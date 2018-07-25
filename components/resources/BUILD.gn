@@ -8,7 +8,20 @@ transpile_includes = [
   # Brave Rewards
   "../brave_rewards_ui/brave_rewards.html",
   # Brave Welcome Page
-  "../brave_welcome_ui/brave_welcome.html"
+  "../brave_welcome_ui/brave_welcome.html",
+  "../brave_welcome_ui/brave_welcome.html",
+  # Brave sync
+  "../brave_sync_ui/brave_sync.html",
+  "../brave_sync_ui/brave_sync.js",
+  # Brave sync lib
+  "../brave_sync_lib/brave_sync_lib.html",
+  "../brave_sync_lib/brave_sync_lib.js",
+  # QR lib for Brave sync
+  "//brave/node_modules/qrcode-generator/qrcode.js",
+  # Brave sync js bundle
+  "$root_gen_dir/brave-sync/bundles/bundle.js",
+  # Brave Crypto for Brave sync
+  "$root_gen_dir/brave-crypto/browser/crypto.js",
 ]
 
 action("transpile_web_uis") {
@@ -19,6 +32,7 @@ action("transpile_web_uis") {
     "$target_out_dir/brave_rewards.bundle.js",
     "$target_out_dir/brave_welcome.bundle.js",
     "$target_out_dir/brave_adblock.bundle.js",
+    "$target_out_dir/brave_sync.bundle.js",
   ]
   gen_dir = rebase_path(root_gen_dir, "//")
   args = [
@@ -29,6 +43,10 @@ action("transpile_web_uis") {
       "--production",
     ]
   }
+  public_deps = [
+    "//brave/components/brave_sync_lib:brave_sync_js_lib_bundle",
+    "//brave/components/brave_sync_lib:brave_crypto_js_lib_bundle",
+  ]
 }
 
 grit("brave_components_resources_grit") {
@@ -48,6 +66,4 @@ grit("brave_components_resources_grit") {
     "root_gen_dir=" + rebase_path(root_gen_dir, root_build_dir),
   ]
   output_dir = "$root_gen_dir/components"
-  resource_ids = "//brave/browser/resources/resource_ids"
 }
-
