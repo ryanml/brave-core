@@ -109,6 +109,8 @@ source_set("browser") {
   deps = [
     "autoplay",
     "//brave/components/brave_shields/browser:brave_shields",
+    "//brave/components/brave_sync",
+    "//brave/components/sync/driver:brave_sync_subclassing",
     "extensions",
     "net",
     "permissions",

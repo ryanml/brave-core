@@ -7,6 +7,7 @@
 #include "brave/browser/alternate_private_search_engine_util.h"
 #include "brave/common/pref_names.h"
 #include "brave/components/brave_shields/browser/brave_shields_web_contents_observer.h"
+#include "brave/components/brave_sync/brave_sync_profile_prefs.h"
 #include "chrome/browser/prefs/session_startup_pref.h"
 #include "chrome/common/pref_names.h"
 #include "components/content_settings/core/common/pref_names.h"
@@ -19,6 +20,7 @@ namespace brave {
 
 void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
   brave_shields::BraveShieldsWebContentsObserver::RegisterProfilePrefs(registry);
+  brave_sync::prefs::BraveSyncPrefs::RegisterProfilePrefs(registry);
 
   RegisterAlternatePrivateSearchEngineProfilePrefs(registry);
 

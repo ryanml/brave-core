@@ -15,6 +15,8 @@ deps = {
   "vendor/bip39wally-core-native": "https://github.com/brave-intl/bip39wally-core-native.git@9b119931c702d55be994117eb505d56310720b1d",
   "vendor/bat-native-anonize": "https://github.com/brave-intl/bat-native-anonize.git@6f5817c5a4dcabb49e22b578ecae4993159e6481",
   "vendor/bat-native-tweetnacl": "https://github.com/brave-intl/bat-native-tweetnacl.git@05ed8f82faa03609fe5ae0a4c2d454afbe2ff267",
+  "vendor/brave-sync": "https://github.com/brave/sync.git@75c1bb10c4a54275de4fb10afd9f204cc07284a8",
+  "vendor/brave-crypto": "https://github.com/brave/crypto@64e4e9ed4f0e06f44102b5970b42e8542c4662db",
 }
 
 hooks = [

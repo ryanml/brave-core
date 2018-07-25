@@ -8,7 +8,9 @@ module.exports = {
     brave_adblock: path.join(__dirname, '../brave_adblock_ui/brave_adblock'),
     brave_new_tab: path.join(__dirname, '../brave_new_tab_ui/brave_new_tab'),
     brave_rewards: path.join(__dirname, '../brave_rewards_ui/brave_rewards'),
-    brave_welcome: path.join(__dirname, '../brave_welcome_ui/brave_welcome')
+    brave_welcome: path.join(__dirname, '../brave_welcome_ui/brave_welcome'),
+    brave_welcome: path.join(__dirname, '../brave_welcome_ui/brave_welcome'),
+    brave_sync: path.join(__dirname, '../brave_sync_ui/brave_sync')
   },
   output: {
     path: process.env.TARGET_GEN_DIR,
@@ -55,4 +57,3 @@ module.exports = {
       }]
   }
 }
-

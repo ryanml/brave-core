@@ -9,6 +9,11 @@
 #include "brave/browser/ui/webui/brave_md_settings_ui.h"
 #include "brave/browser/ui/webui/brave_new_tab_ui.h"
 #include "brave/browser/ui/webui/brave_rewards_ui.h"
+
+#include "brave/browser/ui/webui/sync/sync_ui_impl.h"
+#include "brave/browser/ui/webui/sync/sync_js_layer_impl.h"
+//TODO, AB move these to the shape of other files near, like without "sync" => "brave/browser/ui/webui/sync_ui_impl.h" ?
+
 #include "brave/browser/ui/webui/brave_welcome_ui.h"
 #include "chrome/common/url_constants.h"
 #include "components/grit/brave_components_resources.h"
@@ -33,6 +38,14 @@ WebUIController* NewWebUI(WebUI* web_ui, const GURL& url) {
 template<>
 WebUIController* NewWebUI<BasicUI>(WebUI* web_ui, const GURL& url) {
   auto host = url.host_piece();
+  //TODO, AB: naming BraveXxxxUI
+  if (host == kBraveSyncLibHost) {
+    return new SyncJsLayerImpl(web_ui, url.host(), kBraveSyncLibJS,
+        IDR_BRAVE_SYNC_LIB_JS, IDR_BRAVE_SYNC_LIB_HTML);
+  } else if (host == kBraveUISyncHost) {
+    return new SyncUIImpl(web_ui, url.host(), kBraveSyncJS,
+        IDR_BRAVE_SYNC_JS, IDR_BRAVE_SYNC_HTML);
+  } else
   if (host == kAdblockHost) {
     return new BraveAdblockUI(web_ui, url.host());
   } else if (host == kRewardsHost) {
@@ -56,6 +69,8 @@ WebUIFactoryFunction GetWebUIFactoryFunction(WebUI* web_ui,
       url.host_piece() == kRewardsHost ||
       url.host_piece() == kWelcomeHost ||
       url.host_piece() == kBraveUIWelcomeURL ||
+      url.host_piece() == kBraveSyncLibHost ||
+      url.host_piece() == kBraveUISyncHost ||
       url.host_piece() == chrome::kChromeUINewTabHost ||
       url.host_piece() == chrome::kChromeUISettingsHost) {
     return &NewWebUI<BasicUI>;
@@ -101,4 +116,3 @@ BraveWebUIControllerFactory::BraveWebUIControllerFactory() {
 
 BraveWebUIControllerFactory::~BraveWebUIControllerFactory() {
 }
-
