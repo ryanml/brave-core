@@ -59,6 +59,12 @@ source_set("ui") {
     "webui/brave_welcome_ui.h",
     "webui/settings/brave_appearance_handler.cc",
     "webui/settings/brave_appearance_handler.h",
+    "webui/sync/sync_ui_impl.cc",
+    "webui/sync/sync_ui_impl.h",
+    "webui/sync/sync_ui.h",
+    "webui/sync/sync_js_layer.h",
+    "webui/sync/sync_js_layer_impl.cc",
+    "webui/sync/sync_js_layer_impl.h",
   ]
 
   if (is_linux) {
