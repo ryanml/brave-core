@@ -123,6 +123,10 @@
       <include name="IDR_BRAVE_NEW_TAB_BACKGROUND19" file="../img/newtab/Phoyoserge_VeniseSunset.jpg" type="BINDATA" />
       <include name="IDR_BRAVE_NEW_TAB_BACKGROUND20" file="../img/newtab/Phoyoserge_Yosemite.jpg" type="BINDATA" />
 
+      <!-- WebUI webtorrent resources -->
+      <include name="IDR_BRAVE_WEBTORRENT_HTML" file="../brave_webtorrent_ui/brave_webtorrent.html" type="BINDATA" />
+      <include name="IDR_BRAVE_WEBTORRENT_JS" file="${root_gen_dir}/brave/brave_webtorrent.bundle.js" type="BINDATA" use_base_dir="false" />
+
     </includes>
     <messages fallback_to_english="true">
       <!-- WebUI newtab resources -->

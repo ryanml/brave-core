@@ -8,7 +8,9 @@ transpile_includes = [
   # Brave Rewards
   "../brave_rewards_ui/brave_rewards.html",
   # Brave Welcome Page
-  "../brave_welcome_ui/brave_welcome.html"
+  "../brave_welcome_ui/brave_welcome.html",
+  # Brave Webtorrent Page
+  "../brave_webtorrent_ui/brave_webtorrent.html"
 ]
 
 action("transpile_web_uis") {
@@ -19,6 +21,7 @@ action("transpile_web_uis") {
     "$target_out_dir/brave_rewards.bundle.js",
     "$target_out_dir/brave_welcome.bundle.js",
     "$target_out_dir/brave_adblock.bundle.js",
+    "$target_out_dir/brave_webtorrent.bundle.js",
   ]
   gen_dir = rebase_path(root_gen_dir, "//")
   args = [

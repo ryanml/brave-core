@@ -8,7 +8,8 @@ module.exports = {
     brave_adblock: path.join(__dirname, '../brave_adblock_ui/brave_adblock'),
     brave_new_tab: path.join(__dirname, '../brave_new_tab_ui/brave_new_tab'),
     brave_rewards: path.join(__dirname, '../brave_rewards_ui/brave_rewards'),
-    brave_welcome: path.join(__dirname, '../brave_welcome_ui/brave_welcome')
+    brave_welcome: path.join(__dirname, '../brave_welcome_ui/brave_welcome'),
+    brave_webtorrent: path.join(__dirname, '../brave_webtorrent_ui/brave_webtorrent')
   },
   output: {
     path: path.join(__dirname, '..', '..', '..', process.env.TARGET_GEN_DIR, 'brave'),
@@ -20,7 +21,10 @@ module.exports = {
     new webpack.IgnorePlugin(/[^/]+\/[\S]+.dev$/)
   ],
   resolve: {
-    extensions: ['.ts', '.tsx', '.js']
+    extensions: ['.ts', '.tsx', '.js'],
+    alias: {
+//      'fs': 'chrome-fs'
+    }
   },
   module: {
     rules: [
@@ -53,6 +57,9 @@ module.exports = {
         test: /\.(ttf|eot|svg|png|jpg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         loader: 'file-loader'
       }]
+  },
+  node: {
+    fs: 'empty'
   }
 }
 

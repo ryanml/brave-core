@@ -9,6 +9,7 @@
 #include "brave/browser/ui/webui/brave_md_settings_ui.h"
 #include "brave/browser/ui/webui/brave_new_tab_ui.h"
 #include "brave/browser/ui/webui/brave_rewards_ui.h"
+#include "brave/browser/ui/webui/brave_webtorrent_ui.h"
 #include "brave/browser/ui/webui/brave_welcome_ui.h"
 #include "chrome/common/url_constants.h"
 #include "components/grit/brave_components_resources.h"
@@ -43,6 +44,8 @@ WebUIController* NewWebUI<BasicUI>(WebUI* web_ui, const GURL& url) {
     return new BraveNewTabUI(web_ui, url.host());
   } else if (host == chrome::kChromeUISettingsHost) {
     return new BraveMdSettingsUI(web_ui, url.host());
+  } else if (host == kWebtorrentHost) {
+    return new BraveWebtorrentUI(web_ui, url.host());
   }
   return nullptr;
 }
@@ -57,7 +60,8 @@ WebUIFactoryFunction GetWebUIFactoryFunction(WebUI* web_ui,
       url.host_piece() == kWelcomeHost ||
       url.host_piece() == kBraveUIWelcomeURL ||
       url.host_piece() == chrome::kChromeUINewTabHost ||
-      url.host_piece() == chrome::kChromeUISettingsHost) {
+      url.host_piece() == chrome::kChromeUISettingsHost ||
+      url.host_piece() == kWebtorrentHost) {
     return &NewWebUI<BasicUI>;
   }
 
