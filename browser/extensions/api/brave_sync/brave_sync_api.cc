@@ -9,8 +9,14 @@
 namespace extensions {
 namespace api {
 
-ExtensionFunction::ResponseAction BraveSyncBrowserToWebViewFunction::Run() {
-  LOG(ERROR) << "TAGAB BraveSyncBrowserToWebViewFunction::Run";
+ExtensionFunction::ResponseAction BraveSyncBackgroundPageToBrowserFunction::Run() {
+  LOG(ERROR) << "TAGAB BraveSyncBackgroundPageToBrowserFunction::Run";
+  std::unique_ptr<brave_sync::BackgroundPageToBrowser::Params> params(
+      brave_sync::BackgroundPageToBrowser::Params::Create(*args_));
+  EXTENSION_FUNCTION_VALIDATE(params.get());
+
+  LOG(ERROR) << "TAGAB BraveSyncBackgroundPageToBrowserFunction::Run params->arg1=" << params->arg1;
+
   auto result = std::make_unique<base::Value>(43);
   return RespondNow(OneArgument(std::move(result)));
 }

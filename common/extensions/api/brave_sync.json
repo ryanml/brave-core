@@ -9,9 +9,22 @@
     "compiler_options": {
       "implemented_in": "brave/browser/extensions/api/brave_sync/brave_sync_api.h"
     },
+    "events": [
+      {
+        "name": "onWebViewToBrowser",
+        "type": "function",
+        "description": "Fired when sync lib sends data to browser.",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "arg1"
+          }
+        ]
+      }
+    ],
     "functions": [
       {
-        "name": "browserToWebView",
+        "name": "backgroundPageToBrowser",
         "type": "function",
         "description": "Sends integer to brave_sync api",
         "parameters": [
@@ -23,7 +36,12 @@
             "type": "function",
             "name": "callback",
             "optional": true,
-            "parameters": []
+            "parameters": [
+              {
+                "name": "callback_arg1",
+                "type": "integer"
+              }
+            ]
           }
         ]
       }

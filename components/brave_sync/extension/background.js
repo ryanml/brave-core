@@ -11,8 +11,10 @@ function dynamicallyLoadScript(url) {
 chrome.runtime.onInstalled.addListener(function() {
   console.log("in chrome.runtime.onInstalled 002");
   var arg1 = 142;
-  var result = chrome.braveSync.browserToWebView(arg1);
-  console.log("in chrome.runtime.onInstalled 002-5 result=", result);
+  chrome.braveSync.backgroundPageToBrowser(arg1, function(callback_arg1) {
+    console.log("in chrome.runtime.onInstalled 002-4 backgroundPageToBrowser callback callback_arg1=", callback_arg1);
+  });
+  console.log("in chrome.runtime.onInstalled 002-5");
 });
 
 console.log("in chrome.runtime.onInstalled 003");
