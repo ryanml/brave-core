@@ -8,6 +8,11 @@
     "dependencies": [],
     "contexts": ["blessed_extension"]
   },
+  "braveSync": {
+    "channel": "stable",
+    "dependencies": [],
+    "contexts": ["blessed_extension"]
+  },
   "topSites": [{
     "dependencies": ["permission:topSites"],
     "contexts": ["blessed_extension"]
