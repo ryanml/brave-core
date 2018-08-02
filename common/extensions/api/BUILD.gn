@@ -48,7 +48,8 @@ grit("resources") {
 
 json_schema_api("generated_api") {
   sources = [
-    "brave_shields.json"
+    "brave_shields.json",
+    "brave_sync.json"
   ]
   deps = [
     "//chrome/common/extensions/api",
