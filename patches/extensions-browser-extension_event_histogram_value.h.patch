@@ -8,6 +8,7 @@ index 8312660d4edae8639828f217e82db6a4b3d51a15..1f147c7d7fbb4e676750e793611c41ca
    SYSTEM_POWER_SOURCE_ONPOWERCHANGED,
 +  BRAVE_START = 5000,
 +  BRAVE_AD_BLOCKED,
++  BRAVE_SYNC_BROWSER_TO_BACKGROUND_PAGE,
    // Last entry: Add new entries above, then run:
    // python tools/metrics/histograms/update_extension_histograms.py
    ENUM_BOUNDARY
