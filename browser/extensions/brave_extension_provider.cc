@@ -75,8 +75,9 @@ bool IsWhitelisted(const extensions::Extension* extension) {
     "bhlmpjhncoojbkemjkeppfahkglffilp",
 
     // Test ID: Brave Sync Extension
-    "lmgeoagppogecnmmdbpaglljjoekgpge",
-    "gjnkdbfjlklmcfnhjncapjfeijemelkl",
+    // duplicated in common/extensions/extension_constants.cc
+    // and chrome/browser/extensions/component_extensions_whitelist/whitelist.cc
+    "nomlkjnggnifocmealianaaiobmebgil",
   });
   return std::find(whitelist.begin(), whitelist.end(),
       extension->id()) != whitelist.end();
@@ -122,7 +123,8 @@ bool BraveExtensionProvider::UserMayLoad(const Extension* extension,
 
 bool BraveExtensionProvider::MustRemainInstalled(const Extension* extension,
                                                  base::string16* error) const {
-  return extension->id() == brave_extension_id;
+  return extension->id() == brave_extension_id ||
+    extension->id() == brave_sync_extension_id;
 }
 
 }  // namespace extensions

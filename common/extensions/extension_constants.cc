@@ -7,3 +7,4 @@
 const char brave_extension_id[] = "mnojpmjdmbbfmejpflffifhffcmidifd";
 const char pdfjs_extension_id[] = "oemmndcbldboiebfnladdacbdfmadadm";
 const char widevine_extension_id[] = "oimompecagnajdejgnnjijobebaeigek";
+const char brave_sync_extension_id[] = "nomlkjnggnifocmealianaaiobmebgil";

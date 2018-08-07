@@ -1,5 +1,5 @@
 diff --git a/chrome/browser/extensions/component_extensions_whitelist/whitelist.cc b/chrome/browser/extensions/component_extensions_whitelist/whitelist.cc
-index dfc12043f6c68fd0a258ae54cb2dd8e12f9117a0..2e56d1e21fbc2a6ba1149be0de102a80b4698c52 100644
+index dfc12043f6c68fd0a258ae54cb2dd8e12f9117a0..dcfa5c83b6ecb9a6e93f518e503894c864c0a5db 100644
 --- a/chrome/browser/extensions/component_extensions_whitelist/whitelist.cc
 +++ b/chrome/browser/extensions/component_extensions_whitelist/whitelist.cc
 @@ -12,6 +12,7 @@
@@ -10,19 +10,21 @@ index dfc12043f6c68fd0a258ae54cb2dd8e12f9117a0..2e56d1e21fbc2a6ba1149be0de102a80
  #include "extensions/common/constants.h"
  #include "printing/buildflags/buildflags.h"
  
-@@ -38,6 +39,7 @@ bool IsComponentExtensionWhitelisted(const std::string& extension_id) {
+@@ -38,6 +39,8 @@ bool IsComponentExtensionWhitelisted(const std::string& extension_id) {
      extension_misc::kZIPUnpackerExtensionId,
      extension_misc::kZipArchiverExtensionId,
  #endif
-+    "mnojpmjdmbbfmejpflffifhffcmidifd"
++    "mnojpmjdmbbfmejpflffifhffcmidifd",
++    "nomlkjnggnifocmealianaaiobmebgil"
    };
  
    for (size_t i = 0; i < arraysize(kAllowed); ++i) {
-@@ -60,6 +62,7 @@ bool IsComponentExtensionWhitelisted(const std::string& extension_id) {
+@@ -60,6 +63,8 @@ bool IsComponentExtensionWhitelisted(const std::string& extension_id) {
  bool IsComponentExtensionWhitelisted(int manifest_resource_id) {
    switch (manifest_resource_id) {
      // Please keep the list in alphabetical order.
 +    case IDR_BRAVE_EXTENSON:
++    case IDR_BRAVE_SYNC_EXTENSION:
  #if BUILDFLAG(ENABLE_APP_LIST)
      case IDR_CHROME_APP_MANIFEST:
  #endif
