@@ -1,5 +1,5 @@
 diff --git a/chrome/browser/ui/webui/chrome_web_ui_controller_factory.cc b/chrome/browser/ui/webui/chrome_web_ui_controller_factory.cc
-index be8b073e7bd2778e03d99f953ffae13d90b3b151..b7308cd52bcbb50d9ed6f8e95f3c47ccc760e1ed 100644
+index be8b073e7bd2778e03d99f953ffae13d90b3b151..61a06dd37342ccb019ff5b3a47602d62ed06f372 100644
 --- a/chrome/browser/ui/webui/chrome_web_ui_controller_factory.cc
 +++ b/chrome/browser/ui/webui/chrome_web_ui_controller_factory.cc
 @@ -13,6 +13,7 @@
@@ -19,3 +19,11 @@ index be8b073e7bd2778e03d99f953ffae13d90b3b151..b7308cd52bcbb50d9ed6f8e95f3c47cc
  }
  
  // static
+@@ -788,6 +789,7 @@ bool ChromeWebUIControllerFactory::IsWebUIAllowedToMakeNetworkRequests(
+   // If you are adding a new host to this list, please file a corresponding bug
+   // to track its removal. See https://crbug.com/829412 for the metabug.
+   return
++      origin.host() == "bravesynclib" ||
+ #if BUILDFLAG(ENABLE_PRINT_PREVIEW)
+       // https://crbug.com/829414
+       origin.host() == chrome::kChromeUIPrintHost ||
