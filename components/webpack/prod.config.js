@@ -10,7 +10,7 @@ module.exports = {
     brave_rewards: path.join(__dirname, '../brave_rewards_ui/brave_rewards'),
     brave_welcome: path.join(__dirname, '../brave_welcome_ui/brave_welcome'),
     brave_welcome: path.join(__dirname, '../brave_welcome_ui/brave_welcome'),
-    brave_sync: path.join(__dirname, '../brave_sync_ui/brave_sync')
+    brave_sync: path.join(__dirname, '../brave_sync/ui/brave_sync')
   },
   output: {
     path: process.env.TARGET_GEN_DIR,
