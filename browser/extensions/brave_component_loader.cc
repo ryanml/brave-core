@@ -6,6 +6,7 @@
 
 #include "base/command_line.h"
 #include "brave/common/brave_switches.h"
+#include "brave/components/brave_sync/grit/brave_sync_resources.h"
 #include "components/grit/brave_components_resources.h"
 
 namespace extensions {

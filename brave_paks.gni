@@ -58,6 +58,7 @@ template("brave_extra_paks") {
       "$root_gen_dir/brave/brave_unscaled_resources.pak",
       "$root_gen_dir/components/brave_components_resources.pak",
       "$target_gen_dir/browser/resources/brave_extension.pak",
+      "$target_gen_dir/components/brave_sync/brave_sync_resources.pak",
     ]
 
     deps = [
@@ -65,7 +66,8 @@ template("brave_extra_paks") {
       "//brave/app/theme:brave_unscaled_resources",
       "//brave/components/resources:brave_components_resources_grit",
       "//brave/browser/resources:brave_extension_grit",
-      "//brave/common/extensions/api"
+      "//brave/common/extensions/api",
+      "//brave/components/brave_sync:resources",
     ]
 
     if (defined(invoker.deps)) {
