@@ -5,11 +5,13 @@
 #include "brave/browser/browser_context_keyed_service_factories.h"
 
 #include "brave/browser/payments/payments_service_factory.h"
+#include "brave/browser/tor/tor_profile_service_factory.h"
 
 namespace brave {
 
 void EnsureBrowserContextKeyedServiceFactoriesBuilt() {
   PaymentsServiceFactory::GetInstance();
+  TorProfileServiceFactory::GetInstance();
 }
 
 }  // namespace brave

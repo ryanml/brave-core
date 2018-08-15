@@ -111,6 +111,7 @@ source_set("browser") {
     "autoplay",
     "//brave/components/brave_shields/browser:brave_shields",
     "extensions",
+    "tor",
     "net",
     "permissions",
   ]
