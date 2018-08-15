@@ -6,6 +6,7 @@ source_set("extensions") {
     "api/brave_shields_api.h",
     "api/content_settings/brave_content_settings_store.cc",
     "api/content_settings/brave_content_settings_store.h",
+    # TODO - move these to components/brave_sync
     "api/brave_sync/brave_sync_api.cc",
     "api/brave_sync/brave_sync_api.h",
     "api/brave_sync/brave_sync_event_router.cc",
@@ -26,6 +27,7 @@ source_set("extensions") {
 
   deps = [
     "//brave/browser/resources:brave_extension_grit",
+    "//brave/components/brave_sync:resources",
     "//chrome/browser",
     "//content/public/browser",
     "//extensions/browser",
