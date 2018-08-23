@@ -109,11 +109,13 @@ source_set("browser") {
 
   deps = [
     "autoplay",
-    "//brave/components/brave_shields/browser:brave_shields",
     "extensions",
     "tor",
     "net",
     "permissions",
+    "//base",
+    "//brave/components/brave_shields/browser:brave_shields",
+    "//ui/base",
   ]
 
   if (is_mac) {
