@@ -3,6 +3,11 @@
 
 extern const char kBraveUpdatesExtensionsEndpoint[];
 
+extern const char kBraveReferralServer[];
+extern const char kBraveReferralHeadersPath[];
+extern const char kBraveReferralInitPath[];
+extern const char kBraveReferralActivityPath[];
+
 extern const char kEmptyDataURI[];
 extern const char kJSDataURLPrefix[];
 extern const char kGeoLocationsPattern[];
@@ -20,4 +25,3 @@ extern const char kRefererHeader[];
 extern const char kUserAgentHeader[];
 
 #endif  // BRAVE_COMMON_NETWORK_CONSTANTS_H_
-

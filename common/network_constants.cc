@@ -4,6 +4,11 @@ const char kBraveUpdatesExtensionsEndpoint[] = "https://go-updater.brave.com/ext
 // For debgugging:
 // const char kBraveUpdatesExtensionsEndpoint[] = "http://localhost:8192/extensions";
 
+const char kBraveReferralServer[] = "laptop-updates.brave.com";
+const char kBraveReferralHeadersPath[] = "/promo/custom-headers";
+const char kBraveReferralInitPath[] = "/promo/initialize/nonua";
+const char kBraveReferralActivityPath[] = "/promo/activity";
+
 const char kEmptyDataURI[] = "data:application/javascript;base64,MA==";
 const char kJSDataURLPrefix[] = "data:application/javascript;base64,";
 const char kGeoLocationsPattern[] = "https://www.googleapis.com/geolocation/v1/geolocate?key=*";

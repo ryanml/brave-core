@@ -11,6 +11,7 @@
 #include "brave/browser/component_updater/brave_component_updater_configurator.h"
 #include "brave/browser/extensions/brave_tor_client_updater.h"
 #include "brave/browser/profile_creation_monitor.h"
+#include "brave/components/brave_referrals/brave_referrals_service.h"
 #include "brave/components/brave_shields/browser/ad_block_service.h"
 #include "brave/components/brave_shields/browser/ad_block_regional_service.h"
 #include "brave/components/brave_shields/browser/https_everywhere_service.h"
@@ -31,6 +32,17 @@ BraveBrowserProcessImpl::BraveBrowserProcessImpl()
     : profile_creation_monitor_(new ProfileCreationMonitor) {
   g_browser_process = this;
   g_brave_browser_process = this;
+
+  brave_referrals_service_ = brave::BraveReferralsServiceFactory(local_state());
+  base::SequencedTaskRunnerHandle::Get()->PostDelayedTask(
+      FROM_HERE,
+      base::BindOnce(
+          [](brave::BraveReferralsService* referrals_service) {
+            referrals_service->Start();
+          },
+          base::Unretained(brave_referrals_service_.get())),
+      base::TimeDelta::FromSeconds(30));
+
   brave_stats_updater_ = brave::BraveStatsUpdaterFactory(local_state());
   base::SequencedTaskRunnerHandle::Get()->PostDelayedTask(
       FROM_HERE,
