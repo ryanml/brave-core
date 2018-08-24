@@ -1,15 +1,15 @@
 diff --git a/chrome/browser/profiles/profile_io_data.cc b/chrome/browser/profiles/profile_io_data.cc
-index 3bf4c0fd66c185e839f29c3b54543d6dd21a550b..0b61f8c1f3ed9159c969bdf5d27ae51f90bc37fb 100644
+index 3bf4c0fd66c185e839f29c3b54543d6dd21a550b..4f2ccc5a187eb43a4a31423a02698be1f8a3aa36 100644
 --- a/chrome/browser/profiles/profile_io_data.cc
 +++ b/chrome/browser/profiles/profile_io_data.cc
-@@ -26,6 +26,7 @@
- #include "base/task/post_task.h"
- #include "base/task/task_traits.h"
- #include "base/threading/thread_task_runner_handle.h"
-+#include "brave/browser/net/brave_profile_network_delegate.h"
- #include "build/build_config.h"
- #include "chrome/browser/browser_process.h"
- #include "chrome/browser/chrome_notification_types.h"
+@@ -791,6 +791,7 @@ void ProfileIOData::InstallProtocolHandlers(
+ void ProfileIOData::AddProtocolHandlersToBuilder(
+     net::URLRequestContextBuilder* builder,
+     content::ProtocolHandlerMap* protocol_handlers) {
++  protocol_handlers->insert(std::make_pair("magnet", std::make_unique<MagnetProtocolHandler>()));
+   for (auto& protocol_handler : *protocol_handlers) {
+     builder->SetProtocolHandler(protocol_handler.first,
+                                 std::move(protocol_handler.second));
 @@ -1088,7 +1089,7 @@ void ProfileIOData::Init(
          std::make_unique<network::URLRequestContextBuilderMojo>();
  

@@ -1,9 +1,0 @@
-source_set("net") {
-  sources = [
-    "url_request/magnet_protocol_handler.cc",
-    "url_request/magnet_protocol_handler.h",
-  ]
-  deps = [
-    "//net"
-  ]
-}
