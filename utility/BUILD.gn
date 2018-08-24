@@ -22,6 +22,7 @@ source_set("utility") {
   defines = [ ]
 
   deps = [
+    "tor",
     "//chrome/common",
     "//chrome/utility",
     "//components/password_manager/core/browser",
