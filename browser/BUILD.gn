@@ -113,7 +113,6 @@ source_set("browser") {
     "extensions",
     "net",
     "permissions",
-    "//brave/components/brave_webtorrent/browser/net",
   ]
 
   if (is_mac) {

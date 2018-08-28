@@ -14,11 +14,6 @@ import { File, TorrentState, TorrentsState } from '../../constants/webtorrentSta
 // Utils
 import { addTorrent, delTorrent, findTorrent } from '../webtorrent'
 
-const isTorrentPage = (url: URL) => {
-  const fullpath = url.origin + url.pathname
-  return fullpath === chrome.runtime.getURL('extension/brave_webtorrent.html')
-}
-
 const focusedWindowChanged = (windowId: number, state: TorrentsState) => {
   return { ...state, currentWindowId: windowId }
 }
@@ -47,8 +42,8 @@ const tabUpdated = (tabId: number, url: string, state: TorrentsState) => {
 
   // create new torrent state
   const parsedURL = new window.URL(url)
-  if (isTorrentPage(parsedURL)) { // parse torrent
-    const torrentId = decodeURIComponent(parsedURL.search.substring(1))
+  if (parsedURL.protocol === 'magnet:') { // parse torrent
+    const torrentId = parsedURL.href
     try {
       const { name, infoHash, ix } = ParseTorrent(torrentId)
       newInfoHash = infoHash
