@@ -36,9 +36,11 @@ export default class TorrentViewerHeader extends React.PureComponent<Props, {}> 
 
   render () {
     const { name, torrent } = this.props
-    const title = name
-      ? `Start Torrenting ${name}?`
-      : 'Loading torrent information...'
+    const title = torrent
+      ? name
+      : name
+        ? `Start Torrenting ${name}?`
+        : 'Loading torrent information...'
     const mainButtonText = torrent ? 'Stop Download' : 'Start Torrent'
 
     return (
