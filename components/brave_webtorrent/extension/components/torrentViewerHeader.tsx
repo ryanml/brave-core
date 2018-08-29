@@ -24,25 +24,21 @@ interface Props {
 }
 
 export default class TorrentViewerHeader extends React.PureComponent<Props, {}> {
-  constructor (props: Props) {
-    super(props)
-    this.onClick = this.onClick.bind(this)
-    this.onCopyClick = this.onCopyClick.bind(this)
+  onClick = () => {
+    this.props.torrent
+      ? this.props.onStopDownload(this.props.tabId)
+      : this.props.onStartTorrent(this.props.torrentId, this.props.tabId)
   }
 
-  onClick () {
-    this.props.torrent ? this.props.onStopDownload(this.props.tabId)
-                       : this.props.onStartTorrent(this.props.torrentId, this.props.tabId)
-  }
-
-  onCopyClick () {
+  onCopyClick = () => {
     clipboardCopy(this.props.torrentId)
   }
 
   render () {
     const { name, torrent } = this.props
-    const title = name ? 'Start Torrenting "' + name + '"?'
-                       : 'Loading torrent information...'
+    const title = name
+      ? `Start Torrenting ${name}?`
+      : 'Loading torrent information...'
     const mainButtonText = torrent ? 'Stop Download' : 'Start Torrent'
 
     return (
