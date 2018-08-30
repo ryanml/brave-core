@@ -8,13 +8,14 @@
 
 #include "components/grit/brave_components_resources.h"
 #include "brave/components/brave_sync/grit/brave_sync_resources.h"
+#include "brave/common/extensions/extension_constants.h"
 
 namespace extensions {
 
 bool IsComponentExtensionWhitelisted(const std::string& extension_id) {
   const char* const kAllowed[] = {
-    "mnojpmjdmbbfmejpflffifhffcmidifd",
-    "nomlkjnggnifocmealianaaiobmebgil"
+    brave_extension_id,
+    brave_sync_extension_id,
   };
 
   for (size_t i = 0; i < arraysize(kAllowed); ++i) {

@@ -82,9 +82,7 @@ bool IsWhitelisted(const extensions::Extension* extension) {
     // Test ID: Brave Tor Client Updater
     "ngicbhhaldfdgmjhilmnleppfpmkgbbk",
     // Test ID: Brave Sync Extension
-    // duplicated in common/extensions/extension_constants.cc
-    // and chrome/browser/extensions/component_extensions_whitelist/whitelist.cc
-    "nomlkjnggnifocmealianaaiobmebgil",
+    brave_sync_extension_id,
   });
   return std::find(whitelist.begin(), whitelist.end(),
       extension->id()) != whitelist.end();
