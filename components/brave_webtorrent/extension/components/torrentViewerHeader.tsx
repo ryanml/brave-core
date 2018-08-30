@@ -11,6 +11,8 @@ import { TorrentObj } from '../constants/webtorrentState'
 
 // Themes
 import { theme } from '../constants/theme'
+import Theme from 'brave-ui/theme/brave-default'
+import { ThemeProvider } from 'brave-ui/theme'
 
 let clipboardCopy = require('clipboard-copy')
 
@@ -47,26 +49,30 @@ export default class TorrentViewerHeader extends React.PureComponent<Props, {}> 
     const mainButtonText = torrent ? 'Stop Download' : 'Start Torrent'
 
     return (
-      <Grid>
-        <Column size={9} customStyle={theme.headerColumnLeft}>
-          <TitleHeading
-            text={title}
-          />
-        </Column>
-        <Column size={3} customStyle={theme.headerColumnRight}>
-          <Button
-            type='accent'
-            text={mainButtonText}
-            onClick={this.onClick}
-          />
-          <Button
-            type='accent'
-            level='secondary'
-            text='Copy Magnet Link'
-            onClick={this.onCopyClick}
-          />
-        </Column>
-      </Grid>
+      <ThemeProvider theme={Theme}>
+        <Grid>
+          <Column size={9} customStyle={theme.headerColumnLeft}>
+            <TitleHeading
+              text={title}
+            />
+          </Column>
+          <Column size={3} customStyle={theme.headerColumnRight}>
+            <Button
+              type='accent'
+              brand='brave'
+              text={mainButtonText}
+              onClick={this.onClick}
+            />
+            <Button
+              type='accent'
+              brand='brave'
+              level='secondary'
+              text='Copy Magnet Link'
+              onClick={this.onCopyClick}
+            />
+          </Column>
+        </Grid>
+      </ThemeProvider>
     )
   }
 }
