@@ -57,10 +57,12 @@ source_set("browser_process") {
 
   deps = [
     ":version_info",
+    "//base",
     "//brave/browser/payments",
     "//brave/components/brave_shields/browser:brave_shields",
     "//brave/components/content_settings/core/browser",
     "//brave/common",
+    "//chrome/common",
     "//components/component_updater",
     "//components/safe_browsing/common:safe_browsing_prefs",
     "//components/search_engines",
@@ -113,6 +115,9 @@ source_set("browser") {
     "tor",
     "net",
     "permissions",
+    "profiles",
+    "renderer_host",
+    "ui",
     "//base",
     "//brave/components/brave_shields/browser:brave_shields",
     "//ui/base",
