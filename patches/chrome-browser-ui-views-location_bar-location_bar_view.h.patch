@@ -1,5 +1,5 @@
 diff --git a/chrome/browser/ui/views/location_bar/location_bar_view.h b/chrome/browser/ui/views/location_bar/location_bar_view.h
-index d32fe4bf3e5f95b1be19d90f0cb1bb85dd48b7e6..2bcc385a1bc3ce38e9b7c93a1407a02b7c24e796 100644
+index 99a8916f7cd71d7a689b9baae087f64232dda7cc..b3eec9450b59ebf2c0081c3892e18c46160c6703 100644
 --- a/chrome/browser/ui/views/location_bar/location_bar_view.h
 +++ b/chrome/browser/ui/views/location_bar/location_bar_view.h
 @@ -50,6 +50,7 @@ class Profile;
