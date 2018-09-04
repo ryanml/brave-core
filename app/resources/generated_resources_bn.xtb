@@ -500,7 +500,6 @@
 <translation id="5638497698949808140"><ph name="HOURS"/>ঘণ্টা আগে আপডেট করা হয়েছে</translation>
 <translation id="1329584516321524826">এখনই আপডেট করা হয়েছে</translation>
 <translation id="2724841811573117416">WebRTC লগগুলি</translation>
-<translation id="7518150891539970662">WebRTC লগগুলি (<ph name="WEBRTC_LOG_COUNT"/>)</translation>
 <translation id="6592267180249644460"><ph name="WEBRTC_LOG_CAPTURE_TIME"/> এ WebRTC লগ ক্যাপচার করা হয়েছে</translation>
 <translation id="4093955363990068916">স্থানীয় ফাইল:</translation>
 <translation id="2071393345806050157">কোনো স্থানীয় লগ ফাইল নেই।</translation>
@@ -508,7 +507,6 @@
 <translation id="5946591249682680882">আইডি অভিযোগ করুন <ph name="WEBRTC_LOG_REPORT_ID"/></translation>
 <translation id="1737968601308870607">ফাইল বাগ</translation>
 <translation id="1188807932851744811">লগ আপলোড করা হয়নি।</translation>
-<translation id="3925247638945319984">আপনার কোনো সাম্প্রতিক ক্যাপচার করা WebRTC লগ নেই।</translation>
 <translation id="2076269580855484719">এই প্লাগইনটি লুকান</translation>
 <translation id="2129825002735785149">প্ল্যাগ ইন আপডেট করুন</translation>
 <translation id="9088234649737575428"><ph name="PLUGIN_NAME"/> কে এন্টারপ্রাইজ নীতি দ্বারা অবরুদ্ধ করা হয়েছে</translation>
@@ -2171,25 +2169,14 @@
 <translation id="4562155214028662640">আঙ্গুলের ছাপ যোগ করুন</translation>
 <translation id="1719312230114180055">দ্রষ্টব্য: আপনার আঙ্গুলের ছাপ একটি শক্তিশালী প্যাটার্ন বা পিন এর চাইতে কম নিরাপদ হতে পারে।</translation>
 <translation id="1927632033341042996">আঙ্গুল <ph name="NEW_FINGER_NUMBER"/></translation>
-<translation id="2136573720723402846">আঙ্গুলের ছাপ দিয়ে আনলক সক্ষম করুন</translation>
 <translation id="7665369617277396874">অ্যাকাউন্ট যোগ করুন</translation>
 <translation id="3422989461909154470">অ্যাপ এবং ওয়েবসাইটগুলি থেকে আপনার সাইন-ইন করা সমস্ত Brave Software অ্যাকাউন্টগুলি এখানে পরিচালনা করা যেতে পারে।</translation>
 <translation id="1987317783729300807">অ্যাকাউন্টসমূহ</translation>
 <translation id="8418661265246754237">Brave Software অ্যাকাউন্ট</translation>
-<translation id="2107494551712864447">একটি আঙ্গুলের ছাপ যোগ করুন</translation>
-<translation id="6388771388956873507">আপনার ডিভাইসে আঙ্গুলের ছাপ নেওয়ার সেন্সরটি খুঁজে নিয়ে সেটিকে আপনার আঙুল দিয়ে স্পর্শ করুন</translation>
-<translation id="9170397650136757332">এবার আপনার আঙ্গুলের ছাপের সমস্ত অংশ ক্যাপচার করতে আপনার আঙ্গুল সামান্য সরান</translation>
-<translation id="161707228174452095">আঙ্গুলের ছাপ যোগ করা হয়েছে!</translation>
-<translation id="4576537685267142337">আঙ্গুল তুলুন, তারপরে আবার সেন্সরে স্পর্শ করুন</translation>
-<translation id="494660967831069720">আংশিক ডেটা</translation>
-<translation id="3064410671692449875">অপর্যাপ্ত ডেটা</translation>
-<translation id="2532026602297547439">সেন্সর অপরিষ্কার</translation>
-<translation id="8642267168767642381">আঙ্গুল খুব ধীরে সরানো হয়েছে</translation>
-<translation id="2039623879703305659">আঙ্গুল অতি দ্রুত সরানো হয়েছে</translation>
-<translation id="7311891583377621132">আঙ্গুলের ছাপের বিভিন্ন অংশ ক্যাপচার করতে সেটি এদিক ওদিক সরান</translation>
 <translation id="7345706641791090287">আপনার পাসওয়ার্ড নিশ্চিত করুন</translation>
 <translation id="381202950560906753">আরেকটি জুড়ুন</translation>
-<translation id="6658023813581644008">সাইন-ইনের জন্য Smart Lock সেট-আপ করতে আপনার পাসওয়ার্ড লিখুন</translation>
+<translation id="6968288415730398122">স্ক্রিন লক কনফিগার করতে আপনার পাসওয়ার্ড লিখুন</translation>
+<translation id="4103091233824664032">স্ক্রিন লক এবং সাইন-ইন কনফিগার করার জন্য আপনার পাসওয়ার্ড লিখুন</translation>
 <translation id="5449551289610225147">অবৈধ পাসওয়ার্ড</translation>
 <translation id="5374359983950678924">ছবি পরিবর্তন করুন</translation>
 <translation id="6984299437918708277">সাইন-ইন স্ক্রীনে আপনার অ্যাকাউন্টের জন্য প্রদর্শন করাতে একটি ছবি বেছে নিন</translation>
@@ -2218,7 +2205,7 @@
 <translation id="1136155683023653803">পাসওয়ার্ড, বুকমার্ক, ইতিহাস এবং আরও অনেক কিছু আপনার অ্যাকাউন্টে সিঙ্ক করা হয়েছে</translation>
 <translation id="3267417306184901318">আপনার ব্রাউজ করা ডেটা ও অ্যাক্টিভিটি আপনার Brave Software অ্যাকাউন্টের সাথে সিঙ্ক করা আছে</translation>
 <translation id="1123187597739372905">সিঙ্ক সেটিংস দেখুন</translation>
-<translation id="8420510748452002155">ব্যক্তিগতকৃত নয় এমন পরিষেবাগুলি</translation>
+<translation id="5428209950370661546">Brave Software-এর অন্যান্য পরিষেবা</translation>
 <translation id="2055016640093734678">Brave Software পরিষেবার সেটিংস দেখুন</translation>
 <translation id="7956662517480676674">সিঙ্ক এবং Brave Software পরিষেবাগুলি</translation>
 <translation id="2453021845418314664">উন্নত সিঙ্ক সেটিংস</translation>
@@ -2402,8 +2389,11 @@
 <translation id="5598551463564921617">Better Together চালু আছে</translation>
 <translation id="3088402208262982892">Better Together বন্ধ আছে</translation>
 <translation id="5430931332414098647">ঝটপট টিথারিং</translation>
+<translation id="4746351372139058112">বার্তাগুলি</translation>
 <translation id="3936335337858561470">এই ডিভাইসটি সম্পর্কে ভুলে যান</translation>
 <translation id="3606712892509067288">Better Together থেকে সরিয়ে ফেলুন</translation>
+<translation id="5078490485380754244">ডিভাইসটি ভুলে যান</translation>
+<translation id="8072033737676488034">আপনার ফোনটি সরিয়ে দিন এবং Better Together বন্ধ করুন</translation>
 <translation id="7878562273885520351">আপনার পাসওয়ার্ড অন্য কেউ পরিবর্তন করার চেষ্টা করেছে</translation>
 <translation id="6582421931165117398">আপনার ব্যক্তিগত তথ্য রক্ষা করতে, এখনই এখনই আপনার পাসওয়ার্ড পরিবর্তন করুন। আপনার পাসওয়ার্ড পরিবর্তন করার আগে, আপনাকে সাইন ইন করতে বলা হবে।</translation>
 <translation id="1089439967362294234">পাসওয়ার্ড পরিবর্তন করুন</translation>

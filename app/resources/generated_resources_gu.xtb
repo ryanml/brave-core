@@ -494,7 +494,6 @@
 <translation id="5638497698949808140"><ph name="HOURS"/> કલાક પહેલા અપડેટ કર્યું</translation>
 <translation id="1329584516321524826">હમણા જ અપડેટ કર્યું</translation>
 <translation id="2724841811573117416">WebRTC લૉગ્સ</translation>
-<translation id="7518150891539970662">WebRTC લૉગ્સ (<ph name="WEBRTC_LOG_COUNT"/>)</translation>
 <translation id="6592267180249644460">WebRTC લૉગ કેપ્ચર કર્યો <ph name="WEBRTC_LOG_CAPTURE_TIME"/></translation>
 <translation id="4093955363990068916">સ્થાનિક ફાઇલ:</translation>
 <translation id="2071393345806050157">કોઇ સ્થાનિક લૉગ ફાઇલ નથી.</translation>
@@ -502,7 +501,6 @@
 <translation id="5946591249682680882">રીપોર્ટ ID <ph name="WEBRTC_LOG_REPORT_ID"/></translation>
 <translation id="1737968601308870607">બગ ફાઇલ કરો</translation>
 <translation id="1188807932851744811">લૉગ અપલોડ કર્યો નથી.</translation>
-<translation id="3925247638945319984">તમારી પાસે તાજેતરમાં કોઇ કેપ્ચર કરેલ WebRTC લૉગ્સ નથી.</translation>
 <translation id="2076269580855484719">આ પ્લગિન છુપાવો</translation>
 <translation id="2129825002735785149">પ્લગ-ઇન અપડેટ કરો</translation>
 <translation id="9088234649737575428"><ph name="PLUGIN_NAME"/>, એન્ટરપ્રાઇઝ નીતિ દ્વારા અવરોધિત કરેલ છે</translation>
@@ -2163,25 +2161,14 @@
 <translation id="4562155214028662640">ફિંગરપ્રિન્ટ ઉમેરો</translation>
 <translation id="1719312230114180055">નોંધ: તમારી ફિંગરપ્રિન્ટ એક સશક્ત પાસવર્ડ અથવા PIN થી ઓછી સુરક્ષિત હોઇ શકે છે.</translation>
 <translation id="1927632033341042996">ફિંગર <ph name="NEW_FINGER_NUMBER"/></translation>
-<translation id="2136573720723402846">ફિંગરપ્રિન્ટ અનલૉક સક્ષમ કરો</translation>
 <translation id="7665369617277396874">એકાઉન્ટ ઉમેરો</translation>
 <translation id="3422989461909154470">ઍપ અને વેબસાઇટમાંથી સાઇન ઇન કરેલ તમારા બધા Brave Software એકાઉન્ટને અહીં મેનેજ કરી શકાય છે.</translation>
 <translation id="1987317783729300807">એકાઉન્ટ્સ</translation>
 <translation id="8418661265246754237">Brave Software એકાઉન્ટ</translation>
-<translation id="2107494551712864447">કોઈ ફિંગરપ્રિન્ટ ઉમેરો</translation>
-<translation id="6388771388956873507">તમારા ઉપકરણ પર ફિંગરપ્રિન્ટ સેન્સર શોધો અને તેને તમારી આંગળી વડે ટચ કરો</translation>
-<translation id="9170397650136757332">હવે તમારી ફિંગરપ્રિન્ટના નામ ભિન્ન ભાગોને કૅપ્ચર કરવા માટે તમારી આંગળીને સહેજ ખસેડો</translation>
-<translation id="161707228174452095">ફિંગરપ્રિન્ટ ઉમેરી!</translation>
-<translation id="4576537685267142337">આંગળીને ઉંચકો, પછી ફરીથી સેન્સરને ટચ કરો</translation>
-<translation id="494660967831069720">આંશિક ડેટા</translation>
-<translation id="3064410671692449875">અપૂરતો ડેટા</translation>
-<translation id="2532026602297547439">સેન્સર ગંદું છે</translation>
-<translation id="8642267168767642381">આંગળી બહુ જ ધીમેથી ખસેડી</translation>
-<translation id="2039623879703305659">ફિંગરપ્રિન્ટ બહુ જ ઝડપથી ખસેડી</translation>
-<translation id="7311891583377621132">ફિંગરપ્રિન્ટનો ભિન્ન ભાગ કૅપ્ચર કરવા માટે સહેજ ખસેડો</translation>
 <translation id="7345706641791090287">તમારા પાસવર્ડની પુષ્ટિ કરો</translation>
 <translation id="381202950560906753">બીજી ઉમેરો</translation>
-<translation id="6658023813581644008">સાઇન-ઇન માટે Smart Lock સેટ અપ કરવા, તમારો પાસવર્ડ દાખલ કરો</translation>
+<translation id="6968288415730398122">સ્ક્રીન લૉક ગોઠવવા માટે તમારો પાસવર્ડ દાખલ કરો</translation>
+<translation id="4103091233824664032">સ્ક્રીન લૉક ગોઠવવા અને સાઇન ઇન કરવા માટે, તમારો પાસવર્ડ દાખલ કરો</translation>
 <translation id="5449551289610225147">અમાન્ય પાસવર્ડ</translation>
 <translation id="5374359983950678924">ચિત્ર બદલો</translation>
 <translation id="6984299437918708277">સાઇન-ઇન સ્ક્રીન પર તમારા એકાઉન્ટ માટે પ્રદર્શિત કરવા માટેનું ચિત્ર પસંદ કરો</translation>
@@ -2210,7 +2197,7 @@
 <translation id="1136155683023653803">પાસવર્ડ, બુકમાર્ક, ઇતિહાસ અને ઘણું બધું તમારા એકાઉન્ટ સાથે સિંક થાય છે</translation>
 <translation id="3267417306184901318">તમારા બ્રાઉઝિંગ ડેટા અને પ્રવૃત્તિને તમારા Brave Software એકાઉન્ટ સાથે સિંક કરેલા છે</translation>
 <translation id="1123187597739372905">સિંક સેટિંગ બતાવો</translation>
-<translation id="8420510748452002155">બિન-વ્યક્તિગત કરેલી સેવાઓ</translation>
+<translation id="5428209950370661546">અન્ય Brave Software સેવાઓ</translation>
 <translation id="2055016640093734678">Brave Software સેવાઓ સેટિંગ બતાવો</translation>
 <translation id="7956662517480676674">સિંક અને Brave Software સેવાઓ</translation>
 <translation id="2453021845418314664">વિગતવાર સમન્વયન સેટિંગ્સ</translation>
@@ -2394,8 +2381,11 @@
 <translation id="5598551463564921617">Better Together સુવિધા ચાલુ છે</translation>
 <translation id="3088402208262982892">Better Together સુવિધા બંધ છે</translation>
 <translation id="5430931332414098647">ઝટપટ ટિથરિંગ</translation>
+<translation id="4746351372139058112">સંદેશા</translation>
 <translation id="3936335337858561470">આ ઉપકરણને ભૂલી જાઓ</translation>
 <translation id="3606712892509067288">Better Together સુવિધામાંથી કાઢી નાખો</translation>
+<translation id="5078490485380754244">ઉપકરણને ભૂલી જાઓ</translation>
+<translation id="8072033737676488034">તમારો ફોન કાઢી નાખો અને Better Together સુવિધા ચાલુ કરો</translation>
 <translation id="7878562273885520351">તમારા પાસવર્ડ સાથે ચેડાં થઈ શકે છે</translation>
 <translation id="6582421931165117398">તમારી વ્યક્તિગત માહિતીને સુરક્ષિત રાખવા માટે, હમણાં જ તમારો પાસવર્ડ બદલો. તમે તમારો પાસવર્ડ બદલો તે પહેલાં, તમને સાઇન ઇન કરવાનું કહેવામાં આવશે.</translation>
 <translation id="1089439967362294234">પાસવર્ડ બદલો</translation>
