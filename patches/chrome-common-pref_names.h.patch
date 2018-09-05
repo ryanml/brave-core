@@ -1,8 +1,8 @@
 diff --git a/chrome/common/pref_names.h b/chrome/common/pref_names.h
-index 2baccfde79b3aa41a081f9783b17ef73913251f2..13f5b1d41aa13fa4b8be474536440ad42ab087d5 100644
+index b2cfb7c8f96606d9488b0d33df2d1983a22a5104..4eebba41f802a79039907719bfe6a41bae41a040 100644
 --- a/chrome/common/pref_names.h
 +++ b/chrome/common/pref_names.h
-@@ -361,6 +361,8 @@ extern const char kImportDialogBookmarks[];
+@@ -362,6 +362,8 @@ extern const char kImportDialogBookmarks[];
  extern const char kImportDialogHistory[];
  extern const char kImportDialogSavedPasswords[];
  extern const char kImportDialogSearchEngine[];
