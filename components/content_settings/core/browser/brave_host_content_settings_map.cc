@@ -42,6 +42,19 @@ void BraveHostContentSettingsMap::InitializeReferrerContentSetting() {
       CONTENT_SETTING_BLOCK);
 }
 
+void BraveHostContentSettingsMap::OnContentSettingChanged(
+      const ContentSettingsPattern& primary_pattern,
+      const ContentSettingsPattern& secondary_pattern,
+      ContentSettingsType content_type,
+      const std::string& resource_identifier) {
+  SetContentSettingCustomScope(
+      primary_pattern,
+      secondary_pattern,
+      content_type,
+      resource_identifier,
+      CONTENT_SETTING_BLOCK);
+}
+
 void BraveHostContentSettingsMap::InitializeCookieContentSetting() {
   // We intentionally do not use the cookies content settings so that
   // these special rules do not show up in Chromium UI.

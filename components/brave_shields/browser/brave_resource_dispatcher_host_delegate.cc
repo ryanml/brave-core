@@ -10,8 +10,13 @@
 #include "brave/components/brave_shields/browser/brave_shields_resource_throttle.h"
 #include "brave/components/brave_shields/browser/https_everywhere_service.h"
 #include "brave/components/brave_shields/browser/tracking_protection_service.h"
+#include "brave/components/content_settings/core/browser/brave_cookie_settings.h"
+#include "chrome/browser/profiles/profile_io_data.h"
+
+#include <vector>
 
 using content::ResourceType;
+using content_settings::BraveCookieSettings;
 
 BraveResourceDispatcherHostDelegate::BraveResourceDispatcherHostDelegate() {
   g_brave_browser_process->ad_block_service()->Start();
@@ -30,6 +35,11 @@ void BraveResourceDispatcherHostDelegate::AppendStandardResourceThrottles(
     content::ResourceContext* resource_context,
     ResourceType resource_type,
     std::vector<std::unique_ptr<content::ResourceThrottle>>* throttles) {
+  CHECK(g_brave_browser_process->tracking_protection_service()->IsInitialized());
+  ProfileIOData* io_data = ProfileIOData::FromResourceContext(resource_context);
+  g_brave_browser_process->tracking_protection_service()->AddObserver(
+    io_data->GetHostContentSettingsMap());
+
   ChromeResourceDispatcherHostDelegate::AppendStandardResourceThrottles(
     request, resource_context, resource_type, throttles);
 

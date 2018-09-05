@@ -17,10 +17,16 @@
 #include "base/memory/weak_ptr.h"
 #include "brave/components/brave_shields/browser/base_brave_shields_service.h"
 #include "brave/components/brave_shields/browser/dat_file_util.h"
+#include "components/content_settings/core/browser/host_content_settings_map.h"
+#include "components/content_settings/core/browser/content_settings_observable_provider.h"
 #include "content/public/common/resource_type.h"
 
 class CTPParser;
 class TrackingProtectionServiceTest;
+
+using content_settings::ObservableProvider;
+using content_settings::ResourceIdentifier;
+using content_settings::RuleIterator;
 
 namespace brave_shields {
 
@@ -37,7 +43,8 @@ const std::string kTrackingProtectionComponentBase64PublicKey =
     "xQIDAQAB";
 
 // The brave shields service in charge of tracking protection and init.
-class TrackingProtectionService : public BaseBraveShieldsService {
+class TrackingProtectionService : public BaseBraveShieldsService,
+  public ObservableProvider {
  public:
   TrackingProtectionService();
   ~TrackingProtectionService() override;
@@ -45,6 +52,8 @@ class TrackingProtectionService : public BaseBraveShieldsService {
   bool ShouldStartRequest(const GURL& spec,
     content::ResourceType resource_type,
     const std::string& tab_host) override;
+
+  std::vector<std::string> firstPartyTrackers();
 
  protected:
   bool Init() override;
@@ -60,12 +69,29 @@ class TrackingProtectionService : public BaseBraveShieldsService {
       const std::string& component_id,
       const std::string& component_base64_public_key);
 
+  std::unique_ptr<RuleIterator> GetRuleIterator (
+      ContentSettingsType content_type,
+      const ResourceIdentifier& resource_identifier,
+      bool incognito) const override;
+
+  bool SetWebsiteSetting (
+      const ContentSettingsPattern& primary_pattern,
+      const ContentSettingsPattern& secondary_pattern,
+      ContentSettingsType content_type,
+      const ResourceIdentifier& resource_identifier,
+      base::Value* value) override;
+
+  void ClearAllContentSettingsRules(ContentSettingsType content_type) override;
+
+  void ShutdownOnUIThread() override;
+
   void OnDATFileDataReady();
   std::vector<std::string> GetThirdPartyHosts(const std::string& base_host);
 
   brave_shields::DATFileDataBuffer buffer_;
 
   std::unique_ptr<CTPParser> tracking_protection_client_;
+
   // TODO: Temporary hack which matches both browser-laptop and Android code
   std::vector<std::string> white_list_;
   std::vector<std::string> third_party_base_hosts_;

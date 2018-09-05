@@ -4,9 +4,11 @@
 
 #include "brave/renderer/brave_content_settings_observer.h"
 
+#include "brave/browser/brave_browser_process_impl.h"
 #include "base/strings/utf_string_conversions.h"
 #include "brave/common/render_messages.h"
 #include "brave/content/common/frame_messages.h"
+#include "brave/components/brave_shields/browser/tracking_protection_service.h"
 #include "components/content_settings/core/common/content_settings_pattern.h"
 #include "content/public/renderer/render_frame.h"
 #include "services/service_manager/public/cpp/interface_provider.h"

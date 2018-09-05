@@ -6,6 +6,9 @@
 #define BRAVE_COMPONENTS_CONTENT_SETTINGS_CORE_BROWSER_BRAVE_HOST_CONTENT_SETTINGS_MAP_H_
 
 #include "components/content_settings/core/browser/host_content_settings_map.h"
+#include "components/content_settings/core/browser/content_settings_observer.h"
+
+
 
 class BraveHostContentSettingsMap : public HostContentSettingsMap {
  public:
@@ -20,6 +23,11 @@ class BraveHostContentSettingsMap : public HostContentSettingsMap {
    void InitializeBraveShieldsContentSetting();
    void InitializeFlashContentSetting();
    ~BraveHostContentSettingsMap() override;
+
+   void OnContentSettingChanged(const ContentSettingsPattern& primary_pattern,
+                               const ContentSettingsPattern& secondary_pattern,
+                               ContentSettingsType content_type,
+                               const std::string& resource_identifier) override;
 };
 
 #endif // BRAVE_COMPONENTS_CONTENT_SETTINGS_CORE_BROWSER_BRAVE_HOST_CONTENT_SETTINGS_MAP_H_

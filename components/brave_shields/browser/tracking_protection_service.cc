@@ -15,7 +15,9 @@
 #include "base/strings/utf_string_conversions.h"
 #include "base/threading/thread_restrictions.h"
 #include "brave/components/brave_shields/browser/dat_file_util.h"
+#include "brave/components/brave_shields/common/brave_shield_constants.h"
 #include "brave/vendor/tracking-protection/TPParser.h"
+#include "components/content_settings/core/common/content_settings_types.h"
 
 #define DAT_FILE "TrackingProtection.dat"
 #define DAT_FILE_VERSION "1"
@@ -44,10 +46,39 @@ TrackingProtectionService::TrackingProtectionService()
       "cdn.syndication.twimg.com"
     }),
     weak_factory_(this) {
+      NotifyObservers(
+        ContentSettingsPattern::FromString("https://dustiest-limitation.000webhostapp.com"),
+        ContentSettingsPattern::Wildcard(),
+        CONTENT_SETTINGS_TYPE_PLUGINS, brave_shields::kCookies);
 }
 
 TrackingProtectionService::~TrackingProtectionService() {
   Cleanup();
+}
+
+std::unique_ptr<RuleIterator> TrackingProtectionService::GetRuleIterator (
+    ContentSettingsType content_type,
+    const ResourceIdentifier& resource_identifier,
+    bool incognito) const {
+      return nullptr;
+}
+
+bool TrackingProtectionService::SetWebsiteSetting (
+    const ContentSettingsPattern& primary_pattern,
+    const ContentSettingsPattern& secondary_pattern,
+    ContentSettingsType content_type,
+    const ResourceIdentifier& resource_identifier,
+    base::Value* value) {
+  return false;
+}
+
+void TrackingProtectionService::ClearAllContentSettingsRules(ContentSettingsType
+  content_type) {
+  return;
+}
+
+void TrackingProtectionService::ShutdownOnUIThread() {
+  return;
 }
 
 void TrackingProtectionService::Cleanup() {
@@ -103,6 +134,10 @@ void TrackingProtectionService::OnDATFileDataReady() {
     tracking_protection_client_.reset();
     LOG(ERROR) << "Failed to deserialize tracking protection data";
   }
+}
+
+std::vector<std::string> TrackingProtectionService::firstPartyTrackers() {
+  return {"https://dustiest-limitation.000webhostapp.com/first_party.html"};
 }
 
 void TrackingProtectionService::OnComponentReady(
