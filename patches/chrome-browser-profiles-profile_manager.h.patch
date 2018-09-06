@@ -1,0 +1,13 @@
+diff --git a/chrome/browser/profiles/profile_manager.h b/chrome/browser/profiles/profile_manager.h
+index fc027d61027a83d7b3c3b3bd3cb0d8f186ea2932..a9b4dad674bebd8d4bb7d2120e5b52ca82b2d2d1 100644
+--- a/chrome/browser/profiles/profile_manager.h
++++ b/chrome/browser/profiles/profile_manager.h
+@@ -224,7 +224,7 @@ class ProfileManager : public content::NotificationObserver,
+ 
+   // Initializes user prefs of |profile|. This includes profile name and
+   // avatar values.
+-  void InitProfileUserPrefs(Profile* profile);
++  virtual void InitProfileUserPrefs(Profile* profile);
+ 
+   // Register and add testing profile to the ProfileManager. Use ONLY in tests.
+   // This allows the creation of Profiles outside of the standard creation path
