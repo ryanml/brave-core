@@ -1,58 +1,40 @@
 diff --git a/chrome/browser/profiles/profile_manager.cc b/chrome/browser/profiles/profile_manager.cc
-index e58df1f15e8f85902908fb0eec6a74790d9f0169..214b2d6b609436727b2eaa0a6455cf59dbec82bc 100644
+index e58df1f15e8f85902908fb0eec6a74790d9f0169..351e0c747286522c8e4a51bbae05784fe5401014 100644
 --- a/chrome/browser/profiles/profile_manager.cc
 +++ b/chrome/browser/profiles/profile_manager.cc
-@@ -432,6 +432,7 @@ Profile* ProfileManager::GetLastUsedProfileAllowedByPolicy() {
- // static
- bool ProfileManager::IncognitoModeForced(Profile* profile) {
-   return profile->IsGuestSession() ||
-+         profile->IsTorProfile() ||
-          profile->IsSystemProfile() ||
-          IncognitoModePrefs::GetAvailability(profile->GetPrefs()) ==
-              IncognitoModePrefs::FORCED;
-@@ -605,7 +606,7 @@ void ProfileManager::CreateProfileAsync(
-       // If this was the guest profile, apply settings and go OffTheRecord.
-       // The system profile also needs characteristics of being off the record,
-       // such as having no extensions, not writing to disk, etc.
--      if (profile->IsGuestSession() || profile->IsSystemProfile()) {
-+      if (profile->IsGuestSession() || profile->IsSystemProfile() || profile->IsTorProfile()) {
-         SetNonPersonalProfilePrefs(profile);
-         profile = profile->GetOffTheRecordProfile();
-       }
-@@ -669,7 +670,8 @@ Profile* ProfileManager::GetLastUsedProfile(
-     LOG_IF(FATAL, !profile) << "Calling GetLastUsedProfile() before profile "
-                             << "initialization is completed.";
- 
--    return profile->IsGuestSession() ? profile->GetOffTheRecordProfile() :
-+    return profile->IsGuestSession() || profile->IsTorProfile()
-+            ? profile->GetOffTheRecordProfile() :
-                                        profile;
-   }
- #else
-@@ -1256,7 +1258,7 @@ void ProfileManager::OnProfileCreated(Profile* profile,
-   if (profile) {
-     // If this was the guest or system profile, finish setting its special
-     // status.
--    if (profile->IsGuestSession() || profile->IsSystemProfile())
-+    if (profile->IsGuestSession() || profile->IsSystemProfile() || profile->IsTorProfile())
-       SetNonPersonalProfilePrefs(profile);
- 
-     // Invoke CREATED callback for incognito profiles.
-@@ -1639,7 +1641,7 @@ ProfileManager::ProfileInfo* ProfileManager::GetProfileInfoByPath(
- 
- void ProfileManager::AddProfileToStorage(Profile* profile) {
-   TRACE_EVENT0("browser", "ProfileManager::AddProfileToCache");
--  if (profile->IsGuestSession() || profile->IsSystemProfile())
-+  if (profile->IsGuestSession() || profile->IsSystemProfile() || profile->IsTorProfile())
-     return;
-   if (profile->GetPath().DirName() != user_data_dir()) {
-     UMA_HISTOGRAM_BOOLEAN("Profile.GetProfileInfoPath.OutsideUserDir", true);
-@@ -1729,7 +1731,7 @@ bool ProfileManager::ShouldGoOffTheRecord(Profile* profile) {
-     return true;
-   }
- #endif
--  return profile->IsGuestSession() || profile->IsSystemProfile();
-+  return profile->IsGuestSession() || profile->IsSystemProfile() || profile->IsTorProfile();
- }
- 
- void ProfileManager::RunCallbacks(const std::vector<CreateCallback>& callbacks,
+@@ -1477,9 +1477,11 @@ void ProfileManager::EnsureActiveProfileExistsBeforeDeletion(
+   const base::FilePath last_used_profile_path =
+       GetLastUsedProfileDir(user_data_dir_);
+   const base::FilePath guest_profile_path = GetGuestProfilePath();
++  const base::FilePath tor_profile_path = BraveProfileManager::GetTorProfilePath();
+   Profile* last_used_profile = GetProfileByPath(last_used_profile_path);
+   if (last_used_profile_path != profile_dir &&
+       last_used_profile_path != guest_profile_path &&
++      last_used_profile_path != tor_profile_path &&
+       last_used_profile != nullptr &&
+       !last_used_profile->IsLegacySupervised()) {
+     FinishDeletingProfile(profile_dir, last_used_profile_path);
+@@ -1492,6 +1494,7 @@ void ProfileManager::EnsureActiveProfileExistsBeforeDeletion(
+     base::FilePath cur_path = profile->GetPath();
+     if (cur_path != profile_dir &&
+         cur_path != guest_profile_path &&
++        cur_path != tor_profile_path &&
+         !profile->IsLegacySupervised() &&
+         !IsProfileDirectoryMarkedForDeletion(cur_path)) {
+       OnNewActiveProfileLoaded(profile_dir, cur_path, std::move(callback),
+@@ -1511,6 +1514,7 @@ void ProfileManager::EnsureActiveProfileExistsBeforeDeletion(
+     // legacy-supervised.
+     if (cur_path != profile_dir &&
+         cur_path != guest_profile_path &&
++        cur_path != tor_profile_path &&
+         !entry->IsLegacySupervised() &&
+         !IsProfileDirectoryMarkedForDeletion(cur_path)) {
+       fallback_profile_path = cur_path;
+@@ -1863,6 +1867,7 @@ void ProfileManager::ScheduleForcedEphemeralProfileForDeletion(
+     base::FilePath entry_path = entry->GetPath();
+     if (entry_path == profile_dir ||
+         entry_path == GetGuestProfilePath() ||
++        entry_path == BraveProfileManager::GetTorProfilePath() ||
+         entry->IsLegacySupervised() ||
+         IsProfileDirectoryMarkedForDeletion(entry_path))
+       continue;
