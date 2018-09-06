@@ -16,6 +16,7 @@ import {
   WalletSummary
 } from 'brave-ui/features/rewards'
 import { WalletAddIcon, WalletImportIcon } from 'brave-ui/components/icons'
+import { Props as WalletSummaryProps } from 'brave-ui/features/rewards/walletSummary'
 import { AlertWallet } from 'brave-ui/features/rewards/walletWrapper'
 
 // Utils
@@ -24,6 +25,7 @@ import * as rewardsActions from '../actions/rewards_actions'
 import * as utils from '../utils'
 import WalletOff from '../../../../node_modules/brave-ui/features/rewards/walletOff'
 import ModalAddFunds from 'brave-ui/features/rewards/modalAddFunds'
+import {convertProbiToDouble} from '../utils'
 
 interface State {
   modalBackup: boolean,
@@ -161,65 +163,25 @@ class PageWallet extends React.Component<Props, State> {
 
   getWalletSummary = () => {
 
-    const { contributionMonthly, walletInfo, reports } = this.props.rewardsData
+    const { walletInfo, reports } = this.props.rewardsData
     const { rates } = walletInfo
-    const convertedMonthly = utils.convertBalance(contributionMonthly, rates)
-    let total = contributionMonthly * -1
 
-    let props = {
-      contribute: {
-        tokens: contributionMonthly,
-        converted: convertedMonthly
-      },
-      total: {
-        tokens: contributionMonthly,
-        converted: convertedMonthly
-      }
-    }
+    let props = {} as WalletSummaryProps
 
     const currentTime = new Date()
     const reportKey = `${currentTime.getFullYear()}_${currentTime.getMonth() + 1}`
     const report: Rewards.Report = reports[reportKey]
     if (report) {
-      if (report.ads) {
-        props['ads'] = {
-          tokens: report.ads,
-          converted: utils.convertBalance(report.ads, rates)
+      for (let key in report) {
+        const item = report[key]
+
+        if (item.length > 1 || key === 'total') {
+          const tokens = convertProbiToDouble(item)
+          props[key] = {
+            tokens,
+            converted: utils.convertBalance(tokens, rates)
+          }
         }
-
-        total += report.ads
-      }
-
-      if (report.donations) {
-        props['donation'] = {
-          tokens: report.donations,
-          converted: utils.convertBalance(report.donations, rates)
-        }
-
-        total -= report.donations
-      }
-
-      if (report.grants) {
-        props['grant'] = {
-          tokens: report.grants,
-          converted: utils.convertBalance(report.grants, rates)
-        }
-
-        total += report.grants
-      }
-
-      if (report.oneTime) {
-        props['tips'] = {
-          tokens: report.oneTime,
-          converted: utils.convertBalance(report.oneTime, rates)
-        }
-
-        total -= report.oneTime
-      }
-
-      props['total'] = {
-        tokens: total,
-        converted: utils.convertBalance(total, rates)
       }
     }
 
