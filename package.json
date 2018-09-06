@@ -125,6 +125,7 @@
     "webpack-cli": "^3.0.8"
   },
   "dependencies": {
+    "@types/parse-torrent": "^5.8.2",
     "@types/webtorrent": "^0.98.4",
     "bittorrent-tracker": "github:brave/bittorrent-tracker#87cd1bba3ce2f40159210b904db3420e8b237b0a",
     "chrome-dgram": "^3.0.1",
