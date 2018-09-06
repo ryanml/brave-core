@@ -31,7 +31,15 @@ export default class TorrentViewerHeader extends React.PureComponent<Props, {}> 
   }
 
   onCopyClick = () => {
-    clipboardCopy(this.props.torrentId)
+    console.log('onCopyClick')
+    if (this.props.torrentId.startsWith("magnet:")) {
+      clipboardCopy(this.props.torrentId)
+    } else {
+      let a = document.createElement('a')
+      a.download = ''
+      a.href = this.props.torrentId
+      a.click()
+    }
   }
 
   render () {
@@ -45,6 +53,9 @@ export default class TorrentViewerHeader extends React.PureComponent<Props, {}> 
         ? `Start Torrenting ${name}?`
         : 'Loading torrent information...'
     const mainButtonText = torrent ? 'Stop Download' : 'Start Torrent'
+    const copyButtonText = this.props.torrentId.startsWith("magnet:")
+      ? 'Copy Magnet Link'
+      : 'Save Torrent File'
 
     return (
       <Grid>
@@ -62,7 +73,7 @@ export default class TorrentViewerHeader extends React.PureComponent<Props, {}> 
           <Button
             type='accent'
             level='secondary'
-            text='Copy Magnet Link'
+            text={copyButtonText}
             onClick={this.onCopyClick}
           />
         </Column>
