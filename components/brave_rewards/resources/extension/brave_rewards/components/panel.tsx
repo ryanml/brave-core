@@ -299,7 +299,8 @@ export class Panel extends React.Component<Props, State> {
         >
           {
             publisher && publisher.publisher_key
-            ? <WalletPanel
+            ? <>
+              <WalletPanel
               id={'wallet-panel'}
               platform={publisher.provider as Provider}
               publisherName={publisher.name}
@@ -313,7 +314,9 @@ export class Panel extends React.Component<Props, State> {
               donationAction={this.showDonateToSiteDetail}
               onAmountChange={this.doNothing}
               onIncludeInAuto={this.switchAutoContribute}
-            />
+              />
+              <div style={{ height: '48px' }}></div>
+              </>
             : null
           }
           <WalletSummary compact={true} {...this.getWalletSummary()}/>
