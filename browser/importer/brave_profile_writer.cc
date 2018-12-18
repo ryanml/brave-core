@@ -239,6 +239,10 @@ void BraveProfileWriter::SetWalletProperties(brave_rewards::RewardsService*
     rewards_service->ExcludePublisher(publisher_key);
   }
 
+  if (ledger_.claimed_grants.size() > 0) {
+  // todo 
+  }
+
   // Set the recurring tips (formerly known as pinned sites)
   int sum_of_monthly_tips = 0;
   pinned_item_count_ = 0;

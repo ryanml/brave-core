@@ -424,6 +424,16 @@ bool TryFindIntKey(const base::Value* dict, const std::string key,
   return false;
 }
 
+bool TryFindDoubleKey(const base::Value* dict, const std::string key,
+  double& value_to_set) {
+  auto* value_read = dict->FindKeyOfType(key, base::Value::Type::DOUBLE);
+  if (value_read) {
+    value_to_set = value_read->GetDouble();
+    return true;
+  }
+  return false;
+}
+
 bool TryFindUInt64Key(const base::Value* dict, const std::string key, uint64_t& value_to_set) {
   auto* value_read = dict->FindKeyOfType(key, base::Value::Type::DOUBLE);
   if (value_read) {
@@ -574,6 +584,37 @@ bool ends_with(const std::string &input, const std::string &test) {
   return false;
 }
 
+bool ParseClaimedGrants(BraveLedger& ledger,
+  const base::Value& session_store_json) {
+  const base::Value* grants = session_store_json.FindPathOfType(
+      {"ledger", "info", "grants"}, base::Value::Type::LIST);
+
+  LOG(ERROR) << "\n\n\nINSIDE PARSE CLAIMED GRANTS ";
+
+  if (!grants) {
+    LOG(ERROR)
+      << "\"ledger\".\"info\".\"grants\" not found in session-store-1";
+    return false;    
+  }
+
+  ledger.claimed_grants = std::vector<BraveGrant>();
+
+  for (const auto& item : grants->GetList()) {
+    BraveGrant grant;
+
+    if (!TryFindDoubleKey(&item, "amount", grant.amount) ||
+        !TryFindUInt64Key(&item, "expirationDate", grant.expiration_date)) {
+      continue;
+    }
+
+    ledger.claimed_grants.push_back(grant);
+  }
+
+  LOG(ERROR) << "\n\n\nGRANTS LENGTH IS " << ledger.claimed_grants.size();  
+
+  return true;
+}
+
 bool ParsePinnedSites(BraveLedger& ledger,
   const base::Value& session_store_json) {
   const base::Value* publishers = session_store_json.FindPathOfType(
@@ -660,6 +701,11 @@ bool BraveImporter::ImportLedger() {
   if (!ParsePinnedSites(ledger, *session_store_json)) {
     LOG(ERROR) << "Failed to parse list of pinned sites for Brave Payments";
     return false;
+  }
+
+  if (!ParseClaimedGrants(ledger, *session_store_json)) {
+    LOG(ERROR) << "Failed to parse list of grants for Brave Payments";
+    return false;    
   }
 
   bridge_->UpdateLedger(ledger);

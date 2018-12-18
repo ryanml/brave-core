@@ -10,6 +10,10 @@ BravePublisher::BravePublisher(const BravePublisher& other) = default;
 
 BravePublisher::~BravePublisher() {}
 
+BraveGrant::BraveGrant() {}
+
+BraveGrant::~BraveGrant() {}
+
 BraveLedger::BraveLedger() {}
 
 BraveLedger::BraveLedger(const BraveLedger& other) = default;

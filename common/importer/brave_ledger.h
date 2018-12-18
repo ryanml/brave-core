@@ -21,6 +21,14 @@ struct BravePublisher {
   ~BravePublisher();
 };
 
+struct BraveGrant {
+  double amount;
+  uint64_t expiration_date;
+
+  BraveGrant();
+  ~BraveGrant();
+};
+
 // NOTE: if we need to read more data from session-store-1,
 // we may consider moving this to brave_importer.h (or similar)
 struct SessionStoreSettings {
@@ -45,6 +53,7 @@ struct BraveLedger {
   std::string passphrase;
   std::vector<std::string> excluded_publishers;
   std::vector<BravePublisher> pinned_publishers;
+  std::vector<BraveGrant> claimed_grants;
   SessionStoreSettings settings;
 };
 
