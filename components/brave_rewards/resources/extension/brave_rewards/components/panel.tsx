@@ -115,6 +115,12 @@ export class Panel extends React.Component<Props, State> {
     this.actions.getGrantCaptcha()
   }
 
+  onBackupWallet = () => {
+    chrome.tabs.create({
+      url: 'chrome://rewards#backup-restore'
+    })
+  }
+
   onGrantHide = () => {
     this.actions.onResetGrant()
   }
@@ -199,6 +205,38 @@ export class Panel extends React.Component<Props, State> {
 
   onCloseNotification = (id: string) => {
     this.actions.deleteNotification(id)
+  }
+
+  getNotificationProp = (key: string, notification: any) => {
+    if (!notification ||
+        !notification.notification ||
+        !notification.notification[key]) {
+      return null
+    }
+
+    return notification.notification[key]
+  }
+
+  getNotificationClickEvent = (type?: string) => {
+    if (!type) {
+      return null
+    }
+
+    let clickEvent
+
+    switch (type) {
+      case 'grant':
+        clickEvent = this.onFetchCaptcha
+        break
+      case 'backupWallet':
+        clickEvent = this.onBackupWallet
+        break
+      default:
+        clickEvent = null
+        break
+    }
+
+    return clickEvent
   }
 
   getNotification = () => {
@@ -294,6 +332,8 @@ export class Panel extends React.Component<Props, State> {
     const publisher: RewardsExtension.Publisher | undefined = this.getPublisher()
     const converted = utils.convertBalance(balance.toString(), rates)
     const notification = this.getNotification()
+    const notificationType = this.getNotificationProp('type', notification)
+    const notificationClick = this.getNotificationClickEvent(notificationType)
 
     const pendingTotal = parseFloat(
       (pendingContributionTotal || 0).toFixed(1))
@@ -329,7 +369,7 @@ export class Panel extends React.Component<Props, State> {
         connectedWallet={false}
         grant={grant}
         onGrantHide={this.onGrantHide}
-        onFetchCaptcha={this.onFetchCaptcha}
+        onNotificationClick={notificationClick}
         onSolution={this.onSolution}
         onFinish={this.onFinish}
         convertProbiToFixed={utils.convertProbiToFixed}
