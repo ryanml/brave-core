@@ -872,6 +872,7 @@ void RewardsServiceImpl::OnReconcileComplete(ledger::Result result,
       return;
 
     FetchWalletProperties();
+    MaybeShowNotificationTipsPaid();
     bat_ledger_->OnReconcileCompleteSuccess(viewing_id,
         category,
         probi,
@@ -2394,6 +2395,21 @@ void RewardsServiceImpl::ShowNotificationAddFunds(bool sufficient) {
   notification_service_->AddNotification(
       RewardsNotificationService::REWARDS_NOTIFICATION_INSUFFICIENT_FUNDS, args,
       "rewards_notification_insufficient_funds");
+}
+
+void RewardsServiceImpl::MaybeShowNotificationTipsPaid() {
+  GetAutoContribute(base::Bind(&RewardsServiceImpl::ShowNotificationTipsPaid,
+      AsWeakPtr()));
+}
+
+void RewardsServiceImpl::ShowNotificationTipsPaid(bool ac_enabled) {
+  if (ac_enabled)
+    return;
+
+  RewardsNotificationService::RewardsNotificationArgs args;
+  notification_service_->AddNotification(
+      RewardsNotificationService::REWARDS_NOTIFICATION_TIPS_PROCESSED, args,
+      "rewards_notification_tips_processed");
 }
 
 std::unique_ptr<ledger::LogStream> RewardsServiceImpl::Log(

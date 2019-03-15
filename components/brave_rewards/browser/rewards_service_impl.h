@@ -419,6 +419,9 @@ class RewardsServiceImpl : public RewardsService,
   bool ShouldShowNotificationAddFunds() const;
   void ShowNotificationAddFunds(bool sufficient);
 
+  void MaybeShowNotificationTipsPaid();
+  void ShowNotificationTipsPaid(bool ac_enabled);
+
   // Mojo Proxy methods
   void OnPublisherBannerMojoProxy(const std::string& banner);
   void OnGetConfirmationsHistory(
