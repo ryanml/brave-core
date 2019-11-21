@@ -134,3 +134,8 @@ export const onPromotionFinish = (result: NewTab.RewardsResult, promotion: NewTa
 export const setCurrentStackWidget = (widgetId: NewTab.StackWidget) => action(types.SET_CURRENT_STACK_WIDGET, {
   widgetId
 })
+
+export const connectToBinance = () => action(types.CONNECT_TO_BINANCE)
+
+// Exists only for prototyping right now
+export const onBinanceConnectComplete = () => action(types.ON_BINANCE_CONNECT_COMPLETE)

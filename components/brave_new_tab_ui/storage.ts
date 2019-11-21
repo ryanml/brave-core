@@ -18,6 +18,7 @@ const defaultState: NewTab.State = {
   showRewards: false,
   brandedWallpaperOptIn: false,
   isBrandedWallpaperNotificationDismissed: true,
+  showBinance: false,
   topSites: [],
   ignoredTopSites: [],
   pinnedTopSites: [],
@@ -53,7 +54,13 @@ const defaultState: NewTab.State = {
     walletCreateFailed: false,
     walletCorrupted: false
   },
-  currentStackWidget: 'rewards'
+  currentStackWidget: 'rewards',
+  binanceState: {
+    authInProgress: false,
+    authFailed: false,
+    userAuthed: false,
+    btcBalance: '0.00'
+  }
 }
 
 if (chrome.extension.inIncognitoContext) {
@@ -72,7 +79,11 @@ const getPersistentData = (state: NewTab.State): NewTab.PersistentState => {
     showEmptyPage: state.showEmptyPage,
     bookmarks: state.bookmarks,
     rewardsState: state.rewardsState,
+<<<<<<< HEAD
     currentStackWidget: state.currentStackWidget
+=======
+    binanceState: state.binanceState
+>>>>>>> Binance Widget Prototyping
   }
 
   return peristantState

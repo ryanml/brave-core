@@ -69,6 +69,7 @@ declare namespace NewTab {
     bookmarks: Record<string, Bookmark>
     rewardsState: RewardsWidgetState
     currentStackWidget: StackWidget
+    binanceState: BinanceWidgetState
   }
 
   export interface EphemeralState {
@@ -91,6 +92,7 @@ declare namespace NewTab {
     isBrandedWallpaperNotificationDismissed: boolean
     stats: Stats,
     brandedWallpaperData?: BrandedWallpaper
+    showBinance: boolean
   }
 
   export interface RewardsWidgetState {
@@ -107,6 +109,13 @@ declare namespace NewTab {
     walletCreating: boolean
     walletCreateFailed: boolean
     walletCorrupted: boolean
+  }
+
+  export interface BinanceWidgetState {
+    authInProgress: boolean
+    authFailed: boolean
+    userAuthed: boolean
+    btcBalance: string
   }
 
   export const enum RewardsResult {
