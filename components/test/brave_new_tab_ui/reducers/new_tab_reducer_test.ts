@@ -270,4 +270,25 @@ describe('newTabReducer', () => {
       })
     })
   })
+  describe('ON_BINANCE_CONNECT_COMPLETE', () => {
+    it('clears in progress attributes and sets userAuthed', () => {
+      const initialState = newTabReducer(fakeState, {
+        type: types.CONNECT_TO_BINANCE,
+        payload: {}
+      })
+      const assertion = newTabReducer(initialState, {
+        type: types.ON_BINANCE_CONNECT_COMPLETE,
+        payload: {}
+      })
+
+      expect(assertion).toEqual({
+        ...fakeState,
+        binanceState: {
+          ...fakeState.binanceState,
+          userAuthed: true,
+          authInProgress: false
+        }
+      })
+    })
+  })
 })
