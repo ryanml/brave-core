@@ -21,23 +21,31 @@ import {
   DetailsAction,
   ActionsGroup,
   AccountAction,
-  ActionIcon
+  ActionIcon,
+  BlurIcon
 } from './style'
+import {
+  HideIcon,
+  ShowIcon,
+  TradeIcon,
+  BinanceLogo,
+  DepositIcon
+} from './assets/icons'
+
 import createWidget from '../widget/index'
-import BinanceLogo from './assets/binance-logo'
-import TradeIcon from './assets/trade-icon'
-import DepositIcon from './assets/deposit-icon'
 import { getLocale } from '../../../../common/locale'
 
 interface Props {
   userAuthed: boolean
   btcBalance: string
   authInProgress: boolean
+  hideBalance: boolean
   hideWidget: () => void
   connectBinance: () => void
   onBinanceDetails: () => void
   onBinanceDeposit: () => void
   onBinanceTrade: () => void
+  onSetHideBalance: (hide: boolean) => void
 }
 
 class Binance extends React.PureComponent<Props, {}> {
@@ -56,6 +64,12 @@ class Binance extends React.PureComponent<Props, {}> {
     return this.renderWelcomeView()
   }
 
+  onSetHideBalance = () => {
+    this.props.onSetHideBalance(
+      !this.props.hideBalance
+    )
+  }
+
   renderAuthInProgress = () => {
     return (
       <>
@@ -69,6 +83,7 @@ class Binance extends React.PureComponent<Props, {}> {
   renderAccountView = () => {
     const {
       btcBalance,
+      hideBalance,
       onBinanceDetails,
       onBinanceDeposit,
       onBinanceTrade
@@ -78,11 +93,18 @@ class Binance extends React.PureComponent<Props, {}> {
       <>
         <EquityTitle>
           {getLocale('binanceWidgetValueText')}
+          <BlurIcon onClick={this.onSetHideBalance}>
+            {
+              hideBalance
+              ? <ShowIcon />
+              : <HideIcon />
+            }
+          </BlurIcon>
         </EquityTitle>
-        <Balance>
+        <Balance hideBalance={hideBalance}>
           {btcBalance} <TickerLabel>{getLocale('binanceWidgetBTCTickerText')}</TickerLabel>
         </Balance>
-        <Converted>
+        <Converted hideBalance={hideBalance}>
           {'= $0.00'}
         </Converted>
         <DetailsAction onClick={onBinanceDetails}>

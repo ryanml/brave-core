@@ -230,6 +230,10 @@ class NewTabPage extends React.Component<Props, State> {
     window.open('https://www.binance.us/en/usercenter/dashboard/overview', '_blank')
   }
 
+  setHideBalance = (hide: boolean) => {
+    this.props.actions.setHideBalance(hide)
+  }
+
   enableAds = () => {
     chrome.braveRewards.saveAdsSetting('adsEnabled', 'true')
   }

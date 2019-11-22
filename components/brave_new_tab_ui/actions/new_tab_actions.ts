@@ -139,3 +139,7 @@ export const connectToBinance = () => action(types.CONNECT_TO_BINANCE)
 
 // Exists only for prototyping right now
 export const onBinanceConnectComplete = () => action(types.ON_BINANCE_CONNECT_COMPLETE)
+
+export const setHideBalance = (hide: boolean) => action(types.SET_HIDE_BALANCE, {
+  hide
+})

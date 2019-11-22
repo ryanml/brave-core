@@ -4,6 +4,10 @@
 
 import styled from 'styled-components'
 
+interface StyleProps {
+  hideBalance: boolean
+}
+
 export const WidgetWrapper = styled<{}, 'div'>('div')`
   color: white;
   padding: 10px 15px;
@@ -71,13 +75,15 @@ export const EquityTitle = styled<{}, 'span'>('span')`
   display: block;
   font-size: 14px;
   color: rgba(255, 255, 255, 0.7);
+  vertical-align: middle;
 `
 
-export const Balance = styled<{}, 'span'>('span')`
+export const Balance = styled<StyleProps, 'span'>('span')`
   display: block;
   font-size: 30px;
   font-weight bold;
   margin: 10px 0;
+  -webkit-filter: blur(${p => p.hideBalance ? 10 : 0}px);
 `
 
 export const TickerLabel = styled<{}, 'span'>('span')`
@@ -85,10 +91,11 @@ export const TickerLabel = styled<{}, 'span'>('span')`
   font-weight bold;
 `
 
-export const Converted = styled<{}, 'span'>('span')`
+export const Converted = styled<StyleProps, 'span'>('span')`
   display: block;
   font-size: 14px;
   color: rgba(255, 255, 255, 0.7);
+  -webkit-filter: blur(${p => p.hideBalance ? 10 : 0}px);
 `
 
 export const DetailsAction = styled<{}, 'span'>('span')`
@@ -121,4 +128,11 @@ export const AccountAction = styled<{}, 'div'>('div')`
   padding: 5px 7px;
   display: inline-block;
   height: 31px;
+`
+
+export const BlurIcon = styled<{}, 'div'>('div')`
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 10px;
+  cursor: pointer;
 `

@@ -487,6 +487,11 @@ export const newTabReducer: Reducer<NewTab.State | undefined> = (state: NewTab.S
       state.binanceState.authInProgress = false
       break
 
+    case types.SET_HIDE_BALANCE:
+      state = { ...state }
+      state.binanceState.hideBalance = payload.hide
+      break
+
     default:
       break
   }
