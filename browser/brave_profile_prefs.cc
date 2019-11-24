@@ -216,6 +216,9 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
       password_manager::prefs::kPasswordLeakDetectionEnabled,
       base::Value(false));
 
+  // Binance widget
+  registry->RegisterStringPref(kBinanceWidgetAPIKey, "");
+  registry->RegisterStringPref(kBinanceWidgetSecretKey, "");
   RegisterProfilePrefsForMigration(registry);
 }
 

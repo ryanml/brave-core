@@ -1,0 +1,51 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+[
+  {
+    "namespace": "binanceWidget",
+    "description": "Use the <code>chrome.binanceWidget</code> API to receive notifications about Dapp detection.",
+    "compiler_options": {
+      "implemented_in": "brave/browser/extensions/api/binance_widget_api.h"
+    },
+    "events": [
+    ],
+    "functions": [
+      {
+        "name": "getAccountBalance",
+        "type": "function",
+        "description": "Obtain account information",
+        "parameters": [
+          {
+            "type": "function",
+            "name": "callback",
+            "parameters": [
+              {
+                "name": "btc_balance",
+                "type": "string"
+              }
+            ]
+          }
+        ]
+      }, {
+        "name": "setAPIKey",
+        "type": "function",
+        "description": "Sets a user's API key information",
+        "parameters": [
+          {
+            "name": "apiKey",
+            "type": "string"
+          }, {
+            "name": "secretKey",
+            "type": "string"
+          }
+        ]
+      }
+    ],
+    "types": [
+    ],
+    "properties": {
+    }
+  }
+]
