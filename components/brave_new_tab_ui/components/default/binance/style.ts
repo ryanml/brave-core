@@ -47,6 +47,12 @@ export const Copy = styled<{}, 'p'>('p')`
   color: rgba(255, 255, 255, 0.7);
 `
 
+export const ApiCopy = styled(Copy)`
+  max-width: 190px;
+  line-height: 17px;
+  margin-bottom: 10px;
+`
+
 export const ActionsWrapper = styled<{}, 'div'>('div')`
   margin-bottom: 15px;
   text-align: center;
@@ -135,4 +141,51 @@ export const BlurIcon = styled<{}, 'div'>('div')`
   vertical-align: middle;
   margin-left: 10px;
   cursor: pointer;
+`
+
+export const InputWrapper = styled<{}, 'div'>('div')`
+`
+
+export const InputItem = styled<{}, 'div'>('div')`
+  margin-bottom: 10px;
+`
+
+export const InputIconWrapper = styled<{}, 'div'>('div')`
+  display: inline-block;
+  height: 30px;
+  background: #fff;
+  width: 20px;
+`
+
+export const InputIcon = styled<{}, 'div'>('div')`
+  padding: 8px 0px 0px 5px;
+`
+
+export const InputField = styled<{}, 'input'>('input')`
+  display: inline-block;
+  min-width: 215px;
+  height: 30px;
+  vertical-align: top;
+  border: none;
+  border-left: solid #fff;
+  color: #000;
+
+  &:focus {
+    outline: 0;
+  }
+`
+
+export const GenButtonWrapper = styled<{}, 'div'>('div')`
+  margin-top: 10px;
+`
+
+export const GenButton = styled<{}, 'button'>('button')`
+  font-size: 13px;
+  font-weight: bold;
+  border-radius: 20px;
+  border: 0;
+  padding: 5px 10px;
+  cursor: pointer;
+  background: #2C2C2B;
+  color: rgba(255, 255, 255, 0.7);
 `

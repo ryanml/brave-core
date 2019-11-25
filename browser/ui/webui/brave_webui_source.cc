@@ -239,13 +239,16 @@ void CustomizeWebUIHTMLSource(const std::string &name,
         { "binanceWidgetSubText", IDS_BINANCE_WIDGET_SUB_TEXT },
         { "binanceWidgetConnectText", IDS_BINANCE_WIDGET_CONNECT_TEXT },
         { "binanceWidgetDismissText", IDS_BINANCE_WIDGET_DISMISS_TEXT },
-        { "binanceWidgetConnectingOne", IDS_BINANCE_WIDGET_CONNECTING_MESSAGE_ONE },  // NOLINT
-        { "binanceWidgetConnectingTwo", IDS_BINANCE_WIDGET_CONNECTING_MESSAGE_TWO },  // NOLINT
         { "binanceWidgetValueText", IDS_BINANCE_WIDGET_VALUE_TEXT },
         { "binanceWidgetBTCTickerText" , IDS_BINANCE_BTC_TICKER_TEXT },
         { "binanceWidgetViewDetails", IDS_BRAVE_UI_VIEW_DETAILS },
         { "binanceWidgetDepositLabel", IDS_BINANCE_WIDGET_DEPOSIT_LABEL },
         { "binanceWidgetTradeLabel", IDS_BINANCE_WIDGET_TRADE_LABEL },
+        { "binanceWidgetApiKeyDesc" , IDS_BINANCE_WIDGET_API_KEY_DESC },
+        { "binanceWidgetApiKeyHelp" , IDS_BINANCE_WIDGET_API_KEY_HELP },
+        { "binanceWidgetApiKeyInput" , IDS_BINANCE_WIDGET_API_KEY_INPUT },
+        { "binanceWidgetApiSecretKeyInput" , IDS_BINANCE_WIDGET_API_SECRET_KEY_INPUT },  // NOLINT
+        { "binanceWidgetGenNewKey" , IDS_BINANCE_WIDGET_GENERATE_NEW_KEY },
       }
     }, {
       std::string("welcome"), {

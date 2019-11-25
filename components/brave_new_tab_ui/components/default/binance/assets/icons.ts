@@ -7,11 +7,15 @@ import TradeIcon from './trade-icon'
 import DepositIcon from './deposit-icon'
 import ShowIcon from './show-icon'
 import HideIcon from './hide-icon'
+import ApiKeyIcon from './api-key-icon'
+import SecretKeyIcon from './secret-key-icon'
 
 export {
   HideIcon,
   ShowIcon,
   TradeIcon,
   BinanceLogo,
-  DepositIcon
+  DepositIcon,
+  ApiKeyIcon,
+  SecretKeyIcon
 }

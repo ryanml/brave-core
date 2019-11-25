@@ -9,6 +9,7 @@ import {
   Content,
   Title,
   Copy,
+  ApiCopy,
   Link,
   ActionsWrapper,
   ConnectButton,
@@ -22,18 +23,32 @@ import {
   ActionsGroup,
   AccountAction,
   ActionIcon,
-  BlurIcon
+  BlurIcon,
+  InputWrapper,
+  InputItem,
+  InputIcon,
+  InputIconWrapper,
+  InputField,
+  GenButtonWrapper,
+  GenButton
 } from './style'
 import {
   HideIcon,
   ShowIcon,
   TradeIcon,
   BinanceLogo,
-  DepositIcon
+  DepositIcon,
+  ApiKeyIcon,
+  SecretKeyIcon
 } from './assets/icons'
 
 import createWidget from '../widget/index'
 import { getLocale } from '../../../../common/locale'
+
+interface State {
+  apiKey: string
+  apiSecret: string
+}
 
 interface Props {
   userAuthed: boolean
@@ -46,15 +61,24 @@ interface Props {
   onBinanceDeposit: () => void
   onBinanceTrade: () => void
   onSetHideBalance: (hide: boolean) => void
+  onGenerateNewKey: () => void
+  onBinanceConnected: () => void
 }
 
-class Binance extends React.PureComponent<Props, {}> {
+class Binance extends React.PureComponent<Props, State> {
+  constructor (props: Props) {
+    super(props)
+    this.state = {
+      apiKey: '',
+      apiSecret: ''
+    }
+  }
 
   renderRoutes = () => {
     const { userAuthed, authInProgress } = this.props
 
     if (authInProgress) {
-      return this.renderAuthInProgress()
+      return this.renderApiKeyEntry()
     }
 
     if (userAuthed) {
@@ -70,12 +94,73 @@ class Binance extends React.PureComponent<Props, {}> {
     )
   }
 
-  renderAuthInProgress = () => {
+  onKeySubmit = (field: string, event: any) => {
+    const fieldValue = event.target.value
+
+    // const { onBinanceConnected } = this.props
+    const { apiKey, apiSecret } = this.state
+
+    if (!fieldValue.length) {
+      return
+    }
+
+    this.setState({
+      ...this.state,
+      [field]: fieldValue
+    })
+
+    if ((field === 'apiKey' && apiSecret.length) ||
+        (field === 'apiSecret' && apiKey.length)) {
+      console.log('Submitting credentials to binance service')
+      /*
+      chrome.binanceWidget.setAPIKey(apiKey, apiSecret, (success) => {
+        if (success) {
+          onBinanceConnected()
+        }
+      })
+      */
+    }
+  }
+
+  renderApiKeyEntry = () => {
+    const { onGenerateNewKey } = this.props
+
     return (
       <>
-        <Copy>
-          {getLocale('binanceWidgetConnectingOne')} <Link target={'_blank'} href={'https://www.binance.us/en/login'}>binance.us</Link> {getLocale('binanceWidgetConnectingTwo')}
-        </Copy>
+        <ApiCopy>
+          {getLocale('binanceWidgetApiKeyDesc')} <Link target={'_blank'} href={'https://www.binance.com/en/support/articles/360002502072'}>{getLocale('binanceWidgetApiKeyHelp')}</Link>
+        </ApiCopy>
+        <InputWrapper>
+          <InputItem>
+            <InputIconWrapper>
+              <InputIcon>
+                <ApiKeyIcon />
+              </InputIcon>
+            </InputIconWrapper>
+            <InputField
+              type={'text'}
+              onChange={this.onKeySubmit.bind(this, 'apiKey')}
+              placeholder={getLocale('binanceWidgetApiKeyInput')}
+            />
+          </InputItem>
+          <InputItem>
+            <InputIconWrapper>
+              <InputIcon>
+                <SecretKeyIcon />
+              </InputIcon>
+            </InputIconWrapper>
+            <InputField
+              type={'text'}
+              onChange={this.onKeySubmit.bind(this, 'apiSecret')}
+              placeholder={getLocale('binanceWidgetApiSecretKeyInput')}
+            />
+          </InputItem>
+        </InputWrapper>
+        <GenButtonWrapper>
+          <GenButton onClick={onGenerateNewKey}>
+            {getLocale('binanceWidgetGenNewKey')}
+          </GenButton>
+        </GenButtonWrapper>
       </>
     )
   }
