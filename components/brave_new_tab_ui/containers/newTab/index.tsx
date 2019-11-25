@@ -214,8 +214,12 @@ class NewTabPage extends React.Component<Props, State> {
     this.props.actions.connectToBinance()
   }
 
-  binanceConnected = () => {
-    this.props.actions.onBinanceConnectComplete()
+  setApiKeys = (apiKey: string, apiSecret: string) => {
+    this.props.actions.setApiKeys(apiKey, apiSecret)
+  }
+
+  setBinanceBalance = (balance: string) => {
+    this.props.actions.onBinanceBalance(balance)
   }
 
   depositBinance = () => {

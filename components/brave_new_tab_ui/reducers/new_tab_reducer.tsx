@@ -481,15 +481,23 @@ export const newTabReducer: Reducer<NewTab.State | undefined> = (state: NewTab.S
       state.binanceState.authInProgress = true
       break
 
-    case types.ON_BINANCE_CONNECT_COMPLETE:
-      state = { ...state }
-      state.binanceState.userAuthed = true
-      state.binanceState.authInProgress = false
-      break
-
     case types.SET_HIDE_BALANCE:
       state = { ...state }
       state.binanceState.hideBalance = payload.hide
+      break
+
+    case types.SET_API_KEYS:
+      state = { ...state }
+      const { apiKey, secretKey } = payload
+
+      state.binanceState.userAuthed = true
+      state.binanceState.authInProgress = false
+      chrome.binanceWidget.setAPIKey(apiKey, secretKey)
+      break
+
+    case types.ON_BINANCE_BALANCE:
+      state = { ...state }
+      state.binanceState.btcBalance = payload.balance
       break
 
     default:

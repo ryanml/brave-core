@@ -62,7 +62,8 @@ interface Props {
   onBinanceTrade: () => void
   onSetHideBalance: (hide: boolean) => void
   onGenerateNewKey: () => void
-  onBinanceConnected: () => void
+  onBinanceBalance: (balance: string) => void
+  onSetApiKeys: (apiKey: string, apiSecret: string) => void
 }
 
 class Binance extends React.PureComponent<Props, State> {
@@ -72,6 +73,24 @@ class Binance extends React.PureComponent<Props, State> {
       apiKey: '',
       apiSecret: ''
     }
+  }
+
+  componentDidMount () {
+    if (this.props.userAuthed) {
+      this.fetchBalance()
+    }
+  }
+
+  componentDidUpdate (prevProps: Props) {
+    if (!prevProps.userAuthed && this.props.userAuthed) {
+      this.fetchBalance()
+    }
+  }
+
+  fetchBalance = () => {
+    chrome.binanceWidget.getAccountBalance((balance: string) => {
+      this.props.onBinanceBalance(balance)
+    })
   }
 
   renderRoutes = () => {
@@ -97,29 +116,21 @@ class Binance extends React.PureComponent<Props, State> {
   onKeySubmit = (field: string, event: any) => {
     const fieldValue = event.target.value
 
-    // const { onBinanceConnected } = this.props
-    const { apiKey, apiSecret } = this.state
-
     if (!fieldValue.length) {
       return
     }
 
-    this.setState({
+    const newState = {
       ...this.state,
       [field]: fieldValue
-    })
-
-    if ((field === 'apiKey' && apiSecret.length) ||
-        (field === 'apiSecret' && apiKey.length)) {
-      console.log('Submitting credentials to binance service')
-      /*
-      chrome.binanceWidget.setAPIKey(apiKey, apiSecret, (success) => {
-        if (success) {
-          onBinanceConnected()
-        }
-      })
-      */
     }
+    const { apiKey, apiSecret } = newState
+
+    if (apiKey.length && apiSecret.length) {
+      this.props.onSetApiKeys(apiKey, apiSecret)
+    }
+
+    this.setState(newState)
   }
 
   renderApiKeyEntry = () => {

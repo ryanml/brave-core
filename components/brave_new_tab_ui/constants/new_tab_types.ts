@@ -38,9 +38,10 @@ export const enum types {
   ON_WIDGET_POSITION_CHANGED = '@@newtab/ON_WIDGET_POSITION_CHANGED',
   SET_CURRENT_STACK_WIDGET = '@@newtab/SET_CURRENT_STACK_WIDGET',
   // Binance Widget
+  SET_API_KEYS = '@@newtab/SET_API_KEYS',
+  ON_BINANCE_BALANCE = '@@newtab/ON_BINANCE_BALANCE',
   SET_HIDE_BALANCE = '@@newtab/SET_HIDE_BALANCE',
-  CONNECT_TO_BINANCE = '@@newtab/CONNECT_TO_BINANCE',
-  ON_BINANCE_CONNECT_COMPLETE = '@@newtab/ON_BINANCE_CONNECT_COMPLETE'
+  CONNECT_TO_BINANCE = '@@newtab/CONNECT_TO_BINANCE'
 }
 
 export type DismissBrandedWallpaperNotificationPayload = {
