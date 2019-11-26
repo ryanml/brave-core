@@ -155,6 +155,7 @@ declare namespace chrome.braveRewards {
 declare namespace chrome.binanceWidget {
   const setAPIKey: (apiKey: string, apiSecret: string) => {}
   const getAccountBalance: (callback: (balance: string) => void) => {}
+  const getUserTLD: (callback: (userTLD: string) => void) => {}
 }
 
 declare namespace chrome.rewardsNotifications {

@@ -78,5 +78,19 @@ BinanceWidgetSetAPIKeyFunction::Run() {
   return RespondNow(NoArguments());
 }
 
+ExtensionFunction::ResponseAction
+BinanceWidgetGetUserTLDFunction::Run() {
+  Profile* profile = Profile::FromBrowserContext(browser_context());
+  if (brave::IsTorProfile(profile)) {
+    return RespondNow(Error("Not available in Tor profile"));
+  }
+
+  auto* controller = GetBinanceWidgetController(browser_context());
+  const std::string userTLD = controller->GetBinanceTLD();
+
+  return RespondNow(OneArgument(
+      std::make_unique<base::Value>(userTLD)));
+}
+
 }  // namespace api
 }  // namespace extensions

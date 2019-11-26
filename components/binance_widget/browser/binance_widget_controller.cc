@@ -31,6 +31,7 @@
 #include "net/base/load_flags.h"
 #include "services/network/public/cpp/shared_url_loader_factory.h"
 #include "services/network/public/cpp/simple_url_loader.h"
+#include "components/country_codes/country_codes.h"
 
 using namespace std::chrono;
 
@@ -295,6 +296,21 @@ bool BinanceWidgetController::LoadAPIKeyFromPrefs() {
     return false;
   }
   return true;
+}
+
+std::string BinanceWidgetController::GetBinanceTLD() {
+  Profile* profile = Profile::FromBrowserContext(context_);
+
+  const std::string usTLD = "us";
+  const std::string usCode = "US";
+  const std::string globalTLD = "com";
+
+  const int32_t user_country_id =
+      country_codes::GetCountryIDFromPrefs(profile->GetPrefs());
+  const int32_t us_id = country_codes::CountryCharsToCountryID(
+      usCode.at(0), usCode.at(1));
+
+  return (user_country_id == us_id) ? usTLD : globalTLD;
 }
 
 base::SequencedTaskRunner* BinanceWidgetController::io_task_runner() {

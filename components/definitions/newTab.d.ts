@@ -117,7 +117,10 @@ declare namespace NewTab {
     userAuthed: boolean
     btcBalance: string
     hideBalance: boolean
+    userTLD: BinanceTLD
   }
+
+  export type BinanceTLD = 'us' | 'com'
 
   export const enum RewardsResult {
     LEDGER_OK = 0,

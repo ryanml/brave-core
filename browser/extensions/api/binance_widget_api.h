@@ -38,6 +38,17 @@ class BinanceWidgetSetAPIKeyFunction :
   ResponseAction Run() override;
 };
 
+class BinanceWidgetGetUserTLDFunction :
+    public ExtensionFunction {
+  public:
+   DECLARE_EXTENSION_FUNCTION("binanceWidget.getUserTLD", UNKNOWN)
+
+  protected:
+   ~BinanceWidgetGetUserTLDFunction() override {}
+
+   ResponseAction Run() override;
+};
+
 }  // namespace api
 }  // namespace extensions
 

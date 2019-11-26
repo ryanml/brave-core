@@ -40,6 +40,7 @@ export const enum types {
   // Binance Widget
   SET_API_KEYS = '@@newtab/SET_API_KEYS',
   ON_BINANCE_BALANCE = '@@newtab/ON_BINANCE_BALANCE',
+  ON_BINANCE_USER_TLD = '@@newtab/ON_BINANCE_USER_TLD',
   SET_HIDE_BALANCE = '@@newtab/SET_HIDE_BALANCE',
   CONNECT_TO_BINANCE = '@@newtab/CONNECT_TO_BINANCE'
 }

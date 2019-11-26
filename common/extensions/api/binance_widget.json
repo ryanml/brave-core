@@ -41,6 +41,23 @@
             "type": "string"
           }
         ]
+      },
+      {
+        "name": "getUserTLD",
+        "type": "function",
+        "description": "Gets the appropriate Binance TLD per a user's region",
+        "parameters": [
+          {
+            "type": "function",
+            "name": "callback",
+            "parameters": [
+              {
+                "name": "userTLD",
+                "type": "string"
+              }
+            ]
+          }
+        ]
       }
     ],
     "types": [

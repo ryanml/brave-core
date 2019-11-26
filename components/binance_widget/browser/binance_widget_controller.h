@@ -46,7 +46,7 @@ class BinanceWidgetController {
 
   void AddObserver(BinanceWidgetControllerObserver* observer);
   void RemoveObserver(BinanceWidgetControllerObserver* observer);
-
+  std::string GetBinanceTLD();
 
  private:
   using SimpleURLLoaderList =

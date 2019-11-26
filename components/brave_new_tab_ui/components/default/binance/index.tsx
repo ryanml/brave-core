@@ -63,6 +63,7 @@ interface Props {
   onSetHideBalance: (hide: boolean) => void
   onGenerateNewKey: () => void
   onBinanceBalance: (balance: string) => void
+  onBinanceUserTLD: (userTLD: NewTab.BinanceTLD) => void
   onSetApiKeys: (apiKey: string, apiSecret: string) => void
 }
 
@@ -79,6 +80,10 @@ class Binance extends React.PureComponent<Props, State> {
     if (this.props.userAuthed) {
       this.fetchBalance()
     }
+
+    chrome.binanceWidget.getUserTLD((userTLD: NewTab.BinanceTLD) => {
+      this.props.onBinanceUserTLD(userTLD)
+    })
   }
 
   componentDidUpdate (prevProps: Props) {

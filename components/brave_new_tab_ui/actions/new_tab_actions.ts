@@ -149,3 +149,7 @@ export const setApiKeys = (apiKey: string, secretKey: string) => action(types.SE
 export const onBinanceBalance = (balance: string) => action(types.ON_BINANCE_BALANCE, {
   balance
 })
+
+export const onBinanceUserTLD = (userTLD: NewTab.BinanceTLD) => action(types.ON_BINANCE_USER_TLD, {
+  userTLD
+})

@@ -222,20 +222,46 @@ class NewTabPage extends React.Component<Props, State> {
     this.props.actions.onBinanceBalance(balance)
   }
 
+  onBinanceUserTLD = (userTLD: NewTab.BinanceTLD) => {
+    this.props.actions.onBinanceUserTLD(userTLD)
+  }
+
+  openBinanceUrl = (route: string) => {
+    let path = ''
+    const { userTLD } = this.props.newTabData.binanceState
+
+    switch (route) {
+      case 'deposit':
+        path = '/usercenter/wallet/deposit/BTC'
+        break
+      case 'trade':
+        path = '/usercenter/wallet/balances'
+        break
+      case 'details':
+        path = '/usercenter/dashboard/overview'
+        break
+      case 'newKey':
+        path = '/usercenter/settings/api-management '
+        break
+    }
+
+    window.open(`https://www.binance.${userTLD}/en${path}`, '_blank')
+  }
+
   depositBinance = () => {
-    window.open('https://www.binance.us/en/usercenter/wallet/deposit/BTC', '_blank')
+    this.openBinanceUrl('deposit')
   }
 
   tradeBinance = () => {
-    window.open('https://www.binance.us/en/usercenter/wallet/balances', '_blank')
+    this.openBinanceUrl('trade')
   }
 
   binanceDetails = () => {
-    window.open('https://www.binance.us/en/usercenter/dashboard/overview', '_blank')
+    this.openBinanceUrl('details')
   }
 
   generateNewKey = () => {
-    window.open('https://www.binance.us/en/usercenter/settings/api-management', '_blank')
+    this.openBinanceUrl('newKey')
   }
 
   setHideBalance = (hide: boolean) => {
