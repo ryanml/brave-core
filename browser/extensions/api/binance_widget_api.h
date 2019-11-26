@@ -40,13 +40,23 @@ class BinanceWidgetSetAPIKeyFunction :
 
 class BinanceWidgetGetUserTLDFunction :
     public ExtensionFunction {
-  public:
-   DECLARE_EXTENSION_FUNCTION("binanceWidget.getUserTLD", UNKNOWN)
+ public:
+  DECLARE_EXTENSION_FUNCTION("binanceWidget.getUserTLD", UNKNOWN)
 
-  protected:
-   ~BinanceWidgetGetUserTLDFunction() override {}
+ protected:
+  ~BinanceWidgetGetUserTLDFunction() override {}
+  ResponseAction Run() override;
+};
 
-   ResponseAction Run() override;
+class BinanceWidgetValidateAPIKeyFunction :
+    public ExtensionFunction {
+ public:
+  DECLARE_EXTENSION_FUNCTION("binanceWidget.validateAPIKey", UNKNOWN)
+
+ protected:
+  ~BinanceWidgetValidateAPIKeyFunction() override {}
+  void OnValidateAPIKey(int status_code, bool unauthorized);
+  ResponseAction Run() override;
 };
 
 }  // namespace api

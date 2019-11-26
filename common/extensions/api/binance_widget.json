@@ -58,6 +58,27 @@
             ]
           }
         ]
+      }, {
+        "name": "validateAPIKey",
+        "type": "function",
+        "description": "Validates that the API key is valid",
+        "parameters": [
+          {
+            "type": "function",
+            "name": "callback",
+            "parameters": [
+              {
+                "name": "status",
+                "type": "integer",
+                "description": "The HTTP status code"
+              }, {
+                "name": "unauthorized",
+                "type": "boolean",
+                "description": "Helpful for a clear indication that the error is explicitly unauthorized"
+              }
+            ]
+          }
+        ]
       }
     ],
     "types": [

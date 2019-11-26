@@ -98,6 +98,15 @@ bool BinanceWidgetController::GetAccountBalance(
   return URLRequest("GET", api_path_account, "", std::move(internal_callback));
 }
 
+bool BinanceWidgetController::ValidateAPIKey(
+    ValidateAPIKeyCallback callback) {
+  auto internal_callback = base::BindOnce(
+       &BinanceWidgetController::OnValidateAPIKey,
+       base::Unretained(this), std::move(callback));
+  // This API is of security type USER_DATA as documented here:
+  return URLRequest("GET", api_path_account, "", std::move(internal_callback));
+}
+
 /**
  * Performs a URL Request to a Binance API endpoint
  * @param method The HTTP method to use, e.g. GET, POST, PUT, ...
@@ -211,15 +220,20 @@ void BinanceWidgetController::OnGetAccountBalance(
     const std::map<std::string, std::string>& headers) {
   LOG(ERROR) << "====OnGetAccountBalance body: " << body;
   LOG(ERROR) << "====OnGetAccountBalance status: " << status;
-
   std::string btc_balance = "-";
   if (status >= 200 && status <= 299) {
     if (!GetBTCValueFromAccountJSON(body, btc_balance)) {
       btc_balance = "-";
     }
   }
-
   std::move(callback).Run(btc_balance);
+}
+
+void BinanceWidgetController::OnValidateAPIKey(
+    ValidateAPIKeyCallback callback,
+    const int status, const std::string& body,
+    const std::map<std::string, std::string>& headers) {
+  std::move(callback).Run(status, status == 401);
 }
 
 bool BinanceWidgetController::GetBTCValueFromAccountJSON(

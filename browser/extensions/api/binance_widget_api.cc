@@ -92,5 +92,28 @@ BinanceWidgetGetUserTLDFunction::Run() {
       std::make_unique<base::Value>(userTLD)));
 }
 
+ExtensionFunction::ResponseAction
+BinanceWidgetValidateAPIKeyFunction::Run() {
+  Profile* profile = Profile::FromBrowserContext(browser_context());
+  if (brave::IsTorProfile(profile)) {
+    return RespondNow(Error("Not available in Tor profile"));
+  }
+
+  auto* controller = GetBinanceWidgetController(browser_context());
+  if (!controller->ValidateAPIKey(
+      base::BindOnce(
+          &BinanceWidgetValidateAPIKeyFunction::OnValidateAPIKey,
+          this))) {
+    return RespondNow(Error("Could not send request to validate API key"));
+  }
+  return RespondLater();
+}
+
+void BinanceWidgetValidateAPIKeyFunction::OnValidateAPIKey(
+    int status_code, bool unauthorized) {
+  Respond(TwoArguments(std::make_unique<base::Value>(status_code),
+                       std::make_unique<base::Value>(unauthorized)));
+}
+
 }  // namespace api
 }  // namespace extensions

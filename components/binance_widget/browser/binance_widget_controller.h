@@ -42,6 +42,8 @@ class BinanceWidgetController {
 
   using GetAccountBalanceCallback = base::OnceCallback<void(const std::string&)>;
   bool GetAccountBalance(GetAccountBalanceCallback callback);
+  using ValidateAPIKeyCallback = base::OnceCallback<void(int, bool)>;
+  bool ValidateAPIKey(ValidateAPIKeyCallback callback);
   bool SetAPIKey(const std::string& api_key, const std::string& secret_key);
 
   void AddObserver(BinanceWidgetControllerObserver* observer);
@@ -58,6 +60,9 @@ class BinanceWidgetController {
 
   base::SequencedTaskRunner* io_task_runner();
   void OnGetAccountBalance(GetAccountBalanceCallback callback,
+                           const int status, const std::string& body,
+                           const std::map<std::string, std::string>& headers);
+  void OnValidateAPIKey(ValidateAPIKeyCallback callback,
                            const int status, const std::string& body,
                            const std::map<std::string, std::string>& headers);
   bool URLRequest(const std::string& method, const std::string& path,
