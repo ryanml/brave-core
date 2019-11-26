@@ -61,7 +61,9 @@ const defaultState: NewTab.State = {
     userAuthed: false,
     btcBalance: '0.00',
     hideBalance: false,
-    userTLD: 'com'
+    userTLD: 'com',
+    apiCredError: false,
+    validationInProgress: false
   }
 }
 

@@ -53,6 +53,14 @@ export const ApiCopy = styled(Copy)`
   margin-bottom: 10px;
 `
 
+export const Error = styled<{}, 'span'>('span')`
+  display: block;
+  font-size: 13px;
+  font-weight: bold;
+  margin: 5px 0;
+  color: #FF7316;
+`
+
 export const ActionsWrapper = styled<{}, 'div'>('div')`
   margin-bottom: 15px;
   text-align: center;
@@ -177,6 +185,18 @@ export const InputField = styled<{}, 'input'>('input')`
 
 export const GenButtonWrapper = styled<{}, 'div'>('div')`
   margin-top: 10px;
+`
+
+export const Validation = styled<{}, 'div'>('div')`
+  font-weight: bold;
+`
+
+export const Spinner = styled<{}, 'div'>('div')`
+  color: #fff;
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-left: 5px;
 `
 
 export const GenButton = styled<{}, 'button'>('button')`

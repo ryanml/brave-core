@@ -10,6 +10,7 @@ import {
   Title,
   Copy,
   ApiCopy,
+  Error,
   Link,
   ActionsWrapper,
   ConnectButton,
@@ -30,7 +31,9 @@ import {
   InputIconWrapper,
   InputField,
   GenButtonWrapper,
-  GenButton
+  GenButton,
+  Validation,
+  Spinner
 } from './style'
 import {
   HideIcon,
@@ -44,6 +47,7 @@ import {
 
 import createWidget from '../widget/index'
 import { getLocale } from '../../../../common/locale'
+import { LoaderIcon } from 'brave-ui/components/icons'
 
 interface State {
   apiKey: string
@@ -55,6 +59,8 @@ interface Props {
   btcBalance: string
   authInProgress: boolean
   hideBalance: boolean
+  apiCredError: boolean
+  validationInProgress: boolean
   hideWidget: () => void
   connectBinance: () => void
   onBinanceDetails: () => void
@@ -89,6 +95,13 @@ class Binance extends React.PureComponent<Props, State> {
   componentDidUpdate (prevProps: Props) {
     if (!prevProps.userAuthed && this.props.userAuthed) {
       this.fetchBalance()
+    }
+
+    if (!prevProps.apiCredError && this.props.apiCredError) {
+      this.setState({
+        apiKey: '',
+        apiSecret: ''
+      })
     }
   }
 
@@ -139,13 +152,24 @@ class Binance extends React.PureComponent<Props, State> {
   }
 
   renderApiKeyEntry = () => {
-    const { onGenerateNewKey } = this.props
+    const {
+      apiCredError,
+      onGenerateNewKey,
+      validationInProgress
+    } = this.props
 
     return (
       <>
         <ApiCopy>
           {getLocale('binanceWidgetApiKeyDesc')} <Link target={'_blank'} href={'https://www.binance.com/en/support/articles/360002502072'}>{getLocale('binanceWidgetApiKeyHelp')}</Link>
         </ApiCopy>
+        {
+          apiCredError
+          ? <Error>
+              {getLocale('binanceWidgetInvalidEntry')}
+            </Error>
+          : null
+        }
         <InputWrapper>
           <InputItem>
             <InputIconWrapper>
@@ -154,7 +178,8 @@ class Binance extends React.PureComponent<Props, State> {
               </InputIcon>
             </InputIconWrapper>
             <InputField
-              type={'text'}
+              type={'password'}
+              value={this.state.apiKey}
               onChange={this.onKeySubmit.bind(this, 'apiKey')}
               placeholder={getLocale('binanceWidgetApiKeyInput')}
             />
@@ -166,16 +191,23 @@ class Binance extends React.PureComponent<Props, State> {
               </InputIcon>
             </InputIconWrapper>
             <InputField
-              type={'text'}
+              type={'password'}
+              value={this.state.apiSecret}
               onChange={this.onKeySubmit.bind(this, 'apiSecret')}
               placeholder={getLocale('binanceWidgetApiSecretKeyInput')}
             />
           </InputItem>
         </InputWrapper>
         <GenButtonWrapper>
-          <GenButton onClick={onGenerateNewKey}>
-            {getLocale('binanceWidgetGenNewKey')}
-          </GenButton>
+          {
+            validationInProgress
+            ? <Validation>
+                {getLocale('binanceWidgetValidatingCreds')} <Spinner><LoaderIcon /></Spinner>
+              </Validation>
+            : <GenButton onClick={onGenerateNewKey}>
+                {getLocale('binanceWidgetGenNewKey')}
+              </GenButton>
+          }
         </GenButtonWrapper>
       </>
     )

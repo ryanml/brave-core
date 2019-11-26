@@ -249,6 +249,8 @@ void CustomizeWebUIHTMLSource(const std::string &name,
         { "binanceWidgetApiKeyInput" , IDS_BINANCE_WIDGET_API_KEY_INPUT },
         { "binanceWidgetApiSecretKeyInput" , IDS_BINANCE_WIDGET_API_SECRET_KEY_INPUT },  // NOLINT
         { "binanceWidgetGenNewKey" , IDS_BINANCE_WIDGET_GENERATE_NEW_KEY },
+        { "binanceWidgetInvalidEntry", IDS_BINANCE_WIDGET_INVALID_ENTRY },
+        { "binanceWidgetValidatingCreds", IDS_BINANCE_WIDGET_VALIDATING_CREDS }
       }
     }, {
       std::string("welcome"), {

@@ -721,6 +721,8 @@
       <message name="IDS_BINANCE_WIDGET_API_KEY_INPUT" desc="">Binance API Key</message>
       <message name="IDS_BINANCE_WIDGET_API_SECRET_KEY_INPUT" desc="">Secret Key</message>
       <message name="IDS_BINANCE_WIDGET_GENERATE_NEW_KEY" desc="">Generate new key</message>
+      <message name="IDS_BINANCE_WIDGET_INVALID_ENTRY" desc="">Invalid entry.</message>
+      <message name="IDS_BINANCE_WIDGET_VALIDATING_CREDS" desc="">Validating your credentials...</message>
 
       <!-- WebUI brave sync resources -->
       <!-- WebUI brave sync resources: Shared Content -->

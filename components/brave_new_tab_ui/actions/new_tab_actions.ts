@@ -153,3 +153,7 @@ export const onBinanceBalance = (balance: string) => action(types.ON_BINANCE_BAL
 export const onBinanceUserTLD = (userTLD: NewTab.BinanceTLD) => action(types.ON_BINANCE_USER_TLD, {
   userTLD
 })
+
+export const onApiCredsError = () => action(types.ON_API_CREDS_ERROR)
+
+export const onValidApiCreds = () => action(types.ON_VALID_API_CREDS)

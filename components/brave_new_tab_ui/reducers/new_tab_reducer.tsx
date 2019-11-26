@@ -490,8 +490,8 @@ export const newTabReducer: Reducer<NewTab.State | undefined> = (state: NewTab.S
       state = { ...state }
       const { apiKey, secretKey } = payload
 
-      state.binanceState.userAuthed = true
-      state.binanceState.authInProgress = false
+      state.binanceState.apiCredError = false
+      state.binanceState.validationInProgress = true
       chrome.binanceWidget.setAPIKey(apiKey, secretKey)
       break
 
@@ -503,6 +503,19 @@ export const newTabReducer: Reducer<NewTab.State | undefined> = (state: NewTab.S
     case types.ON_BINANCE_USER_TLD:
       state = { ...state }
       state.binanceState.userTLD = payload.userTLD
+      break
+
+    case types.ON_API_CREDS_ERROR:
+      state = { ...state }
+      state.binanceState.apiCredError = true
+      state.binanceState.validationInProgress = false
+      break
+
+    case types.ON_VALID_API_CREDS:
+      state = { ...state }
+      state.binanceState.userAuthed = true
+      state.binanceState.authInProgress = false
+      state.binanceState.validationInProgress = false
       break
 
     default:
