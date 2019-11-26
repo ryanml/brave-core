@@ -13,7 +13,6 @@
 #include "base/memory/scoped_refptr.h"
 #include "base/memory/weak_ptr.h"
 #include "base/scoped_observer.h"
-#include "brave/components/binance_widget/browser/binance_widget_controller_observer.h"
 #include "components/keyed_service/core/keyed_service.h"
 
 namespace base {
@@ -27,8 +26,7 @@ class BrowserContext;
 class BinanceWidgetController;
 class Profile;
 
-class BinanceWidgetService : public KeyedService,
-                             public BinanceWidgetControllerObserver {
+class BinanceWidgetService : public KeyedService {
  public:
   explicit BinanceWidgetService(content::BrowserContext* context);
   ~BinanceWidgetService() override;
@@ -37,10 +35,6 @@ class BinanceWidgetService : public KeyedService,
   BinanceWidgetController* controller() const { return controller_.get(); }
 
  private:
-  // BinanceWidgetControllerObserver overrides:
-  void OnGetAccountBalance() override;
-
-  ScopedObserver<BinanceWidgetController, BinanceWidgetControllerObserver> observer_;
   content::BrowserContext* context_;
   std::unique_ptr<BinanceWidgetController> controller_;
   base::WeakPtrFactory<BinanceWidgetService> weak_factory_;

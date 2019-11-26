@@ -33,8 +33,6 @@ class SharedURLLoaderFactory;
 class SimpleURLLoader;
 }  // namespace network
 
-class BinanceWidgetControllerObserver;
-
 class BinanceWidgetController {
  public:
   explicit BinanceWidgetController(content::BrowserContext* context);
@@ -46,8 +44,6 @@ class BinanceWidgetController {
   bool ValidateAPIKey(ValidateAPIKeyCallback callback);
   bool SetAPIKey(const std::string& api_key, const std::string& secret_key);
 
-  void AddObserver(BinanceWidgetControllerObserver* observer);
-  void RemoveObserver(BinanceWidgetControllerObserver* observer);
   std::string GetBinanceTLD();
 
  private:
@@ -74,8 +70,6 @@ class BinanceWidgetController {
       const std::unique_ptr<std::string> response_body);
   bool GetBTCValueFromAccountJSON(const std::string& json,
                                   std::string& btc_balance);
-
-  base::ObserverList<BinanceWidgetControllerObserver> observers_;
 
   scoped_refptr<base::SequencedTaskRunner> io_task_runner_;
   std::string api_key_;

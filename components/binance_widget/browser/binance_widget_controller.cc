@@ -21,7 +21,6 @@
 #include "base/task_runner_util.h"
 #include "base/token.h"
 #include "brave/common/pref_names.h"
-#include "brave/components/binance_widget/browser/binance_widget_controller_observer.h"
 #include "chrome/browser/profiles/profile.h"
 #include "components/os_crypt/os_crypt.h"
 #include "components/prefs/pref_service.h"
@@ -358,14 +357,4 @@ base::SequencedTaskRunner* BinanceWidgetController::io_task_runner() {
          base::TaskShutdownBehavior::SKIP_ON_SHUTDOWN});
   }
   return io_task_runner_.get();
-}
-
-
-void BinanceWidgetController::AddObserver(BinanceWidgetControllerObserver* observer) {
-  observers_.AddObserver(observer);
-}
-
-void BinanceWidgetController::RemoveObserver(
-    BinanceWidgetControllerObserver* observer) {
-  observers_.RemoveObserver(observer);
 }

@@ -2,7 +2,6 @@ source_set("browser") {
   sources = [
     "binance_widget_controller.cc",
     "binance_widget_controller.h",
-    "binance_widget_controller_observer.h",
     "binance_widget_service.cc",
     "binance_widget_service.h",
   ]

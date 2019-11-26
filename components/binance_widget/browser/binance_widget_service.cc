@@ -14,14 +14,9 @@
 #include "content/public/browser/browser_context.h"
 
 BinanceWidgetService::BinanceWidgetService(content::BrowserContext* context)
-    : observer_(this),
-      context_(context),
+    : context_(context),
       controller_(new BinanceWidgetController(context)),
       weak_factory_(this) {
-  observer_.Add(controller_.get());
 }
 
 BinanceWidgetService::~BinanceWidgetService() {}
-
-void BinanceWidgetService::OnGetAccountBalance() {
-}
