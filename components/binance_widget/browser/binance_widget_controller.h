@@ -67,6 +67,8 @@ class BinanceWidgetController {
       SimpleURLLoaderList::iterator iter,
       URLRequestCallback callback,
       const std::unique_ptr<std::string> response_body);
+  bool GetBTCValueFromAccountJSON(const std::string& json,
+                                  std::string& btc_balance);
 
   base::ObserverList<BinanceWidgetControllerObserver> observers_;
 

@@ -212,32 +212,56 @@ void BinanceWidgetController::OnGetAccountBalance(
   LOG(ERROR) << "====OnGetAccountBalance body: " << body;
   LOG(ERROR) << "====OnGetAccountBalance status: " << status;
 
-  std::string btc_balance = "3.14";
+  std::string btc_balance = "-";
   if (status >= 200 && status <= 299) {
-    // Response looks like this:
-    // {
-    //  "makerCommission":10,
-    //  ...
-    // "accountType":"SPOT",
-    // "balances":[]
-    // }
-    base::JSONReader::ValueWithError value_with_error =
-        base::JSONReader::ReadAndReturnValueWithError(
-            body, base::JSONParserOptions::JSON_PARSE_RFC);
-    base::Optional<base::Value>& records_v = value_with_error.value;
-    DCHECK(records_v);
-    if (!records_v) {
-      LOG(ERROR) << "Invalid response, coudl not parse JSON";
-      return;
-    }
-    // TODO get balances here
-    const base::Value* val = records_v->FindKey("accountType");
-    if (val && val->is_string()) {
-      btc_balance = val->GetString();
+    if (!GetBTCValueFromAccountJSON(body, btc_balance)) {
+      btc_balance = "-";
     }
   }
 
   std::move(callback).Run(btc_balance);
+}
+
+bool BinanceWidgetController::GetBTCValueFromAccountJSON(
+    const std::string& json, std::string& btc_balance) {
+  // Response looks like this:
+  // {
+  //   "makerCommission":10,
+  //    ...
+  //   "balances":[
+  //     {"asset":"BTC", "free":"0.01382621", "locked":"0.00000000"},
+  //     {"asset":"LTC","free":"0.00000000","locked":"0.00000000"},
+  //     {"asset":"ETH","free":"0.00000000","locked":"0.00000000"},
+  //     ...
+  //   ]
+  // }
+  btc_balance = "0";
+  base::JSONReader::ValueWithError value_with_error =
+      base::JSONReader::ReadAndReturnValueWithError(
+          json, base::JSONParserOptions::JSON_PARSE_RFC);
+  base::Optional<base::Value>& records_v = value_with_error.value;
+  if (!records_v) {
+    LOG(ERROR) << "Invalid response, could not parse JSON, JSON is: " << json;
+    return false;
+  }
+
+  const base::Value* pv_arr = records_v->FindKey("balances");
+  if (pv_arr->is_list()) {
+    for (const base::Value &val : pv_arr->GetList()) {
+      const base::Value* asset = val.FindKey("asset");
+      const base::Value* free_amount = val.FindKey("free");
+      const base::Value* locked_amount = val.FindKey("locked");
+      if (asset && asset->is_string() &&
+          free_amount && free_amount->is_string() &&
+          locked_amount && locked_amount->is_string()) {
+        std::string asset_symbol = asset->GetString();
+        if (asset_symbol == "BTC") {
+          btc_balance = free_amount->GetString();
+        }
+      }
+    }
+  }
+  return true;
 }
 
 bool BinanceWidgetController::SetAPIKey(const std::string& api_key,
