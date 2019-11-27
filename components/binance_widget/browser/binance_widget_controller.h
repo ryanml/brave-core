@@ -81,10 +81,6 @@ class BinanceWidgetController {
       SimpleURLLoaderList::iterator iter,
       URLRequestCallback callback,
       const std::unique_ptr<std::string> response_body);
-  bool GetBTCValueFromAccountJSON(const std::string& json,
-                                  std::string& btc_balance);
-  bool GetBTCUSDValueFromJSON(const std::string& json,
-                              std::string& btc_usd_value);
 
   scoped_refptr<base::SequencedTaskRunner> io_task_runner_;
   std::string api_key_;

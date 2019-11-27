@@ -15,12 +15,12 @@
 #include "base/containers/flat_set.h"
 #include "base/files/file_enumerator.h"
 #include "base/files/file_util.h"
-#include "base/json/json_reader.h"
 #include "base/strings/utf_string_conversions.h"
 #include "base/task/post_task.h"
 #include "base/task_runner_util.h"
 #include "base/token.h"
 #include "brave/common/pref_names.h"
+#include "brave/components/binance_widget/browser/binance_json_parser.h"
 #include "chrome/browser/profiles/profile.h"
 #include "components/os_crypt/os_crypt.h"
 #include "components/prefs/pref_service.h"
@@ -248,7 +248,7 @@ void BinanceWidgetController::OnGetAccountBalance(
     const std::map<std::string, std::string>& headers) {
   std::string btc_balance = "-";
   if (status >= 200 && status <= 299) {
-    if (!GetBTCValueFromAccountJSON(body, btc_balance)) {
+    if (!BinanceJSONParser::GetBTCValueFromAccountJSON(body, &btc_balance)) {
       btc_balance = "-";
     }
   }
@@ -268,76 +268,9 @@ void BinanceWidgetController::OnGetBTCUSDValue(
     const std::map<std::string, std::string>& headers) {
   std::string btc_usd_value = "0.00";
   if (status >= 200 && status <= 299) {
-    GetBTCUSDValueFromJSON(body, btc_usd_value);
+    BinanceJSONParser::GetBTCUSDValueFromJSON(body, &btc_usd_value);
   }
   std::move(callback).Run(btc_usd_value);
-}
-
-bool BinanceWidgetController::GetBTCValueFromAccountJSON(
-    const std::string& json, std::string& btc_balance) {
-  // Response looks like this:
-  // {
-  //   "makerCommission":10,
-  //    ...
-  //   "balances":[
-  //     {"asset":"BTC", "free":"0.01382621", "locked":"0.00000000"},
-  //     {"asset":"LTC","free":"0.00000000","locked":"0.00000000"},
-  //     {"asset":"ETH","free":"0.00000000","locked":"0.00000000"},
-  //     ...
-  //   ]
-  // }
-  btc_balance = "0";
-  base::JSONReader::ValueWithError value_with_error =
-      base::JSONReader::ReadAndReturnValueWithError(
-          json, base::JSONParserOptions::JSON_PARSE_RFC);
-  base::Optional<base::Value>& records_v = value_with_error.value;
-  if (!records_v) {
-    LOG(ERROR) << "Invalid response, could not parse JSON, JSON is: " << json;
-    return false;
-  }
-
-  const base::Value* pv_arr = records_v->FindKey("balances");
-  if (pv_arr->is_list()) {
-    for (const base::Value &val : pv_arr->GetList()) {
-      const base::Value* asset = val.FindKey("asset");
-      const base::Value* free_amount = val.FindKey("free");
-      const base::Value* locked_amount = val.FindKey("locked");
-      if (asset && asset->is_string() &&
-          free_amount && free_amount->is_string() &&
-          locked_amount && locked_amount->is_string()) {
-        std::string asset_symbol = asset->GetString();
-        if (asset_symbol == "BTC") {
-          btc_balance = free_amount->GetString();
-        }
-      }
-    }
-  }
-  return true;
-}
-
-bool BinanceWidgetController::GetBTCUSDValueFromJSON(
-    const std::string& json, std::string& btc_usd_value) {
-  // Response format:
-  // {
-  //   "symbol": "BTCUSDT",
-  //   "price": "7137.98000000"
-  // }
-  base::JSONReader::ValueWithError value_with_error =
-      base::JSONReader::ReadAndReturnValueWithError(
-          json, base::JSONParserOptions::JSON_PARSE_RFC);
-  base::Optional<base::Value>& parsed_response = value_with_error.value;
-  if (!parsed_response) {
-    LOG(ERROR) << "Invalid response, could not parse JSON, JSON is: " << json;
-    return false;
-  }
-
-  const base::Value* btc_price = parsed_response->FindKey("price");
-  if (!btc_price || !btc_price->is_string()) {
-    return false;
-  }
-
-  btc_usd_value = btc_price->GetString();
-  return true;
 }
 
 bool BinanceWidgetController::SetAPIKey(const std::string& api_key,
