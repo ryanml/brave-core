@@ -93,6 +93,10 @@ class BinanceWidgetAPIBrowserTest : public InProcessBrowserTest {
   ~BinanceWidgetAPIBrowserTest() override {
   }
 
+  content::WebContents* contents() {
+    return browser()->tab_strip_model()->GetActiveWebContents();
+  }
+
   void ResetHTTPSServer(
       const net::EmbeddedTestServer::HandleRequestCallback& callback) {
     https_server_.reset(new net::EmbeddedTestServer(
@@ -131,6 +135,75 @@ class BinanceWidgetAPIBrowserTest : public InProcessBrowserTest {
     expected_btc_usd_value_ = btc_usd_value;
     wait_for_get_btc_usd_value_.reset(new base::RunLoop);
     wait_for_get_btc_usd_value_->Run();
+  }
+
+  void WaitForChromeAPIAccountBalance() {
+    std::string msg_from_renderer;
+    std::string script = R"(
+      (function() {
+        chrome.binanceWidget.setAPIKey('abc', 'def')
+        chrome.binanceWidget.validateAPIKey((status, unauthorized) => {
+          if (status != 200) {
+            window.domAutomationController.send('error-1')
+            return
+          }
+          if (unauthorized) {
+            window.domAutomationController.send('error-2')
+            return
+          }
+          chrome.binanceWidget.getAccountBalance((btc_balance) => {
+            if (btc_balance != '0.01382621') {
+              window.domAutomationController.send('error-3')
+              return
+            }
+            window.domAutomationController.send('success')
+          })
+        })
+      })()
+      )";
+    ASSERT_TRUE(ExecuteScriptAndExtractString(
+        contents(), script, &msg_from_renderer));
+    ASSERT_EQ(msg_from_renderer, "success");
+  }
+
+  void WaitForChromeAPIUnauthorized() {
+    std::string msg_from_renderer;
+    std::string script = R"(
+      (function() {
+        chrome.binanceWidget.setAPIKey('abc', 'def')
+        chrome.binanceWidget.validateAPIKey((status, unauthorized) => {
+          if (status == 401 && unauthorized) {
+            window.domAutomationController.send('success')
+            return
+          }
+          window.domAutomationController.send('error-1')
+          return
+        })
+      })()
+      )";
+    ASSERT_TRUE(ExecuteScriptAndExtractString(
+        contents(), script, &msg_from_renderer));
+    ASSERT_EQ(msg_from_renderer, "success");
+  }
+
+    void WaitForChromeAPIServerError() {
+    std::string msg_from_renderer;
+    std::string script = R"(
+      (function() {
+        chrome.binanceWidget.setAPIKey('abc', 'def')
+        chrome.binanceWidget.validateAPIKey((status, unauthorized) => {
+          if (status == 500 && !unauthorized) {
+            window.domAutomationController.send('success')
+            return
+          }
+          window.domAutomationController.send('error-1')
+          return
+        })
+      })()
+      )";
+    ASSERT_TRUE(ExecuteScriptAndExtractString(
+        contents(), script, &msg_from_renderer));
+    ASSERT_EQ(msg_from_renderer, "success");
   }
 
   void OnValidateAPIKey(int status_code, bool unauthorized) {
@@ -345,15 +418,21 @@ IN_PROC_BROWSER_TEST_F(BinanceWidgetAPIBrowserTest,
 }
 
 IN_PROC_BROWSER_TEST_F(BinanceWidgetAPIBrowserTest,
-    PublicEndpoints) {
+    ChromeAPIAccountBalance) {
+  ASSERT_TRUE(NavigateToNewTabUntilLoadStop());
+  WaitForChromeAPIAccountBalance();
+}
+
+IN_PROC_BROWSER_TEST_F(BinanceWidgetAPIBrowserTest,
+    ChromeAPIUnauthorized) {
+  ResetHTTPSServer(base::BindRepeating(&HandleRequestUnauthorized));
+  ASSERT_TRUE(NavigateToNewTabUntilLoadStop());
+  WaitForChromeAPIUnauthorized();
+}
+
+IN_PROC_BROWSER_TEST_F(BinanceWidgetAPIBrowserTest,
+    ChromeAPIServerError) {
   ResetHTTPSServer(base::BindRepeating(&HandleRequestServerError));
-  EXPECT_TRUE(NavigateToNewTabUntilLoadStop());
-  auto* controller = GetBinanceWidgetController();
-  ASSERT_TRUE(controller);
-  ASSERT_TRUE(controller->SetAPIKey("abc", "def"));
-  ASSERT_TRUE(controller->GetBTCUSDValue(
-      base::BindOnce(
-          &BinanceWidgetAPIBrowserTest::OnGetBTCUSDValue,
-          base::Unretained(this))));
-  WaitForGetBTCUSDValue("0.00");
+  ASSERT_TRUE(NavigateToNewTabUntilLoadStop());
+  WaitForChromeAPIServerError();
 }
