@@ -34,12 +34,10 @@
 
 using namespace std::chrono;
 
-namespace {
-
 // https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md
-const char api_endpoint[] = "https://api.binance.com";
-const char api_path_account[] = "/api/v3/account";
-const char api_path_ticker_price[] = "/api/v3/ticker/price";
+std::string BinanceWidgetController::api_endpoint_ =  "https://api.binance.com";
+
+namespace {
 
 const std::vector<std::string> public_endpoints = {
   api_path_ticker_price
@@ -120,6 +118,7 @@ bool BinanceWidgetController::GetBTCUSDValue(
       "symbol=BTCUSDT", std::move(internal_callback));
 }
 
+// static
 bool BinanceWidgetController::IsPublicEndpoint(
     const std::string& endpoint) {
   for (const std::string& path: public_endpoints) {
@@ -179,9 +178,10 @@ bool BinanceWidgetController::URLRequest(const std::string& method,
   }
 
   auto request = std::make_unique<network::ResourceRequest>();
-  std::string api_url = api_endpoint;
+  std::string api_url = api_endpoint_;
   std::string api_path = path;
-  if (!api_path.empty() && api_path[0] != '/') {
+  if (!api_path.empty() && api_path[0] != '/' &&
+      !api_url.empty() && api_url.back() != '/') {
     api_path = "/" + api_path;
   }
   api_url += api_path + "?" + query_string;
@@ -246,8 +246,6 @@ void BinanceWidgetController::OnGetAccountBalance(
     GetAccountBalanceCallback callback,
     const int status, const std::string& body,
     const std::map<std::string, std::string>& headers) {
-  LOG(ERROR) << "====OnGetAccountBalance body: " << body;
-  LOG(ERROR) << "====OnGetAccountBalance status: " << status;
   std::string btc_balance = "-";
   if (status >= 200 && status <= 299) {
     if (!GetBTCValueFromAccountJSON(body, btc_balance)) {

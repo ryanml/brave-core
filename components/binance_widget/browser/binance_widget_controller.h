@@ -33,6 +33,9 @@ class SharedURLLoaderFactory;
 class SimpleURLLoader;
 }  // namespace network
 
+const char api_path_account[] = "/api/v3/account";
+const char api_path_ticker_price[] = "/api/v3/ticker/price";
+
 class BinanceWidgetController {
  public:
   explicit BinanceWidgetController(content::BrowserContext* context);
@@ -45,10 +48,15 @@ class BinanceWidgetController {
   using GetBTCUSDValueCallback = base::OnceCallback<void(const std::string&)>;
   bool GetBTCUSDValue(GetBTCUSDValueCallback callback);
   bool SetAPIKey(const std::string& api_key, const std::string& secret_key);
-
   std::string GetBinanceTLD();
 
+  static bool IsPublicEndpoint(const std::string& endpoint);
+  static void SetAPIEndPointForTest(const std::string& api_endpoint) {
+    api_endpoint_ = api_endpoint;
+  }
+
  private:
+  static std::string api_endpoint_;
   using SimpleURLLoaderList =
       std::list<std::unique_ptr<network::SimpleURLLoader>>;
 
@@ -77,7 +85,6 @@ class BinanceWidgetController {
                                   std::string& btc_balance);
   bool GetBTCUSDValueFromJSON(const std::string& json,
                               std::string& btc_usd_value);
-  bool IsPublicEndpoint(const std::string& endpoint);
 
   scoped_refptr<base::SequencedTaskRunner> io_task_runner_;
   std::string api_key_;
@@ -89,6 +96,7 @@ class BinanceWidgetController {
 
   base::WeakPtrFactory<BinanceWidgetController> weak_factory_;
 
+  FRIEND_TEST_ALL_PREFIXES(BinanceWidgetAPIBrowserTest, SetAPIKey);
   DISALLOW_COPY_AND_ASSIGN(BinanceWidgetController);
 };
 
