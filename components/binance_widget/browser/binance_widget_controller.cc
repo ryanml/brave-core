@@ -7,8 +7,6 @@
 
 #include <algorithm>
 #include <chrono>
-#include <iomanip>
-#include <utility>
 
 #include "base/base64.h"
 #include "base/bind.h"
@@ -20,13 +18,13 @@
 #include "base/task_runner_util.h"
 #include "base/token.h"
 #include "brave/common/pref_names.h"
+#include "brave/components/binance_widget/browser/binance_crypto.h"
 #include "brave/components/binance_widget/browser/binance_json_parser.h"
 #include "chrome/browser/profiles/profile.h"
 #include "components/os_crypt/os_crypt.h"
 #include "components/prefs/pref_service.h"
 #include "content/public/browser/browser_context.h"
 #include "content/public/browser/storage_partition.h"
-#include "crypto/hmac.h"
 #include "net/base/load_flags.h"
 #include "services/network/public/cpp/shared_url_loader_factory.h"
 #include "services/network/public/cpp/simple_url_loader.h"
@@ -42,16 +40,6 @@ namespace {
 const std::vector<std::string> public_endpoints = {
   api_path_ticker_price
 };
-
-template<typename T, size_t N>
-std::string uint8ToHex(T (&a)[N]) {
-  std::ostringstream res;
-  for (size_t i = 0; i < N; i++) {
-    res << std::setfill('0') << std::setw(sizeof(uint8_t) * 2)
-       << std::hex << static_cast<int>(a[i]);
-  }
-  return res.str();
-}
 
 const unsigned int kRetriesCountOnNetworkChange = 1;
 net::NetworkTrafficAnnotationTag GetNetworkTrafficAnnotationTag() {
@@ -142,17 +130,6 @@ bool BinanceWidgetController::URLRequest(const std::string& method,
                                          const std::string& path,
                                          const std::string& query_params,
                                          URLRequestCallback callback) {
-  //
-  // A signature must be provided for most API types which is the HMAC using
-  // key `secretKey` and value `totalParams` which is query string concat
-  // request body.
-  crypto::HMAC hmac(crypto::HMAC::SHA256);
-  const size_t kSignatureSize = 32;
-  if (kSignatureSize != hmac.DigestLength()) {
-    LOG(ERROR) << "Signature size is not as expected for HMAC SHA256";
-    return false;
-  }
-
   std::string query_string = query_params;
 
   // Public endpoints won't accept extraneous parameters
@@ -164,15 +141,12 @@ bool BinanceWidgetController::URLRequest(const std::string& method,
     }
     query_string += "recvWindow=5000&timestamp=";
     query_string += std::to_string(ms.count());
-    uint8_t signature[kSignatureSize];
-    if (!hmac.Init(secret_key_) ||
-        !hmac.Sign(query_string, signature, kSignatureSize)) {
-      LOG(ERROR) << "Error could not create signature for query "
-                    "params for account balance";
+    std::string encoded_signature;
+    if (!BinanceCrypto::GetSignatureForTotalParams(query_string,
+                                                   secret_key_,
+                                                   &encoded_signature)) {
       return false;
     }
-    std::string encoded_signature = uint8ToHex(signature);
-
     query_string += "&signature=";
     query_string += encoded_signature;
   }
