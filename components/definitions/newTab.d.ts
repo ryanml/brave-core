@@ -116,6 +116,7 @@ declare namespace NewTab {
     authFailed: boolean
     userAuthed: boolean
     btcBalance: string
+    btcBalanceValue: string
     hideBalance: boolean
     userTLD: BinanceTLD
     apiCredError: boolean

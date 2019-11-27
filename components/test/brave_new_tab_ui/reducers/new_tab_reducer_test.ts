@@ -270,23 +270,56 @@ describe('newTabReducer', () => {
       })
     })
   })
-  describe('ON_BINANCE_CONNECT_COMPLETE', () => {
-    it('clears in progress attributes and sets userAuthed', () => {
-      const initialState = newTabReducer(fakeState, {
-        type: types.CONNECT_TO_BINANCE,
-        payload: {}
-      })
-      const assertion = newTabReducer(initialState, {
-        type: types.ON_BINANCE_CONNECT_COMPLETE,
-        payload: {}
+  describe('ON_BTC_USD_VALUE', () => {
+    it('handles "-" account case', () => {
+      fakeState.btcBalance = '-'
+      const assertion = newTabReducer(fakeState, {
+        type: types.ON_BTC_USD_VALUE,
+        payload: {
+          value: '7154.99000000'
+        }
       })
 
       expect(assertion).toEqual({
         ...fakeState,
         binanceState: {
           ...fakeState.binanceState,
-          userAuthed: true,
-          authInProgress: false
+          btcBalanceValue: '0.00'
+        }
+      })
+    })
+
+    it('handles default "0.00" account case', () => {
+      const assertion = newTabReducer(fakeState, {
+        type: types.ON_BTC_USD_VALUE,
+        payload: {
+          value: '7154.99000000'
+        }
+      })
+
+      expect(assertion).toEqual({
+        ...fakeState,
+        binanceState: {
+          ...fakeState.binanceState,
+          btcBalanceValue: '0.00'
+        }
+      })
+    })
+
+    it('properly calculates BTC USD Value', () => {
+      fakeState.binanceState.btcBalance = '3.14'
+      const assertion = newTabReducer(fakeState, {
+        type: types.ON_BTC_USD_VALUE,
+        payload: {
+          value: '7154.99000000'
+        }
+      })
+
+      expect(assertion).toEqual({
+        ...fakeState,
+        binanceState: {
+          ...fakeState.binanceState,
+          btcBalanceValue: '22466.67'
         }
       })
     })

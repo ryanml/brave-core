@@ -42,6 +42,8 @@ class BinanceWidgetController {
   bool GetAccountBalance(GetAccountBalanceCallback callback);
   using ValidateAPIKeyCallback = base::OnceCallback<void(int, bool)>;
   bool ValidateAPIKey(ValidateAPIKeyCallback callback);
+  using GetBTCUSDValueCallback = base::OnceCallback<void(const std::string&)>;
+  bool GetBTCUSDValue(GetBTCUSDValueCallback callback);
   bool SetAPIKey(const std::string& api_key, const std::string& secret_key);
 
   std::string GetBinanceTLD();
@@ -59,8 +61,11 @@ class BinanceWidgetController {
                            const int status, const std::string& body,
                            const std::map<std::string, std::string>& headers);
   void OnValidateAPIKey(ValidateAPIKeyCallback callback,
-                           const int status, const std::string& body,
-                           const std::map<std::string, std::string>& headers);
+                        const int status, const std::string& body,
+                        const std::map<std::string, std::string>& headers);
+  void OnGetBTCUSDValue(GetBTCUSDValueCallback callback,
+                        const int status, const std::string& body,
+                        const std::map<std::string, std::string>& headers);                
   bool URLRequest(const std::string& method, const std::string& path,
                   const std::string& query_params, URLRequestCallback callback);
   bool LoadAPIKeyFromPrefs();
@@ -70,6 +75,9 @@ class BinanceWidgetController {
       const std::unique_ptr<std::string> response_body);
   bool GetBTCValueFromAccountJSON(const std::string& json,
                                   std::string& btc_balance);
+  bool GetBTCUSDValueFromJSON(const std::string& json,
+                              std::string& btc_usd_value);
+  bool IsPublicEndpoint(const std::string& endpoint);
 
   scoped_refptr<base::SequencedTaskRunner> io_task_runner_;
   std::string api_key_;

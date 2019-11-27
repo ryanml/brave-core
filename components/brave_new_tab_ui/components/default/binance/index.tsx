@@ -60,6 +60,7 @@ interface Props {
   authInProgress: boolean
   hideBalance: boolean
   apiCredError: boolean
+  btcBalanceValue: string
   validationInProgress: boolean
   hideWidget: () => void
   connectBinance: () => void
@@ -70,6 +71,7 @@ interface Props {
   onGenerateNewKey: () => void
   onBinanceBalance: (balance: string) => void
   onBinanceUserTLD: (userTLD: NewTab.BinanceTLD) => void
+  onBTCUSDValue: (value: string) => void
   onSetApiKeys: (apiKey: string, apiSecret: string) => void
 }
 
@@ -108,6 +110,10 @@ class Binance extends React.PureComponent<Props, State> {
   fetchBalance = () => {
     chrome.binanceWidget.getAccountBalance((balance: string) => {
       this.props.onBinanceBalance(balance)
+
+      chrome.binanceWidget.getBTCUSDValue((value: string) => {
+        this.props.onBTCUSDValue(value)
+      })
     })
   }
 
@@ -217,6 +223,7 @@ class Binance extends React.PureComponent<Props, State> {
     const {
       btcBalance,
       hideBalance,
+      btcBalanceValue,
       onBinanceDetails,
       onBinanceDeposit,
       onBinanceTrade
@@ -238,7 +245,7 @@ class Binance extends React.PureComponent<Props, State> {
           {btcBalance} <TickerLabel>{getLocale('binanceWidgetBTCTickerText')}</TickerLabel>
         </Balance>
         <Converted hideBalance={hideBalance}>
-          {'= $0.00'}
+          {`= $${btcBalanceValue}`}
         </Converted>
         <DetailsAction onClick={onBinanceDetails}>
           {getLocale('binanceWidgetViewDetails')}

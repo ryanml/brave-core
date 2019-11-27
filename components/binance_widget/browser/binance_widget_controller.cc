@@ -39,6 +39,11 @@ namespace {
 // https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md
 const char api_endpoint[] = "https://api.binance.com";
 const char api_path_account[] = "/api/v3/account";
+const char api_path_ticker_price[] = "/api/v3/ticker/price";
+
+const std::vector<std::string> public_endpoints = {
+  api_path_ticker_price
+};
 
 template<typename T, size_t N>
 std::string uint8ToHex(T (&a)[N]) {
@@ -106,6 +111,25 @@ bool BinanceWidgetController::ValidateAPIKey(
   return URLRequest("GET", api_path_account, "", std::move(internal_callback));
 }
 
+bool BinanceWidgetController::GetBTCUSDValue(
+    GetBTCUSDValueCallback callback) {
+  auto internal_callback = base::BindOnce(
+      &BinanceWidgetController::OnGetBTCUSDValue,
+      base::Unretained(this), std::move(callback));
+  return URLRequest("GET", api_path_ticker_price,
+      "symbol=BTCUSDT", std::move(internal_callback));
+}
+
+bool BinanceWidgetController::IsPublicEndpoint(
+    const std::string& endpoint) {
+  for (const std::string& path: public_endpoints) {
+    if (path == endpoint) {
+      return true;
+    }
+  }
+  return false;
+}
+
 /**
  * Performs a URL Request to a Binance API endpoint
  * @param method The HTTP method to use, e.g. GET, POST, PUT, ...
@@ -130,32 +154,37 @@ bool BinanceWidgetController::URLRequest(const std::string& method,
     return false;
   }
 
-  milliseconds ms =
-      duration_cast<milliseconds>(system_clock::now().time_since_epoch());
   std::string query_string = query_params;
-  if (query_string.empty()) {
-    query_string += "&";
-  }
-  query_string += "recvWindow=5000&timestamp=";
-  query_string += std::to_string(ms.count());
-  uint8_t signature[kSignatureSize];
-  if (!hmac.Init(secret_key_) ||
-      !hmac.Sign(query_string, signature, kSignatureSize)) {
-    LOG(ERROR) << "Error could not create signature for query "
-                  "params for account balance";
-    return false;
-  }
-  std::string encoded_signature = uint8ToHex(signature);
 
-  query_string += "&signature=";
-  query_string += encoded_signature;
+  // Public endpoints won't accept extraneous parameters
+  if (!IsPublicEndpoint(path)) {
+    milliseconds ms =
+        duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+    if (!query_string.empty()) {
+      query_string += "&";
+    }
+    query_string += "recvWindow=5000&timestamp=";
+    query_string += std::to_string(ms.count());
+    uint8_t signature[kSignatureSize];
+    if (!hmac.Init(secret_key_) ||
+        !hmac.Sign(query_string, signature, kSignatureSize)) {
+      LOG(ERROR) << "Error could not create signature for query "
+                    "params for account balance";
+      return false;
+    }
+    std::string encoded_signature = uint8ToHex(signature);
+
+    query_string += "&signature=";
+    query_string += encoded_signature;
+  }
 
   auto request = std::make_unique<network::ResourceRequest>();
   std::string api_url = api_endpoint;
-  if (!api_url.empty() && api_url[0] != '/') {
-    api_url += "/";
+  std::string api_path = path;
+  if (!api_path.empty() && api_path[0] != '/') {
+    api_path = "/" + api_path;
   }
-  api_url += path + "?" + query_string;
+  api_url += api_path + "?" + query_string;
   request->url = GURL(api_url);
   request->load_flags = net::LOAD_DO_NOT_SEND_COOKIES |
                         net::LOAD_DO_NOT_SAVE_COOKIES |
@@ -235,6 +264,17 @@ void BinanceWidgetController::OnValidateAPIKey(
   std::move(callback).Run(status, status == 401);
 }
 
+void BinanceWidgetController::OnGetBTCUSDValue(
+    GetBTCUSDValueCallback callback,
+    const int status, const std::string& body,
+    const std::map<std::string, std::string>& headers) {
+  std::string btc_usd_value = "0.00";
+  if (status >= 200 && status <= 299) {
+    GetBTCUSDValueFromJSON(body, btc_usd_value);
+  }
+  std::move(callback).Run(btc_usd_value);
+}
+
 bool BinanceWidgetController::GetBTCValueFromAccountJSON(
     const std::string& json, std::string& btc_balance) {
   // Response looks like this:
@@ -274,6 +314,31 @@ bool BinanceWidgetController::GetBTCValueFromAccountJSON(
       }
     }
   }
+  return true;
+}
+
+bool BinanceWidgetController::GetBTCUSDValueFromJSON(
+    const std::string& json, std::string& btc_usd_value) {
+  // Response format:
+  // {
+  //   "symbol": "BTCUSDT",
+  //   "price": "7137.98000000"
+  // }
+  base::JSONReader::ValueWithError value_with_error =
+      base::JSONReader::ReadAndReturnValueWithError(
+          json, base::JSONParserOptions::JSON_PARSE_RFC);
+  base::Optional<base::Value>& parsed_response = value_with_error.value;
+  if (!parsed_response) {
+    LOG(ERROR) << "Invalid response, could not parse JSON, JSON is: " << json;
+    return false;
+  }
+
+  const base::Value* btc_price = parsed_response->FindKey("price");
+  if (!btc_price || !btc_price->is_string()) {
+    return false;
+  }
+
+  btc_usd_value = btc_price->GetString();
   return true;
 }
 

@@ -115,5 +115,29 @@ void BinanceWidgetValidateAPIKeyFunction::OnValidateAPIKey(
                        std::make_unique<base::Value>(unauthorized)));
 }
 
+ExtensionFunction::ResponseAction
+BinanceWidgetGetBTCUSDValueFunction::Run() {
+  Profile* profile = Profile::FromBrowserContext(browser_context());
+  if (brave::IsTorProfile(profile)) {
+    return RespondNow(Error("Not available in Tor profile"));
+  }
+
+  auto* controller = GetBinanceWidgetController(browser_context());
+  bool value_request = controller->GetBTCUSDValue(base::BindOnce(
+      &BinanceWidgetGetBTCUSDValueFunction::OnGetBTCUSDValue, this));
+
+  if (!value_request) {
+    return RespondNow(
+        Error("Could not make request for BTC price"));
+  }
+
+  return RespondLater();
+}
+
+void BinanceWidgetGetBTCUSDValueFunction::OnGetBTCUSDValue(
+    const std::string& btc_usd_value) {
+  Respond(OneArgument(std::make_unique<base::Value>(btc_usd_value)));
+}
+
 }  // namespace api
 }  // namespace extensions

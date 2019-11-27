@@ -28,7 +28,8 @@
             ]
           }
         ]
-      }, {
+      },
+      {
         "name": "setAPIKey",
         "type": "function",
         "description": "Sets a user's API key information",
@@ -58,7 +59,8 @@
             ]
           }
         ]
-      }, {
+      },
+      {
         "name": "validateAPIKey",
         "type": "function",
         "description": "Validates that the API key is valid",
@@ -75,6 +77,23 @@
                 "name": "unauthorized",
                 "type": "boolean",
                 "description": "Helpful for a clear indication that the error is explicitly unauthorized"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "getBTCUSDValue",
+        "type": "function",
+        "description": "Fetches latest BTC value in USD",
+        "parameters": [
+          {
+            "type": "function",
+            "name": "callback",
+            "parameters": [
+              {
+                "name": "btcUSDValue",
+                "type": "string"
               }
             ]
           }

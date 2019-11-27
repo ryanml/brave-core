@@ -59,6 +59,18 @@ class BinanceWidgetValidateAPIKeyFunction :
   ResponseAction Run() override;
 };
 
+class BinanceWidgetGetBTCUSDValueFunction :
+    public ExtensionFunction {
+ public:
+  DECLARE_EXTENSION_FUNCTION("binanceWidget.getBTCUSDValue", UNKNOWN)
+
+ protected:
+  ~BinanceWidgetGetBTCUSDValueFunction() override {}
+  void OnGetBTCUSDValue(const std::string& btc_usd_value);
+
+  ResponseAction Run() override;
+};
+
 }  // namespace api
 }  // namespace extensions
 
