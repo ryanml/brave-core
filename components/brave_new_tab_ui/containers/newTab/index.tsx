@@ -231,8 +231,8 @@ class NewTabPage extends React.Component<Props, State> {
     this.props.actions.onBinanceBalance(balance)
   }
 
-  setBTCUSDValue = (value: string) => {
-    this.props.actions.onBTCUSDValue(value)
+  setBTCUSDPrice = (price: string) => {
+    this.props.actions.onBTCUSDPrice(price)
   }
 
   onBinanceUserTLD = (userTLD: NewTab.BinanceTLD) => {

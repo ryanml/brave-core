@@ -40,7 +40,7 @@ export const enum types {
   // Binance Widget
   SET_API_KEYS = '@@newtab/SET_API_KEYS',
   ON_API_CREDS_ERROR = '@@newtab/ON_API_CREDS_ERROR',
-  ON_BTC_USD_VALUE = '@@newtab/ON_BTC_USD_VALUE',
+  ON_BTC_USD_PRICE = '@@newtab/ON_BTC_USD_PRICE',
   ON_BINANCE_BALANCE = '@@newtab/ON_BINANCE_BALANCE',
   ON_BINANCE_USER_TLD = '@@newtab/ON_BINANCE_USER_TLD',
   ON_VALID_API_CREDS = '@@newtab/ON_VALID_API_CREDS',

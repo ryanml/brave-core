@@ -54,9 +54,9 @@ bool BinanceJSONParser::GetBTCValueFromAccountJSON(
 }
 
 // static
-bool BinanceJSONParser::GetBTCUSDValueFromJSON(
-    const std::string& json, std::string* btc_usd_value) {
-  if (!btc_usd_value) {
+bool BinanceJSONParser::GetTickerPriceFromJSON(
+    const std::string& json, std::string* symbol_pair_price) {
+  if (!symbol_pair_price) {
     return false;
   }
   // Response format:
@@ -73,11 +73,11 @@ bool BinanceJSONParser::GetBTCUSDValueFromJSON(
     return false;
   }
 
-  const base::Value* btc_price = parsed_response->FindKey("price");
-  if (!btc_price || !btc_price->is_string()) {
+  const base::Value* price = parsed_response->FindKey("price");
+  if (!price || !price->is_string()) {
     return false;
   }
 
-  *btc_usd_value = btc_price->GetString();
+  *symbol_pair_price = price->GetString();
   return true;
 }

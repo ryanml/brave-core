@@ -59,14 +59,14 @@ class BinanceWidgetValidateAPIKeyFunction :
   ResponseAction Run() override;
 };
 
-class BinanceWidgetGetBTCUSDValueFunction :
+class BinanceWidgetGetTickerPriceFunction :
     public ExtensionFunction {
  public:
-  DECLARE_EXTENSION_FUNCTION("binanceWidget.getBTCUSDValue", UNKNOWN)
+  DECLARE_EXTENSION_FUNCTION("binanceWidget.getTickerPrice", UNKNOWN)
 
  protected:
-  ~BinanceWidgetGetBTCUSDValueFunction() override {}
-  void OnGetBTCUSDValue(const std::string& btc_usd_value);
+  ~BinanceWidgetGetTickerPriceFunction() override {}
+  void OnGetTickerPrice(const std::string& symbol_pair_price);
 
   ResponseAction Run() override;
 };

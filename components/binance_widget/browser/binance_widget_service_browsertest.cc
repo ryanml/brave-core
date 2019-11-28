@@ -128,13 +128,13 @@ class BinanceWidgetAPIBrowserTest : public InProcessBrowserTest {
     wait_for_get_account_balance_->Run();
   }
 
-  void WaitForGetBTCUSDValue(const std::string& btc_usd_value) {
-    if (wait_for_get_btc_usd_value_) {
+  void WaitForGetTickerPrice(const std::string& symbol_pair_price) {
+    if (wait_for_get_ticker_price_) {
       return;
     }
-    expected_btc_usd_value_ = btc_usd_value;
-    wait_for_get_btc_usd_value_.reset(new base::RunLoop);
-    wait_for_get_btc_usd_value_->Run();
+    expected_symbol_pair_price_ = symbol_pair_price;
+    wait_for_get_ticker_price_.reset(new base::RunLoop);
+    wait_for_get_ticker_price_->Run();
   }
 
   void WaitForChromeAPIAccountBalance() {
@@ -221,11 +221,11 @@ class BinanceWidgetAPIBrowserTest : public InProcessBrowserTest {
     ASSERT_EQ(expected_btc_balance_, btc_balance);
   }
 
-  void OnGetBTCUSDValue(const std::string& btc_usd_value) {
-    if (wait_for_get_btc_usd_value_) {
-      wait_for_get_btc_usd_value_->Quit();
+  void OnGetTickerPrice(const std::string& ticker_price) {
+    if (wait_for_get_ticker_price_) {
+      wait_for_get_ticker_price_->Quit();
     }
-    ASSERT_EQ(expected_btc_usd_value_, btc_usd_value);
+    ASSERT_EQ(expected_symbol_pair_price_, ticker_price);
   }
 
   content::WebContents* active_contents() {
@@ -249,11 +249,11 @@ class BinanceWidgetAPIBrowserTest : public InProcessBrowserTest {
   int expected_status_code_;
   bool expected_unauthorized_;
   std::string expected_btc_balance_;
-  std::string expected_btc_usd_value_;
+  std::string expected_symbol_pair_price_;
 
   std::unique_ptr<base::RunLoop> wait_for_validate_api_key_;
   std::unique_ptr<base::RunLoop> wait_for_get_account_balance_;
-  std::unique_ptr<base::RunLoop> wait_for_get_btc_usd_value_;
+  std::unique_ptr<base::RunLoop> wait_for_get_ticker_price_;
   std::unique_ptr<net::EmbeddedTestServer> https_server_;
 };
 
@@ -375,46 +375,49 @@ IN_PROC_BROWSER_TEST_F(BinanceWidgetAPIBrowserTest, GetBinanceTLD) {
 }
 
 IN_PROC_BROWSER_TEST_F(BinanceWidgetAPIBrowserTest,
-    GetBTCUSDValue) {
+    GetTickerPrice) {
   EXPECT_TRUE(BinanceWidgetController::IsPublicEndpoint(
           api_path_ticker_price));
   EXPECT_TRUE(NavigateToNewTabUntilLoadStop());
   auto* controller = GetBinanceWidgetController();
   ASSERT_TRUE(controller);
   ASSERT_TRUE(controller->SetAPIKey("abc", "def"));
-  ASSERT_TRUE(controller->GetBTCUSDValue(
+  ASSERT_TRUE(controller->GetTickerPrice(
+      "BTCUSDT",
       base::BindOnce(
-          &BinanceWidgetAPIBrowserTest::OnGetBTCUSDValue,
+          &BinanceWidgetAPIBrowserTest::OnGetTickerPrice,
           base::Unretained(this))));
-  WaitForGetBTCUSDValue("7137.98000000");
+  WaitForGetTickerPrice("7137.98000000");
 }
 
 IN_PROC_BROWSER_TEST_F(BinanceWidgetAPIBrowserTest,
-    GetBTCUSDValueUnauthorized) {
+    GetTickerPriceUnauthorized) {
   ResetHTTPSServer(base::BindRepeating(&HandleRequestUnauthorized));
   EXPECT_TRUE(NavigateToNewTabUntilLoadStop());
   auto* controller = GetBinanceWidgetController();
   ASSERT_TRUE(controller);
   ASSERT_TRUE(controller->SetAPIKey("abc", "def"));
-  ASSERT_TRUE(controller->GetBTCUSDValue(
+  ASSERT_TRUE(controller->GetTickerPrice(
+      "BTCUSDT",
       base::BindOnce(
-          &BinanceWidgetAPIBrowserTest::OnGetBTCUSDValue,
+          &BinanceWidgetAPIBrowserTest::OnGetTickerPrice,
           base::Unretained(this))));
-  WaitForGetBTCUSDValue("0.00");
+  WaitForGetTickerPrice("0.00");
 }
 
 IN_PROC_BROWSER_TEST_F(BinanceWidgetAPIBrowserTest,
-    GetBTCUSDValueServerError) {
+    GetTickerPriceServerError) {
   ResetHTTPSServer(base::BindRepeating(&HandleRequestServerError));
   EXPECT_TRUE(NavigateToNewTabUntilLoadStop());
   auto* controller = GetBinanceWidgetController();
   ASSERT_TRUE(controller);
   ASSERT_TRUE(controller->SetAPIKey("abc", "def"));
-  ASSERT_TRUE(controller->GetBTCUSDValue(
+  ASSERT_TRUE(controller->GetTickerPrice(
+      "BTCUSDT",
       base::BindOnce(
-          &BinanceWidgetAPIBrowserTest::OnGetBTCUSDValue,
+          &BinanceWidgetAPIBrowserTest::OnGetTickerPrice,
           base::Unretained(this))));
-  WaitForGetBTCUSDValue("0.00");
+  WaitForGetTickerPrice("0.00");
 }
 
 IN_PROC_BROWSER_TEST_F(BinanceWidgetAPIBrowserTest,

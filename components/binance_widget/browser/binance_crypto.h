@@ -13,6 +13,7 @@ class BinanceCrypto {
   static bool GetSignatureForTotalParams(const std::string& params,
                                          const std::string& key,
                                          std::string* encoded_signature);
+  static std::string SanitizeSymbol(const std::string& symbol);
 };
 
 #endif  // BRAVE_COMPONENTS_BINANCE_WIDGET_BROWSER_BINANCE_CRYPTO_H_

@@ -116,15 +116,20 @@ void BinanceWidgetValidateAPIKeyFunction::OnValidateAPIKey(
 }
 
 ExtensionFunction::ResponseAction
-BinanceWidgetGetBTCUSDValueFunction::Run() {
+BinanceWidgetGetTickerPriceFunction::Run() {
+  std::unique_ptr<binance_widget::GetTickerPrice::Params> params(
+      binance_widget::GetTickerPrice::Params::Create(*args_));
+  EXTENSION_FUNCTION_VALIDATE(params.get());
+
   Profile* profile = Profile::FromBrowserContext(browser_context());
   if (brave::IsTorProfile(profile)) {
     return RespondNow(Error("Not available in Tor profile"));
   }
 
   auto* controller = GetBinanceWidgetController(browser_context());
-  bool value_request = controller->GetBTCUSDValue(base::BindOnce(
-      &BinanceWidgetGetBTCUSDValueFunction::OnGetBTCUSDValue, this));
+  bool value_request = controller->GetTickerPrice(params->symbol_pair,
+      base::BindOnce(
+          &BinanceWidgetGetTickerPriceFunction::OnGetTickerPrice, this));
 
   if (!value_request) {
     return RespondNow(
@@ -134,9 +139,9 @@ BinanceWidgetGetBTCUSDValueFunction::Run() {
   return RespondLater();
 }
 
-void BinanceWidgetGetBTCUSDValueFunction::OnGetBTCUSDValue(
-    const std::string& btc_usd_value) {
-  Respond(OneArgument(std::make_unique<base::Value>(btc_usd_value)));
+void BinanceWidgetGetTickerPriceFunction::OnGetTickerPrice(
+    const std::string& symbol_pair_price) {
+  Respond(OneArgument(std::make_unique<base::Value>(symbol_pair_price)));
 }
 
 }  // namespace api

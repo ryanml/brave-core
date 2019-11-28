@@ -48,20 +48,20 @@ TEST_F(BinanceJSONParserTest, GetBTCValueFromAccountJSONINvalidData) {
                                                              &btc_balance));
 }
 
-TEST_F(BinanceJSONParserTest, GetBTCUSDValueFromJSON) {
-  std::string btc_usd_value;
-  ASSERT_TRUE(BinanceJSONParser::GetBTCUSDValueFromJSON(R"(
+TEST_F(BinanceJSONParserTest, GetTickerPriceFromJSON) {
+  std::string symbol_pair_price;
+  ASSERT_TRUE(BinanceJSONParser::GetTickerPriceFromJSON(R"(
       {
         "symbol": "BTCUSDT",
         "price": "7137.98000000"
-      })", &btc_usd_value));
-  ASSERT_EQ(btc_usd_value, "7137.98000000");
+      })", &symbol_pair_price));
+  ASSERT_EQ(symbol_pair_price, "7137.98000000");
 }
 
-TEST_F(BinanceJSONParserTest, GetBTCUSDValueFromJSONInvalidData) {
-  std::string btc_usd_value;
-  ASSERT_FALSE(BinanceJSONParser::GetBTCUSDValueFromJSON("unexpected",
-                                                         &btc_usd_value));
+TEST_F(BinanceJSONParserTest, GetTickerPriceFromJSONInvalidData) {
+  std::string symbol_pair_price;
+  ASSERT_FALSE(BinanceJSONParser::GetTickerPriceFromJSON("unexpected",
+                                                         &symbol_pair_price));
 }
 
 }  // namespace

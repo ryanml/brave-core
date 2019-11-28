@@ -12,7 +12,6 @@ namespace {
 typedef testing::Test BinanceCryptoTest;
 
 TEST_F(BinanceCryptoTest, GetSignatureForTotalParams) {
-
   std::string encoded_signature;
   ASSERT_TRUE(BinanceCrypto::GetSignatureForTotalParams("c=d&foo=bar&pi=3.14",
         "def", &encoded_signature));
@@ -28,6 +27,11 @@ TEST_F(BinanceCryptoTest, GetSignatureForTotalParams) {
             "7728b5c221422d0a7f144f8bd86fcf21d1fa4c60947d3c7b576a4845fde33053");
   ASSERT_FALSE(BinanceCrypto::GetSignatureForTotalParams("a=b", "def",
                                                          nullptr));
+}
+
+TEST_F(BinanceCryptoTest, SanitizeSymbol) {
+  ASSERT_EQ(BinanceCrypto::SanitizeSymbol("BTCUSDT&intention=bad"),
+            "BTCUSDTintentionbad");
 }
 
 }  // namespace

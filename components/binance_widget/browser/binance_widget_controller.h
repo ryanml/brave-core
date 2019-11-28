@@ -45,8 +45,10 @@ class BinanceWidgetController {
   bool GetAccountBalance(GetAccountBalanceCallback callback);
   using ValidateAPIKeyCallback = base::OnceCallback<void(int, bool)>;
   bool ValidateAPIKey(ValidateAPIKeyCallback callback);
-  using GetBTCUSDValueCallback = base::OnceCallback<void(const std::string&)>;
-  bool GetBTCUSDValue(GetBTCUSDValueCallback callback);
+  using GetTickerPriceCallback = base::OnceCallback<void(const std::string&)>;
+  // Symbol pair is for example: BTCUSDT
+  bool GetTickerPrice(const std::string& symbol_pair,
+      GetTickerPriceCallback callback);
   bool SetAPIKey(const std::string& api_key, const std::string& secret_key);
   std::string GetBinanceTLD();
 
@@ -71,7 +73,7 @@ class BinanceWidgetController {
   void OnValidateAPIKey(ValidateAPIKeyCallback callback,
                         const int status, const std::string& body,
                         const std::map<std::string, std::string>& headers);
-  void OnGetBTCUSDValue(GetBTCUSDValueCallback callback,
+  void OnGetTickerPrice(GetTickerPriceCallback callback,
                         const int status, const std::string& body,
                         const std::map<std::string, std::string>& headers);                
   bool URLRequest(const std::string& method, const std::string& path,

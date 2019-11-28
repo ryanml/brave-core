@@ -13,8 +13,8 @@ class BinanceJSONParser {
 
   static bool GetBTCValueFromAccountJSON(const std::string& json,
                                          std::string* btc_balance);
-  static bool GetBTCUSDValueFromJSON(const std::string& json,
-                                     std::string* btc_usd_value);
+  static bool GetTickerPriceFromJSON(const std::string& json,
+                                     std::string* symbol_pair_price);
 };
 
 #endif  // BRAVE_COMPONENTS_BINANCE_WIDGET_BROWSER_BINANCE_JSON_PARSER_H_

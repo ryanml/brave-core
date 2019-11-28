@@ -83,16 +83,19 @@
         ]
       },
       {
-        "name": "getBTCUSDValue",
+        "name": "getTickerPrice",
         "type": "function",
-        "description": "Fetches latest BTC value in USD",
+        "description": "Fetches latest symbol pair trading value",
         "parameters": [
           {
+            "type": "string",
+            "name": "symbolPair"
+          }, {
             "type": "function",
             "name": "callback",
             "parameters": [
               {
-                "name": "btcUSDValue",
+                "name": "symbolPairValue",
                 "type": "string"
               }
             ]

@@ -97,13 +97,20 @@ bool BinanceWidgetController::ValidateAPIKey(
   return URLRequest("GET", api_path_account, "", std::move(internal_callback));
 }
 
-bool BinanceWidgetController::GetBTCUSDValue(
-    GetBTCUSDValueCallback callback) {
+bool BinanceWidgetController::GetTickerPrice(
+    const std::string& symbol_pair,
+    GetTickerPriceCallback callback) {
   auto internal_callback = base::BindOnce(
-      &BinanceWidgetController::OnGetBTCUSDValue,
+      &BinanceWidgetController::OnGetTickerPrice,
       base::Unretained(this), std::move(callback));
+  // Symbol pair looks like BTCUSDT, but make sure data
+  // passed in doesn't include any sneaky chars like &param2=k
+  std::string sanitized_symbol_pair =
+      BinanceCrypto::SanitizeSymbol(symbol_pair);
+
   return URLRequest("GET", api_path_ticker_price,
-      "symbol=BTCUSDT", std::move(internal_callback));
+                    std::string("symbol=") + sanitized_symbol_pair,
+                    std::move(internal_callback));
 }
 
 // static
@@ -236,15 +243,15 @@ void BinanceWidgetController::OnValidateAPIKey(
   std::move(callback).Run(status, status == 401);
 }
 
-void BinanceWidgetController::OnGetBTCUSDValue(
-    GetBTCUSDValueCallback callback,
+void BinanceWidgetController::OnGetTickerPrice(
+    GetTickerPriceCallback callback,
     const int status, const std::string& body,
     const std::map<std::string, std::string>& headers) {
-  std::string btc_usd_value = "0.00";
+  std::string symbol_pair_price = "0.00";
   if (status >= 200 && status <= 299) {
-    BinanceJSONParser::GetBTCUSDValueFromJSON(body, &btc_usd_value);
+    BinanceJSONParser::GetTickerPriceFromJSON(body, &symbol_pair_price);
   }
-  std::move(callback).Run(btc_usd_value);
+  std::move(callback).Run(symbol_pair_price);
 }
 
 bool BinanceWidgetController::SetAPIKey(const std::string& api_key,

@@ -71,7 +71,7 @@ interface Props {
   onGenerateNewKey: () => void
   onBinanceBalance: (balance: string) => void
   onBinanceUserTLD: (userTLD: NewTab.BinanceTLD) => void
-  onBTCUSDValue: (value: string) => void
+  onBTCUSDPrice: (value: string) => void
   onSetApiKeys: (apiKey: string, apiSecret: string) => void
 }
 
@@ -111,8 +111,8 @@ class Binance extends React.PureComponent<Props, State> {
     chrome.binanceWidget.getAccountBalance((balance: string) => {
       this.props.onBinanceBalance(balance)
 
-      chrome.binanceWidget.getBTCUSDValue((value: string) => {
-        this.props.onBTCUSDValue(value)
+      chrome.binanceWidget.getTickerPrice("BTCUSDT", (price: string) => {
+        this.props.onBTCUSDPrice(price)
       })
     })
   }

@@ -6,8 +6,11 @@
 #include "brave/components/binance_widget/browser/binance_crypto.h"
 
 #include <iomanip>
+#include <locale>
 
 #include "crypto/hmac.h"
+
+using namespace std;
 
 namespace {
 
@@ -51,4 +54,17 @@ bool BinanceCrypto::GetSignatureForTotalParams(const std::string& query_string,
   }
   *encoded_signature = uint8ToHex(signature);
   return true;
+}
+
+// static
+// Sanitizes a symbol or symbol pair to make sure it is only alphanumeric
+std::string BinanceCrypto::SanitizeSymbol(const std::string& symbol_pair) {
+  std::string sanitized_symbol_pair = symbol_pair;
+  sanitized_symbol_pair.erase(
+      std::remove_if(sanitized_symbol_pair.begin(),
+                     sanitized_symbol_pair.end(),
+                     [] (char c) {
+                       return !std::isalnum(c);
+                     }), sanitized_symbol_pair.end());
+  return sanitized_symbol_pair;
 }

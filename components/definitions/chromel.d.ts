@@ -156,7 +156,7 @@ declare namespace chrome.binanceWidget {
   const setAPIKey: (apiKey: string, apiSecret: string) => {}
   const getAccountBalance: (callback: (balance: string) => void) => {}
   const getUserTLD: (callback: (userTLD: string) => void) => {}
-  const getBTCUSDValue: (callback: (btcUSDValue: string) => void) => {}
+  const getTickerPrice: (symbolPair: string, callback: (symbolPairValue: string) => void) => {}
   const validateAPIKey: (callback: (status: number, unauthorized: boolean) => void) => {}
 }
 

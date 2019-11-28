@@ -270,13 +270,13 @@ describe('newTabReducer', () => {
       })
     })
   })
-  describe('ON_BTC_USD_VALUE', () => {
+  describe('ON_BTC_USD_PRICE', () => {
     it('handles "-" account case', () => {
       fakeState.btcBalance = '-'
       const assertion = newTabReducer(fakeState, {
-        type: types.ON_BTC_USD_VALUE,
+        type: types.ON_BTC_USD_PRICE,
         payload: {
-          value: '7154.99000000'
+          price: '7154.99000000'
         }
       })
 
@@ -291,9 +291,9 @@ describe('newTabReducer', () => {
 
     it('handles default "0.00" account case', () => {
       const assertion = newTabReducer(fakeState, {
-        type: types.ON_BTC_USD_VALUE,
+        type: types.ON_BTC_USD_PRICE,
         payload: {
-          value: '7154.99000000'
+          price: '7154.99000000'
         }
       })
 
@@ -306,12 +306,12 @@ describe('newTabReducer', () => {
       })
     })
 
-    it('properly calculates BTC USD Value', () => {
+    it('properly calculates BTC USD Price', () => {
       fakeState.binanceState.btcBalance = '3.14'
       const assertion = newTabReducer(fakeState, {
-        type: types.ON_BTC_USD_VALUE,
+        type: types.ON_BTC_USD_PRICE,
         payload: {
-          value: '7154.99000000'
+          price: '7154.99000000'
         }
       })
 
