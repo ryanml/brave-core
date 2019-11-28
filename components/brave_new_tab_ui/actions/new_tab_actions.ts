@@ -161,3 +161,5 @@ export const onValidApiCreds = () => action(types.ON_VALID_API_CREDS)
 export const onBTCUSDPrice = (price: string) => action(types.ON_BTC_USD_PRICE, {
   price
 })
+
+export const disconnectBinance = () => action(types.DISCONNECT_BINANCE)

@@ -209,3 +209,46 @@ export const GenButton = styled<{}, 'button'>('button')`
   background: #2C2C2B;
   color: rgba(255, 255, 255, 0.7);
 `
+
+export const ActionTray = styled<{}, 'div'>('div')`
+  float: right;
+  margin-top: 2px;
+  display: inline-block;
+
+  > *:nth-child(1) {
+    margin-right: 20px;
+  }
+`
+
+export const ActionItem = styled<{}, 'div'>('div')`
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: middle;
+`
+
+export const DisconnectWrapper = styled<{}, 'div'>('div')`
+  padding-top: 25px;
+  min-height: 226px;
+  text-align: center;
+  max-width: 240px;
+`
+
+export const DisconnectButton = styled(GenButton)`
+  background: #AA1212;
+  color: #fff;
+  padding: 5px 20px;
+`
+
+export const DisconnectTitle = styled(Title)`
+  font-size: 14px;
+  max-width: 245px;
+  margin: 0 auto;
+  line-height: 18px;
+`
+
+export const DisconnectCopy = styled(Copy)`
+  color: #fff;
+  max-width: 220px;
+  line-height: 17px;
+  margin: 8px auto 15px auto;
+`

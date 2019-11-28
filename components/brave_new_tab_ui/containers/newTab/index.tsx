@@ -281,6 +281,10 @@ class NewTabPage extends React.Component<Props, State> {
     this.props.actions.setHideBalance(hide)
   }
 
+  disconnectBinance = () => {
+    this.props.actions.disconnectBinance()
+  }
+
   enableAds = () => {
     chrome.braveRewards.saveAdsSetting('adsEnabled', 'true')
   }

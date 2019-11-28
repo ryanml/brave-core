@@ -7,7 +7,7 @@ import { debounce } from '../common/debounce'
 
 const keyName = 'new-tab-data'
 
-const defaultState: NewTab.State = {
+export const defaultState: NewTab.State = {
   initialDataLoaded: false,
   textDirection: window.loadTimeData.getString('textdirection'),
   featureFlagBraveNTPBrandedWallpaper: window.loadTimeData.getBoolean('featureFlagBraveNTPBrandedWallpaper'),

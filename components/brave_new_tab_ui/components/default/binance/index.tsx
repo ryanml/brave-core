@@ -33,7 +33,13 @@ import {
   GenButtonWrapper,
   GenButton,
   Validation,
-  Spinner
+  Spinner,
+  ActionTray,
+  ActionItem,
+  DisconnectWrapper,
+  DisconnectButton,
+  DisconnectTitle,
+  DisconnectCopy
 } from './style'
 import {
   HideIcon,
@@ -42,7 +48,9 @@ import {
   BinanceLogo,
   DepositIcon,
   ApiKeyIcon,
-  SecretKeyIcon
+  SecretKeyIcon,
+  DisconnectIcon,
+  RefreshIcon
 } from './assets/icons'
 
 import createWidget from '../widget/index'
@@ -52,6 +60,7 @@ import { LoaderIcon } from 'brave-ui/components/icons'
 interface State {
   apiKey: string
   apiSecret: string
+  disconnectInProgress: boolean
 }
 
 interface Props {
@@ -73,6 +82,7 @@ interface Props {
   onBinanceUserTLD: (userTLD: NewTab.BinanceTLD) => void
   onBTCUSDPrice: (value: string) => void
   onSetApiKeys: (apiKey: string, apiSecret: string) => void
+  onDisconnectBinance: () => void
 }
 
 class Binance extends React.PureComponent<Props, State> {
@@ -80,7 +90,8 @@ class Binance extends React.PureComponent<Props, State> {
     super(props)
     this.state = {
       apiKey: '',
-      apiSecret: ''
+      apiSecret: '',
+      disconnectInProgress: false
     }
   }
 
@@ -111,10 +122,27 @@ class Binance extends React.PureComponent<Props, State> {
     chrome.binanceWidget.getAccountBalance((balance: string) => {
       this.props.onBinanceBalance(balance)
 
-      chrome.binanceWidget.getTickerPrice("BTCUSDT", (price: string) => {
+      chrome.binanceWidget.getTickerPrice('BTCUSDT', (price: string) => {
         this.props.onBTCUSDPrice(price)
       })
     })
+  }
+
+  disconnectBinance = () => {
+    this.setState({
+      disconnectInProgress: true
+    })
+  }
+
+  cancelDisconnect = () => {
+    this.setState({
+      disconnectInProgress: false
+    })
+  }
+
+  finishDisconnect = () => {
+    this.props.onDisconnectBinance()
+    this.cancelDisconnect()
   }
 
   renderRoutes = () => {
@@ -155,6 +183,25 @@ class Binance extends React.PureComponent<Props, State> {
     }
 
     this.setState(newState)
+  }
+
+  renderDisconnectView = () => {
+    return (
+      <DisconnectWrapper>
+        <DisconnectTitle>
+          {getLocale('binanceWidgetDisconnectTitle')}
+        </DisconnectTitle>
+        <DisconnectCopy>
+          {getLocale('binanceWidgetDisconnectText')}
+        </DisconnectCopy>
+        <DisconnectButton onClick={this.finishDisconnect}>
+          {getLocale('binanceWidgetDisconnectButton')}
+        </DisconnectButton>
+        <DismissAction onClick={this.cancelDisconnect}>
+          {getLocale('binanceWidgetCancelText')}
+        </DismissAction>
+      </DisconnectWrapper>
+    )
   }
 
   renderApiKeyEntry = () => {
@@ -292,10 +339,32 @@ class Binance extends React.PureComponent<Props, State> {
   }
 
   render () {
+    const { userAuthed } = this.props
+
+    if (this.state.disconnectInProgress) {
+      return (
+        <WidgetWrapper>
+          {this.renderDisconnectView()}
+        </WidgetWrapper>
+      )
+    }
+
     return (
       <WidgetWrapper>
         <Header>
           <BinanceLogo />
+          {
+            userAuthed
+            ? <ActionTray>
+                <ActionItem onClick={this.fetchBalance}>
+                  <RefreshIcon />
+                </ActionItem>
+                <ActionItem onClick={this.disconnectBinance}>
+                  <DisconnectIcon />
+                </ActionItem>
+              </ActionTray>
+            : null
+          }
         </Header>
         <Content>
           {this.renderRoutes()}
