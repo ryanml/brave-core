@@ -42,8 +42,8 @@ export const Link = styled<{}, 'a'>('a')`
 export const Copy = styled<{}, 'p'>('p')`
   font-size: 13px;
   max-width: 240px;
-  margin-top: 5px;
-  margin-bottom: 15px;
+  margin-top: 12px;
+  margin-bottom: 25px;
   color: rgba(255, 255, 255, 0.7);
 `
 
@@ -51,14 +51,15 @@ export const ApiCopy = styled(Copy)`
   max-width: 190px;
   line-height: 17px;
   margin-bottom: 10px;
+  margin-top: 5px;
 `
 
-export const Error = styled<{}, 'span'>('span')`
-  display: block;
+export const Error = styled<{}, 'div'>('div')`
   font-size: 13px;
   font-weight: bold;
-  margin: 5px 0;
+  margin: 5px 0 10px 0;
   color: #FF7316;
+  height: 12px;
 `
 
 export const ActionsWrapper = styled<{}, 'div'>('div')`
@@ -75,6 +76,7 @@ export const ConnectButton = styled<{}, 'button'>('button')`
   border: 0;
   padding: 10px 0;
   cursor: pointer;
+  margin-bottom: 10px;
 `
 
 export const DismissAction = styled<{}, 'span'>('span')`
@@ -185,6 +187,7 @@ export const InputField = styled<{}, 'input'>('input')`
 
 export const GenButtonWrapper = styled<{}, 'div'>('div')`
   margin-top: 10px;
+  height: 24px;
 `
 
 export const Validation = styled<{}, 'div'>('div')`

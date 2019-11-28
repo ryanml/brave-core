@@ -216,13 +216,13 @@ class Binance extends React.PureComponent<Props, State> {
         <ApiCopy>
           {getLocale('binanceWidgetApiKeyDesc')} <Link target={'_blank'} href={'https://www.binance.com/en/support/articles/360002502072'}>{getLocale('binanceWidgetApiKeyHelp')}</Link>
         </ApiCopy>
-        {
-          apiCredError
-          ? <Error>
-              {getLocale('binanceWidgetInvalidEntry')}
-            </Error>
-          : null
-        }
+        <Error>
+          {
+            apiCredError
+            ? getLocale('binanceWidgetInvalidEntry')
+            : null
+          }
+        </Error>
         <InputWrapper>
           <InputItem>
             <InputIconWrapper>
