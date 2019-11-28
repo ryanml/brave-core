@@ -9,6 +9,8 @@ import ShowIcon from './show-icon'
 import HideIcon from './hide-icon'
 import ApiKeyIcon from './api-key-icon'
 import SecretKeyIcon from './secret-key-icon'
+import RefreshIcon from './refresh-icon'
+import DisconnectIcon from './disconnect-icon'
 
 export {
   HideIcon,
@@ -17,5 +19,7 @@ export {
   BinanceLogo,
   DepositIcon,
   ApiKeyIcon,
-  SecretKeyIcon
+  SecretKeyIcon,
+  RefreshIcon,
+  DisconnectIcon
 }
