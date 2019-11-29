@@ -3,20 +3,20 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#include "brave/components/binance_widget/browser/binance_widget_service.h"
+#include "brave/components/binance/browser/binance_service.h"
 
 #include <string>
 #include <utility>
 
 #include "base/task/post_task.h"
 #include "base/task_runner_util.h"
-#include "brave/components/binance_widget/browser/binance_widget_controller.h"
+#include "brave/components/binance/browser/binance_controller.h"
 #include "content/public/browser/browser_context.h"
 
-BinanceWidgetService::BinanceWidgetService(content::BrowserContext* context)
+BinanceService::BinanceService(content::BrowserContext* context)
     : context_(context),
-      controller_(new BinanceWidgetController(context)),
+      controller_(new BinanceController(context)),
       weak_factory_(this) {
 }
 
-BinanceWidgetService::~BinanceWidgetService() {}
+BinanceService::~BinanceService() {}

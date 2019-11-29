@@ -5,11 +5,11 @@
 
 #include "base/path_service.h"
 #include "base/scoped_observer.h"
-#include "brave/browser/binance_widget/binance_widget_service_factory.h"
+#include "brave/browser/binance/binance_service_factory.h"
 #include "brave/common/brave_paths.h"
 #include "brave/common/pref_names.h"
-#include "brave/components/binance_widget/browser/binance_widget_controller.h"
-#include "brave/components/binance_widget/browser/binance_widget_service.h"
+#include "brave/components/binance/browser/binance_controller.h"
+#include "brave/components/binance/browser/binance_service.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/ui/browser.h"
 #include "chrome/test/base/in_process_browser_test.h"
@@ -73,9 +73,9 @@ std::unique_ptr<net::test_server::HttpResponse> HandleRequestServerError(
 
 }  // namespace
 
-class BinanceWidgetAPIBrowserTest : public InProcessBrowserTest {
+class BinanceAPIBrowserTest : public InProcessBrowserTest {
  public:
-  BinanceWidgetAPIBrowserTest() : expected_status_code_(-1),
+  BinanceAPIBrowserTest() : expected_status_code_(-1),
       expected_unauthorized_(false) {
   }
 
@@ -90,7 +90,7 @@ class BinanceWidgetAPIBrowserTest : public InProcessBrowserTest {
     base::PathService::Get(brave::DIR_TEST_DATA, &test_data_dir);
   }
 
-  ~BinanceWidgetAPIBrowserTest() override {
+  ~BinanceAPIBrowserTest() override {
   }
 
   content::WebContents* contents() {
@@ -104,7 +104,7 @@ class BinanceWidgetAPIBrowserTest : public InProcessBrowserTest {
     https_server_->SetSSLConfig(net::EmbeddedTestServer::CERT_OK);
     https_server_->RegisterRequestHandler(callback);
     ASSERT_TRUE(https_server_->Start());
-    BinanceWidgetController::SetAPIEndPointForTest(
+    BinanceController::SetAPIEndPointForTest(
         https_server_->base_url().spec());
   }
 
@@ -141,8 +141,8 @@ class BinanceWidgetAPIBrowserTest : public InProcessBrowserTest {
     std::string msg_from_renderer;
     std::string script = R"(
       (function() {
-        chrome.binanceWidget.setAPIKey('abc', 'def')
-        chrome.binanceWidget.validateAPIKey((status, unauthorized) => {
+        chrome.binance.setAPIKey('abc', 'def')
+        chrome.binance.validateAPIKey((status, unauthorized) => {
           if (status != 200) {
             window.domAutomationController.send('error-1')
             return
@@ -151,7 +151,7 @@ class BinanceWidgetAPIBrowserTest : public InProcessBrowserTest {
             window.domAutomationController.send('error-2')
             return
           }
-          chrome.binanceWidget.getAccountBalance((btc_balance) => {
+          chrome.binance.getAccountBalance((btc_balance) => {
             if (btc_balance != '0.01382621') {
               window.domAutomationController.send('error-3')
               return
@@ -170,8 +170,8 @@ class BinanceWidgetAPIBrowserTest : public InProcessBrowserTest {
     std::string msg_from_renderer;
     std::string script = R"(
       (function() {
-        chrome.binanceWidget.setAPIKey('abc', 'def')
-        chrome.binanceWidget.validateAPIKey((status, unauthorized) => {
+        chrome.binance.setAPIKey('abc', 'def')
+        chrome.binance.validateAPIKey((status, unauthorized) => {
           if (status == 401 && unauthorized) {
             window.domAutomationController.send('success')
             return
@@ -190,8 +190,8 @@ class BinanceWidgetAPIBrowserTest : public InProcessBrowserTest {
     std::string msg_from_renderer;
     std::string script = R"(
       (function() {
-        chrome.binanceWidget.setAPIKey('abc', 'def')
-        chrome.binanceWidget.validateAPIKey((status, unauthorized) => {
+        chrome.binance.setAPIKey('abc', 'def')
+        chrome.binance.validateAPIKey((status, unauthorized) => {
           if (status == 500 && !unauthorized) {
             window.domAutomationController.send('success')
             return
@@ -237,8 +237,8 @@ class BinanceWidgetAPIBrowserTest : public InProcessBrowserTest {
     return WaitForLoadStop(active_contents());
   }
 
-  BinanceWidgetController* GetBinanceWidgetController() {
-    return BinanceWidgetServiceFactory::GetInstance()
+  BinanceController* GetBinanceController() {
+    return BinanceServiceFactory::GetInstance()
         ->GetForProfile(Profile::FromBrowserContext(browser()->profile()))
         ->controller();
   }
@@ -257,102 +257,102 @@ class BinanceWidgetAPIBrowserTest : public InProcessBrowserTest {
   std::unique_ptr<net::EmbeddedTestServer> https_server_;
 };
 
-IN_PROC_BROWSER_TEST_F(BinanceWidgetAPIBrowserTest, PRE_SetAPIKey) {
+IN_PROC_BROWSER_TEST_F(BinanceAPIBrowserTest, PRE_SetAPIKey) {
   EXPECT_TRUE(NavigateToNewTabUntilLoadStop());
-  auto* controller = GetBinanceWidgetController();
+  auto* controller = GetBinanceController();
   ASSERT_TRUE(controller);
   ASSERT_TRUE(controller->SetAPIKey("abc", "def"));
 }
 
-IN_PROC_BROWSER_TEST_F(BinanceWidgetAPIBrowserTest, SetAPIKey) {
-  auto* controller = GetBinanceWidgetController();
+IN_PROC_BROWSER_TEST_F(BinanceAPIBrowserTest, SetAPIKey) {
+  auto* controller = GetBinanceController();
   ASSERT_TRUE(controller);
   ASSERT_EQ(controller->api_key_, "abc");
   ASSERT_EQ(controller->secret_key_, "def");
 }
 
-IN_PROC_BROWSER_TEST_F(BinanceWidgetAPIBrowserTest, ValidateAPIKey) {
+IN_PROC_BROWSER_TEST_F(BinanceAPIBrowserTest, ValidateAPIKey) {
   EXPECT_TRUE(NavigateToNewTabUntilLoadStop());
-  auto* controller = GetBinanceWidgetController();
+  auto* controller = GetBinanceController();
   ASSERT_TRUE(controller);
   ASSERT_TRUE(controller->SetAPIKey("abc", "def"));
   ASSERT_TRUE(controller->ValidateAPIKey(
       base::BindOnce(
-          &BinanceWidgetAPIBrowserTest::OnValidateAPIKey,
+          &BinanceAPIBrowserTest::OnValidateAPIKey,
           base::Unretained(this))));
   WaitForValidateAPIKey(200, false);
 }
 
-IN_PROC_BROWSER_TEST_F(BinanceWidgetAPIBrowserTest,
+IN_PROC_BROWSER_TEST_F(BinanceAPIBrowserTest,
     ValidateAPIKeyUnauthorized) {
   ResetHTTPSServer(base::BindRepeating(&HandleRequestUnauthorized));
   EXPECT_TRUE(NavigateToNewTabUntilLoadStop());
-  auto* controller = GetBinanceWidgetController();
+  auto* controller = GetBinanceController();
   ASSERT_TRUE(controller);
   ASSERT_TRUE(controller->SetAPIKey("abc", "def"));
   ASSERT_TRUE(controller->ValidateAPIKey(
       base::BindOnce(
-          &BinanceWidgetAPIBrowserTest::OnValidateAPIKey,
+          &BinanceAPIBrowserTest::OnValidateAPIKey,
           base::Unretained(this))));
   WaitForValidateAPIKey(401, true);
 }
 
-IN_PROC_BROWSER_TEST_F(BinanceWidgetAPIBrowserTest,
+IN_PROC_BROWSER_TEST_F(BinanceAPIBrowserTest,
     ValidateAPIKeyOtherNetworkError) {
   ResetHTTPSServer(base::BindRepeating(&HandleRequestServerError));
   EXPECT_TRUE(NavigateToNewTabUntilLoadStop());
-  auto* controller = GetBinanceWidgetController();
+  auto* controller = GetBinanceController();
   ASSERT_TRUE(controller);
   ASSERT_TRUE(controller->SetAPIKey("abc", "def"));
   ASSERT_TRUE(controller->ValidateAPIKey(
       base::BindOnce(
-          &BinanceWidgetAPIBrowserTest::OnValidateAPIKey,
+          &BinanceAPIBrowserTest::OnValidateAPIKey,
           base::Unretained(this))));
   WaitForValidateAPIKey(500, false);
 }
 
-IN_PROC_BROWSER_TEST_F(BinanceWidgetAPIBrowserTest, GetAccountBalance) {
-  EXPECT_FALSE(BinanceWidgetController::IsPublicEndpoint(api_path_account));
+IN_PROC_BROWSER_TEST_F(BinanceAPIBrowserTest, GetAccountBalance) {
+  EXPECT_FALSE(BinanceController::IsPublicEndpoint(api_path_account));
   EXPECT_TRUE(NavigateToNewTabUntilLoadStop());
-  auto* controller = GetBinanceWidgetController();
+  auto* controller = GetBinanceController();
   ASSERT_TRUE(controller);
   ASSERT_TRUE(controller->SetAPIKey("abc", "def"));
   ASSERT_TRUE(controller->GetAccountBalance(
       base::BindOnce(
-          &BinanceWidgetAPIBrowserTest::OnGetAccountBalance,
+          &BinanceAPIBrowserTest::OnGetAccountBalance,
           base::Unretained(this))));
   WaitForGetAccountBalance("0.01382621");
 }
 
-IN_PROC_BROWSER_TEST_F(BinanceWidgetAPIBrowserTest,
+IN_PROC_BROWSER_TEST_F(BinanceAPIBrowserTest,
     GetAccountBalanceUnauthorized) {
   ResetHTTPSServer(base::BindRepeating(&HandleRequestUnauthorized));
   EXPECT_TRUE(NavigateToNewTabUntilLoadStop());
-  auto* controller = GetBinanceWidgetController();
+  auto* controller = GetBinanceController();
   ASSERT_TRUE(controller);
   ASSERT_TRUE(controller->SetAPIKey("abc", "def"));
   ASSERT_TRUE(controller->GetAccountBalance(
       base::BindOnce(
-          &BinanceWidgetAPIBrowserTest::OnGetAccountBalance,
+          &BinanceAPIBrowserTest::OnGetAccountBalance,
           base::Unretained(this))));
   WaitForGetAccountBalance("-");
 }
 
-IN_PROC_BROWSER_TEST_F(BinanceWidgetAPIBrowserTest,
+IN_PROC_BROWSER_TEST_F(BinanceAPIBrowserTest,
     GetAccountBalanceOtherNetworkError) {
   ResetHTTPSServer(base::BindRepeating(&HandleRequestServerError));
   EXPECT_TRUE(NavigateToNewTabUntilLoadStop());
-  auto* controller = GetBinanceWidgetController();
+  auto* controller = GetBinanceController();
   ASSERT_TRUE(controller);
   ASSERT_TRUE(controller->SetAPIKey("abc", "def"));
   ASSERT_TRUE(controller->GetAccountBalance(
       base::BindOnce(
-          &BinanceWidgetAPIBrowserTest::OnGetAccountBalance,
+          &BinanceAPIBrowserTest::OnGetAccountBalance,
           base::Unretained(this))));
   WaitForGetAccountBalance("-");
 }
 
-IN_PROC_BROWSER_TEST_F(BinanceWidgetAPIBrowserTest, GetBinanceTLD) {
+IN_PROC_BROWSER_TEST_F(BinanceAPIBrowserTest, GetBinanceTLD) {
   ResetHTTPSServer(base::BindRepeating(&HandleRequestServerError));
   EXPECT_TRUE(NavigateToNewTabUntilLoadStop());
   const std::string usCode = "US";
@@ -362,7 +362,7 @@ IN_PROC_BROWSER_TEST_F(BinanceWidgetAPIBrowserTest, GetBinanceTLD) {
   const int32_t canada_id = country_codes::CountryCharsToCountryID(
     canadaCode.at(0), canadaCode.at(1));
 
-  auto* controller = GetBinanceWidgetController();
+  auto* controller = GetBinanceController();
   ASSERT_TRUE(controller);
 
   browser()->profile()->GetPrefs()->SetInteger(
@@ -374,66 +374,66 @@ IN_PROC_BROWSER_TEST_F(BinanceWidgetAPIBrowserTest, GetBinanceTLD) {
   ASSERT_EQ(controller->GetBinanceTLD(), "com");
 }
 
-IN_PROC_BROWSER_TEST_F(BinanceWidgetAPIBrowserTest,
+IN_PROC_BROWSER_TEST_F(BinanceAPIBrowserTest,
     GetTickerPrice) {
-  EXPECT_TRUE(BinanceWidgetController::IsPublicEndpoint(
+  EXPECT_TRUE(BinanceController::IsPublicEndpoint(
           api_path_ticker_price));
   EXPECT_TRUE(NavigateToNewTabUntilLoadStop());
-  auto* controller = GetBinanceWidgetController();
+  auto* controller = GetBinanceController();
   ASSERT_TRUE(controller);
   ASSERT_TRUE(controller->SetAPIKey("abc", "def"));
   ASSERT_TRUE(controller->GetTickerPrice(
       "BTCUSDT",
       base::BindOnce(
-          &BinanceWidgetAPIBrowserTest::OnGetTickerPrice,
+          &BinanceAPIBrowserTest::OnGetTickerPrice,
           base::Unretained(this))));
   WaitForGetTickerPrice("7137.98000000");
 }
 
-IN_PROC_BROWSER_TEST_F(BinanceWidgetAPIBrowserTest,
+IN_PROC_BROWSER_TEST_F(BinanceAPIBrowserTest,
     GetTickerPriceUnauthorized) {
   ResetHTTPSServer(base::BindRepeating(&HandleRequestUnauthorized));
   EXPECT_TRUE(NavigateToNewTabUntilLoadStop());
-  auto* controller = GetBinanceWidgetController();
+  auto* controller = GetBinanceController();
   ASSERT_TRUE(controller);
   ASSERT_TRUE(controller->SetAPIKey("abc", "def"));
   ASSERT_TRUE(controller->GetTickerPrice(
       "BTCUSDT",
       base::BindOnce(
-          &BinanceWidgetAPIBrowserTest::OnGetTickerPrice,
+          &BinanceAPIBrowserTest::OnGetTickerPrice,
           base::Unretained(this))));
   WaitForGetTickerPrice("0.00");
 }
 
-IN_PROC_BROWSER_TEST_F(BinanceWidgetAPIBrowserTest,
+IN_PROC_BROWSER_TEST_F(BinanceAPIBrowserTest,
     GetTickerPriceServerError) {
   ResetHTTPSServer(base::BindRepeating(&HandleRequestServerError));
   EXPECT_TRUE(NavigateToNewTabUntilLoadStop());
-  auto* controller = GetBinanceWidgetController();
+  auto* controller = GetBinanceController();
   ASSERT_TRUE(controller);
   ASSERT_TRUE(controller->SetAPIKey("abc", "def"));
   ASSERT_TRUE(controller->GetTickerPrice(
       "BTCUSDT",
       base::BindOnce(
-          &BinanceWidgetAPIBrowserTest::OnGetTickerPrice,
+          &BinanceAPIBrowserTest::OnGetTickerPrice,
           base::Unretained(this))));
   WaitForGetTickerPrice("0.00");
 }
 
-IN_PROC_BROWSER_TEST_F(BinanceWidgetAPIBrowserTest,
+IN_PROC_BROWSER_TEST_F(BinanceAPIBrowserTest,
     ChromeAPIAccountBalance) {
   ASSERT_TRUE(NavigateToNewTabUntilLoadStop());
   WaitForChromeAPIAccountBalance();
 }
 
-IN_PROC_BROWSER_TEST_F(BinanceWidgetAPIBrowserTest,
+IN_PROC_BROWSER_TEST_F(BinanceAPIBrowserTest,
     ChromeAPIUnauthorized) {
   ResetHTTPSServer(base::BindRepeating(&HandleRequestUnauthorized));
   ASSERT_TRUE(NavigateToNewTabUntilLoadStop());
   WaitForChromeAPIUnauthorized();
 }
 
-IN_PROC_BROWSER_TEST_F(BinanceWidgetAPIBrowserTest,
+IN_PROC_BROWSER_TEST_F(BinanceAPIBrowserTest,
     ChromeAPIServerError) {
   ResetHTTPSServer(base::BindRepeating(&HandleRequestServerError));
   ASSERT_TRUE(NavigateToNewTabUntilLoadStop());

@@ -2,7 +2,7 @@
   "version": "1.0.0",
   "name": "Brave",
   "manifest_version": 2,
-  "description": "API test for ensure no access to binanceWidget",
+  "description": "API test for ensure no access to binance",
   "web_accessible_resources": [
   ],
   "background": {

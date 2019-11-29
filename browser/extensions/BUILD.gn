@@ -1,5 +1,5 @@
 import("//brave/browser/tor/buildflags/buildflags.gni")
-import("//brave/components/binance_widget/buildflags.gni")
+import("//brave/components/binance/buildflags.gni")
 import("//brave/components/brave_rewards/browser/buildflags/buildflags.gni")
 import("//brave/components/brave_sync/buildflags/buildflags.gni")
 import("//brave/components/brave_wallet/browser/buildflags/buildflags.gni")
@@ -113,12 +113,12 @@ source_set("extensions") {
       "//brave/components/brave_sync:static_resources",
     ]
   }
-  if (binance_widget_enabled) {
+  if (binance_enabled) {
     sources += [
-      "api/binance_widget_api.cc",
-      "api/binance_widget_api.h",
+      "api/binance_api.cc",
+      "api/binance_api.h",
     ]
-    deps += [ "//brave/components/binance_widget/browser" ]
+    deps += [ "//brave/components/binance/browser" ]
   }
   if (enable_brave_webtorrent) {
     deps += [

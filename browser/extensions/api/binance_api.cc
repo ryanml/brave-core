@@ -3,19 +3,19 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#include "brave/browser/extensions/api/binance_widget_api.h"
+#include "brave/browser/extensions/api/binance_api.h"
 
 #include <memory>
 #include <string>
 
 #include "base/environment.h"
 #include "brave/browser/profiles/profile_util.h"
-#include "brave/common/extensions/api/binance_widget.h"
+#include "brave/common/extensions/api/binance.h"
 #include "brave/common/extensions/extension_constants.h"
 #include "brave/common/pref_names.h"
-#include "brave/browser/binance_widget/binance_widget_service_factory.h"
-#include "brave/components/binance_widget/browser/binance_widget_controller.h"
-#include "brave/components/binance_widget/browser/binance_widget_service.h"
+#include "brave/browser/binance/binance_service_factory.h"
+#include "brave/components/binance/browser/binance_controller.h"
+#include "brave/components/binance/browser/binance_service.h"
 #include "chrome/browser/extensions/api/tabs/tabs_constants.h"
 #include "chrome/browser/extensions/extension_tab_util.h"
 #include "chrome/browser/infobars/infobar_service.h"
@@ -25,8 +25,8 @@
 
 namespace {
 
-BinanceWidgetController* GetBinanceWidgetController(content::BrowserContext* context) {
-  return BinanceWidgetServiceFactory::GetInstance()
+BinanceController* GetBinanceController(content::BrowserContext* context) {
+  return BinanceServiceFactory::GetInstance()
       ->GetForProfile(Profile::FromBrowserContext(context))
       ->controller();
 }
@@ -37,30 +37,30 @@ namespace extensions {
 namespace api {
 
 ExtensionFunction::ResponseAction
-BinanceWidgetGetAccountBalanceFunction::Run() {
+BinanceGetAccountBalanceFunction::Run() {
   Profile* profile = Profile::FromBrowserContext(browser_context());
   if (brave::IsTorProfile(profile)) {
     return RespondNow(Error("Not available in Tor profile"));
   }
-  auto* controller = GetBinanceWidgetController(browser_context());
+  auto* controller = GetBinanceController(browser_context());
   if (!controller->GetAccountBalance(
       base::BindOnce(
-          &BinanceWidgetGetAccountBalanceFunction::OnGetAccountBalance,
+          &BinanceGetAccountBalanceFunction::OnGetAccountBalance,
           this))) {
     return RespondNow(Error("Could not send request to get balance"));
   }
   return RespondLater();
 }
 
-void BinanceWidgetGetAccountBalanceFunction::OnGetAccountBalance(
+void BinanceGetAccountBalanceFunction::OnGetAccountBalance(
     const std::string& btc_balance) {
   Respond(OneArgument(std::make_unique<base::Value>(btc_balance)));
 }
 
 ExtensionFunction::ResponseAction
-BinanceWidgetSetAPIKeyFunction::Run() {
-  std::unique_ptr<binance_widget::SetAPIKey::Params> params(
-      binance_widget::SetAPIKey::Params::Create(*args_));
+BinanceSetAPIKeyFunction::Run() {
+  std::unique_ptr<binance::SetAPIKey::Params> params(
+      binance::SetAPIKey::Params::Create(*args_));
   EXTENSION_FUNCTION_VALIDATE(params.get());
 
   Profile* profile = Profile::FromBrowserContext(browser_context());
@@ -70,7 +70,7 @@ BinanceWidgetSetAPIKeyFunction::Run() {
 
   LOG(ERROR) << "API key is: " << params->api_key;
   LOG(ERROR) << "Secret key is: " << params->secret_key;
-  auto* controller = GetBinanceWidgetController(browser_context());
+  auto* controller = GetBinanceController(browser_context());
   if (!controller->SetAPIKey(params->api_key, params->secret_key)) {
     return RespondNow(Error("Could not set API key"));
   }
@@ -79,13 +79,13 @@ BinanceWidgetSetAPIKeyFunction::Run() {
 }
 
 ExtensionFunction::ResponseAction
-BinanceWidgetGetUserTLDFunction::Run() {
+BinanceGetUserTLDFunction::Run() {
   Profile* profile = Profile::FromBrowserContext(browser_context());
   if (brave::IsTorProfile(profile)) {
     return RespondNow(Error("Not available in Tor profile"));
   }
 
-  auto* controller = GetBinanceWidgetController(browser_context());
+  auto* controller = GetBinanceController(browser_context());
   const std::string userTLD = controller->GetBinanceTLD();
 
   return RespondNow(OneArgument(
@@ -93,32 +93,32 @@ BinanceWidgetGetUserTLDFunction::Run() {
 }
 
 ExtensionFunction::ResponseAction
-BinanceWidgetValidateAPIKeyFunction::Run() {
+BinanceValidateAPIKeyFunction::Run() {
   Profile* profile = Profile::FromBrowserContext(browser_context());
   if (brave::IsTorProfile(profile)) {
     return RespondNow(Error("Not available in Tor profile"));
   }
 
-  auto* controller = GetBinanceWidgetController(browser_context());
+  auto* controller = GetBinanceController(browser_context());
   if (!controller->ValidateAPIKey(
       base::BindOnce(
-          &BinanceWidgetValidateAPIKeyFunction::OnValidateAPIKey,
+          &BinanceValidateAPIKeyFunction::OnValidateAPIKey,
           this))) {
     return RespondNow(Error("Could not send request to validate API key"));
   }
   return RespondLater();
 }
 
-void BinanceWidgetValidateAPIKeyFunction::OnValidateAPIKey(
+void BinanceValidateAPIKeyFunction::OnValidateAPIKey(
     int status_code, bool unauthorized) {
   Respond(TwoArguments(std::make_unique<base::Value>(status_code),
                        std::make_unique<base::Value>(unauthorized)));
 }
 
 ExtensionFunction::ResponseAction
-BinanceWidgetGetTickerPriceFunction::Run() {
-  std::unique_ptr<binance_widget::GetTickerPrice::Params> params(
-      binance_widget::GetTickerPrice::Params::Create(*args_));
+BinanceGetTickerPriceFunction::Run() {
+  std::unique_ptr<binance::GetTickerPrice::Params> params(
+      binance::GetTickerPrice::Params::Create(*args_));
   EXTENSION_FUNCTION_VALIDATE(params.get());
 
   Profile* profile = Profile::FromBrowserContext(browser_context());
@@ -126,10 +126,10 @@ BinanceWidgetGetTickerPriceFunction::Run() {
     return RespondNow(Error("Not available in Tor profile"));
   }
 
-  auto* controller = GetBinanceWidgetController(browser_context());
+  auto* controller = GetBinanceController(browser_context());
   bool value_request = controller->GetTickerPrice(params->symbol_pair,
       base::BindOnce(
-          &BinanceWidgetGetTickerPriceFunction::OnGetTickerPrice, this));
+          &BinanceGetTickerPriceFunction::OnGetTickerPrice, this));
 
   if (!value_request) {
     return RespondNow(
@@ -139,7 +139,7 @@ BinanceWidgetGetTickerPriceFunction::Run() {
   return RespondLater();
 }
 
-void BinanceWidgetGetTickerPriceFunction::OnGetTickerPrice(
+void BinanceGetTickerPriceFunction::OnGetTickerPrice(
     const std::string& symbol_pair_price) {
   Respond(OneArgument(std::make_unique<base::Value>(symbol_pair_price)));
 }

@@ -4,10 +4,10 @@
 
 [
   {
-    "namespace": "binanceWidget",
-    "description": "Use the <code>chrome.binanceWidget</code> API to receive notifications about Dapp detection.",
+    "namespace": "binance",
+    "description": "Use the <code>chrome.binance</code> API to receive notifications about Dapp detection.",
     "compiler_options": {
-      "implemented_in": "brave/browser/extensions/api/binance_widget_api.h"
+      "implemented_in": "brave/browser/extensions/api/binance_api.h"
     },
     "events": [
     ],

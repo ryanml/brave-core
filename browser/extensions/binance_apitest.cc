@@ -11,7 +11,7 @@
 namespace extensions {
 namespace {
 
-class BinanceWidgetExtensionApiTest : public ExtensionApiTest {
+class BinanceExtensionApiTest : public ExtensionApiTest {
  public:
   void SetUp() override {
     brave::RegisterPathProvider();
@@ -25,7 +25,7 @@ class BinanceWidgetExtensionApiTest : public ExtensionApiTest {
   base::FilePath extension_dir_;
 };
 
-IN_PROC_BROWSER_TEST_F(BinanceWidgetExtensionApiTest,
+IN_PROC_BROWSER_TEST_F(BinanceExtensionApiTest,
     ExtensionsHaveNoAPIAccess) {
   ResultCatcher catcher;
   const Extension* extension =

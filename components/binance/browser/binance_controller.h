@@ -3,8 +3,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef BRAVE_COMPONENTS_BINANCE_WIDGET_BROWSER_BINANCE_WIDGET_CONTROLLER_H_
-#define BRAVE_COMPONENTS_BINANCE_WIDGET_BROWSER_BINANCE_WIDGET_CONTROLLER_H_
+#ifndef BRAVE_COMPONENTS_BINANCE_BROWSER_BINANCE_CONTROLLER_H_
+#define BRAVE_COMPONENTS_BINANCE_BROWSER_BINANCE_CONTROLLER_H_
 
 #include <list>
 #include <memory>
@@ -36,10 +36,10 @@ class SimpleURLLoader;
 const char api_path_account[] = "/api/v3/account";
 const char api_path_ticker_price[] = "/api/v3/ticker/price";
 
-class BinanceWidgetController {
+class BinanceController {
  public:
-  explicit BinanceWidgetController(content::BrowserContext* context);
-  ~BinanceWidgetController();
+  explicit BinanceController(content::BrowserContext* context);
+  ~BinanceController();
 
   using GetAccountBalanceCallback = base::OnceCallback<void(const std::string&)>;
   bool GetAccountBalance(GetAccountBalanceCallback callback);
@@ -92,10 +92,10 @@ class BinanceWidgetController {
   scoped_refptr<network::SharedURLLoaderFactory> url_loader_factory_;
   SimpleURLLoaderList url_loaders_;
 
-  base::WeakPtrFactory<BinanceWidgetController> weak_factory_;
+  base::WeakPtrFactory<BinanceController> weak_factory_;
 
-  FRIEND_TEST_ALL_PREFIXES(BinanceWidgetAPIBrowserTest, SetAPIKey);
-  DISALLOW_COPY_AND_ASSIGN(BinanceWidgetController);
+  FRIEND_TEST_ALL_PREFIXES(BinanceAPIBrowserTest, SetAPIKey);
+  DISALLOW_COPY_AND_ASSIGN(BinanceController);
 };
 
-#endif  // BRAVE_COMPONENTS_BINANCE_WIDGET_BROWSER_BINANCE_WIDGET_CONTROLLER_H_
+#endif  // BRAVE_COMPONENTS_BINANCE_BROWSER_BINANCE_CONTROLLER_H_

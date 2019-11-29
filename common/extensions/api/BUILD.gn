@@ -1,4 +1,4 @@
-import("//brave/components/binance_widget/buildflags.gni")
+import("//brave/components/binance/buildflags.gni")
 import("//brave/components/brave_sync/buildflags/buildflags.gni")
 import("//brave/components/brave_wallet/browser/buildflags/buildflags.gni")
 import("//tools/grit/grit_rule.gni")
@@ -17,8 +17,8 @@ json_features("api_features") {
     sources += [ "_brave_wallet_api_features.json" ]
   }
 
- if (binance_widget_enabled) {
-    sources += [ "_binance_widget_api_features.json" ]
+ if (binance_enabled) {
+    sources += [ "_binance_api_features.json" ]
   }
 }
 
@@ -65,8 +65,8 @@ if (brave_wallet_enabled) {
   brave_extensions_api_schema_sources += [ "brave_wallet.json" ]
 }
 
-if (binance_widget_enabled) {
-  brave_extensions_api_schema_sources += [ "binance_widget.json" ]
+if (binance_enabled) {
+  brave_extensions_api_schema_sources += [ "binance.json" ]
 }
 
 brave_extensions_api_uncompiled_sources = []

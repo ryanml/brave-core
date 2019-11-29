@@ -124,6 +124,7 @@ test("brave_unit_tests") {
     "//chrome/browser/custom_handlers/test_protocol_handler_registry_delegate.h",
   ]
 
+<<<<<<< HEAD
   deps = [
     "//brave/browser/safebrowsing",
     "//brave/components/ntp_sponsored_images/browser",
@@ -145,9 +146,12 @@ test("brave_unit_tests") {
   ]
 
   if (binance_widget_enabled) {
+=======
+  if (binance_enabled) {
+>>>>>>> Rename BinanceWidget to Binance
     sources += [
-      "//brave/components/binance_widget/browser/binance_json_parser_unittest.cc",
-      "//brave/components/binance_widget/browser/binance_crypto_unittest.cc",
+      "//brave/components/binance/browser/binance_json_parser_unittest.cc",
+      "//brave/components/binance/browser/binance_crypto_unittest.cc",
     ]
   }
 
@@ -670,7 +674,6 @@ test("brave_browser_tests") {
       "//brave/browser/extensions/brave_wallet_apitest.cc",
     ]
   }
-
 
   if (binance_enabled) {
     sources += [

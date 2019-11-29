@@ -100,7 +100,7 @@ class Binance extends React.PureComponent<Props, State> {
       this.fetchBalance()
     }
 
-    chrome.binanceWidget.getUserTLD((userTLD: NewTab.BinanceTLD) => {
+    chrome.binance.getUserTLD((userTLD: NewTab.BinanceTLD) => {
       this.props.onBinanceUserTLD(userTLD)
     })
   }
@@ -119,10 +119,10 @@ class Binance extends React.PureComponent<Props, State> {
   }
 
   fetchBalance = () => {
-    chrome.binanceWidget.getAccountBalance((balance: string) => {
+    chrome.binance.getAccountBalance((balance: string) => {
       this.props.onBinanceBalance(balance)
 
-      chrome.binanceWidget.getTickerPrice('BTCUSDT', (price: string) => {
+      chrome.binance.getTickerPrice('BTCUSDT', (price: string) => {
         this.props.onBTCUSDPrice(price)
       })
     })

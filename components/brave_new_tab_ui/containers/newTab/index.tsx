@@ -217,7 +217,7 @@ class NewTabPage extends React.Component<Props, State> {
   setApiKeys = (apiKey: string, apiSecret: string) => {
     this.props.actions.setApiKeys(apiKey, apiSecret)
     setTimeout(() => {
-      chrome.binanceWidget.validateAPIKey((status: number, unauthorized: boolean) => {
+      chrome.binance.validateAPIKey((status: number, unauthorized: boolean) => {
         if (unauthorized || (status < 200 || status > 299)) {
           this.props.actions.onApiCredsError()
         } else {

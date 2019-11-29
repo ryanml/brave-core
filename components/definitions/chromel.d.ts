@@ -152,7 +152,7 @@ declare namespace chrome.braveRewards {
   const getAnonWalletStatus: (callback: (result: RewardsExtension.Result) => void) => {}
 }
 
-declare namespace chrome.binanceWidget {
+declare namespace chrome.binance {
   const setAPIKey: (apiKey: string, apiSecret: string) => {}
   const getAccountBalance: (callback: (balance: string) => void) => {}
   const getUserTLD: (callback: (userTLD: string) => void) => {}

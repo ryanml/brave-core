@@ -4,10 +4,10 @@ source_set("browser") {
     "binance_crypto.h",
     "binance_json_parser.cc",
     "binance_json_parser.h",
-    "binance_widget_controller.cc",
-    "binance_widget_controller.h",
-    "binance_widget_service.cc",
-    "binance_widget_service.h",
+    "binance_controller.cc",
+    "binance_controller.h",
+    "binance_service.cc",
+    "binance_service.h",
   ]
 
   deps = [

@@ -3,8 +3,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef BRAVE_COMPONENTS_BINANCE_WIDGET_BROWSER_BINANCE_WIDGET_SERVICE_H_
-#define BRAVE_COMPONENTS_BINANCE_WIDGET_BROWSER_BINANCE_WIDGET_SERVICE_H_
+#ifndef BRAVE_COMPONENTS_BINANCE_BROWSER_BINANCE_SERVICE_H_
+#define BRAVE_COMPONENTS_BINANCE_BROWSER_BINANCE_SERVICE_H_
 
 #include <memory>
 
@@ -23,23 +23,23 @@ namespace content {
 class BrowserContext;
 }  // namespace content
 
-class BinanceWidgetController;
+class BinanceController;
 class Profile;
 
-class BinanceWidgetService : public KeyedService {
+class BinanceService : public KeyedService {
  public:
-  explicit BinanceWidgetService(content::BrowserContext* context);
-  ~BinanceWidgetService() override;
+  explicit BinanceService(content::BrowserContext* context);
+  ~BinanceService() override;
 
   bool Init();
-  BinanceWidgetController* controller() const { return controller_.get(); }
+  BinanceController* controller() const { return controller_.get(); }
 
  private:
   content::BrowserContext* context_;
-  std::unique_ptr<BinanceWidgetController> controller_;
-  base::WeakPtrFactory<BinanceWidgetService> weak_factory_;
+  std::unique_ptr<BinanceController> controller_;
+  base::WeakPtrFactory<BinanceService> weak_factory_;
 
-  DISALLOW_COPY_AND_ASSIGN(BinanceWidgetService);
+  DISALLOW_COPY_AND_ASSIGN(BinanceService);
 };
 
-#endif  // BRAVE_COMPONENTS_BINANCE_WIDGET_BROWSER_BINANCE_WIDGET_SERVICE_H_
+#endif  // BRAVE_COMPONENTS_BINANCE_BROWSER_BINANCE_SERVICE_H_

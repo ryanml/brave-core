@@ -3,39 +3,39 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#include "brave/browser/binance_widget/binance_widget_service_factory.h"
+#include "brave/browser/binance/binance_service_factory.h"
 
-#include "brave/components/binance_widget/browser/binance_widget_service.h"
+#include "brave/components/binance/browser/binance_service.h"
 #include "chrome/browser/profiles/incognito_helpers.h"
 #include "chrome/browser/profiles/profile.h"
 #include "components/keyed_service/content/browser_context_dependency_manager.h"
 
 // static
-BinanceWidgetServiceFactory* BinanceWidgetServiceFactory::GetInstance() {
-  return base::Singleton<BinanceWidgetServiceFactory>::get();
+BinanceServiceFactory* BinanceServiceFactory::GetInstance() {
+  return base::Singleton<BinanceServiceFactory>::get();
 }
 
 // static
-BinanceWidgetService* BinanceWidgetServiceFactory::GetForProfile(Profile* profile) {
-  return static_cast<BinanceWidgetService*>(
+BinanceService* BinanceServiceFactory::GetForProfile(Profile* profile) {
+  return static_cast<BinanceService*>(
       GetInstance()->GetServiceForBrowserContext(profile, true));
 }
 
-BinanceWidgetServiceFactory::BinanceWidgetServiceFactory()
+BinanceServiceFactory::BinanceServiceFactory()
     : BrowserContextKeyedServiceFactory(
-          "BinanceWidgetService",
+          "BinanceService",
           BrowserContextDependencyManager::GetInstance()) {
 }
 
-BinanceWidgetServiceFactory::~BinanceWidgetServiceFactory() {
+BinanceServiceFactory::~BinanceServiceFactory() {
 }
 
-KeyedService* BinanceWidgetServiceFactory::BuildServiceInstanceFor(
+KeyedService* BinanceServiceFactory::BuildServiceInstanceFor(
     content::BrowserContext* context) const {
-  return new BinanceWidgetService(Profile::FromBrowserContext(context));
+  return new BinanceService(Profile::FromBrowserContext(context));
 }
 
-content::BrowserContext* BinanceWidgetServiceFactory::GetBrowserContextToUse(
+content::BrowserContext* BinanceServiceFactory::GetBrowserContextToUse(
       content::BrowserContext* context) const {
   return chrome::GetBrowserContextRedirectedInIncognito(context);
 }

@@ -1,6 +1,6 @@
 import("//brave/build/config.gni")
 import("//brave/browser/tor/buildflags/buildflags.gni")
-import("//brave/components/binance_widget/buildflags.gni")
+import("//brave/components/binance/buildflags.gni")
 import("//brave/components/brave_ads/browser/buildflags/buildflags.gni")
 import("//brave/components/brave_perf_predictor/browser/buildflags/buildflags.gni")
 import("//brave/components/brave_sync/buildflags/buildflags.gni")
@@ -247,13 +247,13 @@ source_set("browser_process") {
     ]
   }
 
-  if (binance_widget_enabled) {
+  if (binance_enabled) {
     sources += [
-      "binance_widget/binance_widget_service_factory.cc",
-      "binance_widget/binance_widget_service_factory.h",
+      "binance/binance_service_factory.cc",
+      "binance/binance_service_factory.h",
     ]
 
-    deps += [ "//brave/components/binance_widget/browser" ]
+    deps += [ "//brave/components/binance/browser" ]
   }
 
   if (enable_tor) {

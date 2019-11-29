@@ -3,8 +3,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef BRAVE_COMPONENTS_BINANCE_WIDGET_BROWSER_BINANCE_CRYPTO_H_
-#define BRAVE_COMPONENTS_BINANCE_WIDGET_BROWSER_BINANCE_CRYPTO_H_
+#ifndef BRAVE_COMPONENTS_BINANCE_BROWSER_BINANCE_CRYPTO_H_
+#define BRAVE_COMPONENTS_BINANCE_BROWSER_BINANCE_CRYPTO_H_
 
 #include <string>
 
@@ -16,4 +16,4 @@ class BinanceCrypto {
   static std::string SanitizeSymbol(const std::string& symbol);
 };
 
-#endif  // BRAVE_COMPONENTS_BINANCE_WIDGET_BROWSER_BINANCE_CRYPTO_H_
+#endif  // BRAVE_COMPONENTS_BINANCE_BROWSER_BINANCE_CRYPTO_H_

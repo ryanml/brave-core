@@ -3,25 +3,25 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef BRAVE_BROWSER_BINANCE_WIDGET_BINANCE_WIDGET_SERVICE_FACTORY_H_
-#define BRAVE_BROWSER_BINANCE_WIDGET_BINANCE_WIDGET_SERVICE_FACTORY_H_
+#ifndef BRAVE_BROWSER_BINANCE_BINANCE_SERVICE_FACTORY_H_
+#define BRAVE_BROWSER_BINANCE_BINANCE_SERVICE_FACTORY_H_
 
 #include "base/memory/singleton.h"
 #include "components/keyed_service/content/browser_context_keyed_service_factory.h"
 
-class BinanceWidgetService;
+class BinanceService;
 class Profile;
 
-class BinanceWidgetServiceFactory : public BrowserContextKeyedServiceFactory {
+class BinanceServiceFactory : public BrowserContextKeyedServiceFactory {
  public:
-  static BinanceWidgetService* GetForProfile(Profile* profile);
-  static BinanceWidgetServiceFactory* GetInstance();
+  static BinanceService* GetForProfile(Profile* profile);
+  static BinanceServiceFactory* GetInstance();
 
  private:
-  friend struct base::DefaultSingletonTraits<BinanceWidgetServiceFactory>;
+  friend struct base::DefaultSingletonTraits<BinanceServiceFactory>;
 
-  BinanceWidgetServiceFactory();
-  ~BinanceWidgetServiceFactory() override;
+  BinanceServiceFactory();
+  ~BinanceServiceFactory() override;
 
   // BrowserContextKeyedServiceFactory overrides:
   KeyedService* BuildServiceInstanceFor(
@@ -29,7 +29,7 @@ class BinanceWidgetServiceFactory : public BrowserContextKeyedServiceFactory {
   content::BrowserContext* GetBrowserContextToUse(
       content::BrowserContext* context) const override;
 
-  DISALLOW_COPY_AND_ASSIGN(BinanceWidgetServiceFactory);
+  DISALLOW_COPY_AND_ASSIGN(BinanceServiceFactory);
 };
 
-#endif  // BRAVE_BROWSER_BINANCE_WIDGET_BINANCE_WIDGET_SERVICE_FACTORY_H_
+#endif  // BRAVE_BROWSER_BINANCE_BINANCE_SERVICE_FACTORY_H_

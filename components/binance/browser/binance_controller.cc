@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#include "brave/components/binance_widget/browser/binance_widget_controller.h"
+#include "brave/components/binance/browser/binance_controller.h"
 
 #include <algorithm>
 #include <chrono>
@@ -18,8 +18,8 @@
 #include "base/task_runner_util.h"
 #include "base/token.h"
 #include "brave/common/pref_names.h"
-#include "brave/components/binance_widget/browser/binance_crypto.h"
-#include "brave/components/binance_widget/browser/binance_json_parser.h"
+#include "brave/components/binance/browser/binance_crypto.h"
+#include "brave/components/binance/browser/binance_json_parser.h"
 #include "chrome/browser/profiles/profile.h"
 #include "components/os_crypt/os_crypt.h"
 #include "components/prefs/pref_service.h"
@@ -33,7 +33,7 @@
 using namespace std::chrono;
 
 // https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md
-std::string BinanceWidgetController::api_endpoint_ =  "https://api.binance.com";
+std::string BinanceController::api_endpoint_ =  "https://api.binance.com";
 
 namespace {
 
@@ -43,9 +43,9 @@ const std::vector<std::string> public_endpoints = {
 
 const unsigned int kRetriesCountOnNetworkChange = 1;
 net::NetworkTrafficAnnotationTag GetNetworkTrafficAnnotationTag() {
-  return net::DefineNetworkTrafficAnnotation("binance_widget_controller", R"(
+  return net::DefineNetworkTrafficAnnotation("binance_controller", R"(
       semantics {
-        sender: "Binance Widget Controller"
+        sender: "Binance Controller"
         description:
           "This service is used to communicate with Binance "
           "on behalf of the user interacting with the Binance widget."
@@ -67,7 +67,7 @@ net::NetworkTrafficAnnotationTag GetNetworkTrafficAnnotationTag() {
 
 }  // namespace
 
-BinanceWidgetController::BinanceWidgetController(content::BrowserContext* context)
+BinanceController::BinanceController(content::BrowserContext* context)
     : context_(context),
       url_loader_factory_(
           content::BrowserContext::GetDefaultStoragePartition(context_)
@@ -76,32 +76,32 @@ BinanceWidgetController::BinanceWidgetController(content::BrowserContext* contex
   LoadAPIKeyFromPrefs();
 }
 
-BinanceWidgetController::~BinanceWidgetController() {
+BinanceController::~BinanceController() {
 }
 
-bool BinanceWidgetController::GetAccountBalance(
+bool BinanceController::GetAccountBalance(
     GetAccountBalanceCallback callback) {
   auto internal_callback = base::BindOnce(
-       &BinanceWidgetController::OnGetAccountBalance,
+       &BinanceController::OnGetAccountBalance,
        base::Unretained(this), std::move(callback));
   // This API is of security type USER_DATA as documented here:
   return URLRequest("GET", api_path_account, "", std::move(internal_callback));
 }
 
-bool BinanceWidgetController::ValidateAPIKey(
+bool BinanceController::ValidateAPIKey(
     ValidateAPIKeyCallback callback) {
   auto internal_callback = base::BindOnce(
-       &BinanceWidgetController::OnValidateAPIKey,
+       &BinanceController::OnValidateAPIKey,
        base::Unretained(this), std::move(callback));
   // This API is of security type USER_DATA as documented here:
   return URLRequest("GET", api_path_account, "", std::move(internal_callback));
 }
 
-bool BinanceWidgetController::GetTickerPrice(
+bool BinanceController::GetTickerPrice(
     const std::string& symbol_pair,
     GetTickerPriceCallback callback) {
   auto internal_callback = base::BindOnce(
-      &BinanceWidgetController::OnGetTickerPrice,
+      &BinanceController::OnGetTickerPrice,
       base::Unretained(this), std::move(callback));
   // Symbol pair looks like BTCUSDT, but make sure data
   // passed in doesn't include any sneaky chars like &param2=k
@@ -114,7 +114,7 @@ bool BinanceWidgetController::GetTickerPrice(
 }
 
 // static
-bool BinanceWidgetController::IsPublicEndpoint(
+bool BinanceController::IsPublicEndpoint(
     const std::string& endpoint) {
   for (const std::string& path: public_endpoints) {
     if (path == endpoint) {
@@ -133,7 +133,7 @@ bool BinanceWidgetController::IsPublicEndpoint(
  * @return true if the request was started successfully.
  *   In which case the callback will always be called.
  */
-bool BinanceWidgetController::URLRequest(const std::string& method,
+bool BinanceController::URLRequest(const std::string& method,
                                          const std::string& path,
                                          const std::string& query_params,
                                          URLRequestCallback callback) {
@@ -189,13 +189,13 @@ bool BinanceWidgetController::URLRequest(const std::string& method,
 
   iter->get()->DownloadToStringOfUnboundedSizeUntilCrashAndDie(
       url_loader_factory, base::BindOnce(
-          &BinanceWidgetController::OnURLLoaderComplete,
+          &BinanceController::OnURLLoaderComplete,
           base::Unretained(this), std::move(iter), std::move(callback)));
 
   return true;
 }
 
-void BinanceWidgetController::OnURLLoaderComplete(
+void BinanceController::OnURLLoaderComplete(
     SimpleURLLoaderList::iterator iter,
     URLRequestCallback callback,
     const std::unique_ptr<std::string> response_body) {
@@ -223,7 +223,7 @@ void BinanceWidgetController::OnURLLoaderComplete(
       response_code, response_body ? *response_body : "", headers);
 }
 
-void BinanceWidgetController::OnGetAccountBalance(
+void BinanceController::OnGetAccountBalance(
     GetAccountBalanceCallback callback,
     const int status, const std::string& body,
     const std::map<std::string, std::string>& headers) {
@@ -236,14 +236,14 @@ void BinanceWidgetController::OnGetAccountBalance(
   std::move(callback).Run(btc_balance);
 }
 
-void BinanceWidgetController::OnValidateAPIKey(
+void BinanceController::OnValidateAPIKey(
     ValidateAPIKeyCallback callback,
     const int status, const std::string& body,
     const std::map<std::string, std::string>& headers) {
   std::move(callback).Run(status, status == 401);
 }
 
-void BinanceWidgetController::OnGetTickerPrice(
+void BinanceController::OnGetTickerPrice(
     GetTickerPriceCallback callback,
     const int status, const std::string& body,
     const std::map<std::string, std::string>& headers) {
@@ -254,7 +254,7 @@ void BinanceWidgetController::OnGetTickerPrice(
   std::move(callback).Run(symbol_pair_price);
 }
 
-bool BinanceWidgetController::SetAPIKey(const std::string& api_key,
+bool BinanceController::SetAPIKey(const std::string& api_key,
                                         const std::string& secret_key) {
   api_key_ = api_key;
   secret_key_ = secret_key;
@@ -278,19 +278,19 @@ bool BinanceWidgetController::SetAPIKey(const std::string& api_key,
   base::Base64Encode(encrypted_secret_key, &encoded_encrypted_secret_key);
 
   Profile* profile = Profile::FromBrowserContext(context_);
-  profile->GetPrefs()->SetString(kBinanceWidgetAPIKey, encoded_encrypted_api_key);
-  profile->GetPrefs()->SetString(kBinanceWidgetSecretKey,
+  profile->GetPrefs()->SetString(kBinanceAPIKey, encoded_encrypted_api_key);
+  profile->GetPrefs()->SetString(kBinanceSecretKey,
       encoded_encrypted_secret_key);
 
   return true;
 }
 
-bool BinanceWidgetController::LoadAPIKeyFromPrefs() {
+bool BinanceController::LoadAPIKeyFromPrefs() {
   Profile* profile = Profile::FromBrowserContext(context_);
   std::string encoded_encrypted_api_key =
-      profile->GetPrefs()->GetString(kBinanceWidgetAPIKey);
+      profile->GetPrefs()->GetString(kBinanceAPIKey);
   std::string encoded_encrypted_secret_key =
-      profile->GetPrefs()->GetString(kBinanceWidgetSecretKey);
+      profile->GetPrefs()->GetString(kBinanceSecretKey);
 
   // Base64 decode the encrypted keys.
   std::string encrypted_api_key;
@@ -312,7 +312,7 @@ bool BinanceWidgetController::LoadAPIKeyFromPrefs() {
   return true;
 }
 
-std::string BinanceWidgetController::GetBinanceTLD() {
+std::string BinanceController::GetBinanceTLD() {
   Profile* profile = Profile::FromBrowserContext(context_);
 
   const std::string usTLD = "us";
@@ -327,7 +327,7 @@ std::string BinanceWidgetController::GetBinanceTLD() {
   return (user_country_id == us_id) ? usTLD : globalTLD;
 }
 
-base::SequencedTaskRunner* BinanceWidgetController::io_task_runner() {
+base::SequencedTaskRunner* BinanceController::io_task_runner() {
   if (!io_task_runner_) {
     io_task_runner_ = base::CreateSequencedTaskRunnerWithTraits(
         {base::ThreadPool(), base::MayBlock(), base::TaskPriority::BEST_EFFORT,

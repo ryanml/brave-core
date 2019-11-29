@@ -4,7 +4,7 @@
 
 chrome.test.runTests([
   function braveWalletExtensionHasAccess() {
-    if (!chrome.binanceWidget) {
+    if (!chrome.binance) {
       chrome.test.succeed()
     } else {
       chrome.test.fail()

@@ -493,7 +493,7 @@ export const newTabReducer: Reducer<NewTab.State | undefined> = (state: NewTab.S
 
       state.binanceState.apiCredError = false
       state.binanceState.validationInProgress = true
-      chrome.binanceWidget.setAPIKey(apiKey, secretKey)
+      chrome.binance.setAPIKey(apiKey, secretKey)
       break
 
     case types.ON_BINANCE_BALANCE:
@@ -534,7 +534,7 @@ export const newTabReducer: Reducer<NewTab.State | undefined> = (state: NewTab.S
       state.binanceState = {
         ...storage.defaultState.binanceState
       }
-      chrome.binanceWidget.setAPIKey('', '')
+      chrome.binance.setAPIKey('', '')
       break
 
     default:

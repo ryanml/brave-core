@@ -3,8 +3,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef BRAVE_BROWSER_EXTENSIONS_API_BINANCE_WIDGET_API_H_
-#define BRAVE_BROWSER_EXTENSIONS_API_BINANCE_WIDGET_API_H_
+#ifndef BRAVE_BROWSER_EXTENSIONS_API_BINANCE_API_H_
+#define BRAVE_BROWSER_EXTENSIONS_API_BINANCE_API_H_
 
 #include <string>
 
@@ -15,57 +15,57 @@ class Profile;
 namespace extensions {
 namespace api {
 
-class BinanceWidgetGetAccountBalanceFunction :
+class BinanceGetAccountBalanceFunction :
     public ExtensionFunction {
  public:
-  DECLARE_EXTENSION_FUNCTION("binanceWidget.getAccountBalance", UNKNOWN)
+  DECLARE_EXTENSION_FUNCTION("binance.getAccountBalance", UNKNOWN)
 
  protected:
-  ~BinanceWidgetGetAccountBalanceFunction() override {}
+  ~BinanceGetAccountBalanceFunction() override {}
   void OnGetAccountBalance(const std::string& btc_balance);
 
   ResponseAction Run() override;
 };
 
-class BinanceWidgetSetAPIKeyFunction :
+class BinanceSetAPIKeyFunction :
     public ExtensionFunction {
  public:
-  DECLARE_EXTENSION_FUNCTION("binanceWidget.setAPIKey", UNKNOWN)
+  DECLARE_EXTENSION_FUNCTION("binance.setAPIKey", UNKNOWN)
 
  protected:
-  ~BinanceWidgetSetAPIKeyFunction() override {}
+  ~BinanceSetAPIKeyFunction() override {}
 
   ResponseAction Run() override;
 };
 
-class BinanceWidgetGetUserTLDFunction :
+class BinanceGetUserTLDFunction :
     public ExtensionFunction {
  public:
-  DECLARE_EXTENSION_FUNCTION("binanceWidget.getUserTLD", UNKNOWN)
+  DECLARE_EXTENSION_FUNCTION("binance.getUserTLD", UNKNOWN)
 
  protected:
-  ~BinanceWidgetGetUserTLDFunction() override {}
+  ~BinanceGetUserTLDFunction() override {}
   ResponseAction Run() override;
 };
 
-class BinanceWidgetValidateAPIKeyFunction :
+class BinanceValidateAPIKeyFunction :
     public ExtensionFunction {
  public:
-  DECLARE_EXTENSION_FUNCTION("binanceWidget.validateAPIKey", UNKNOWN)
+  DECLARE_EXTENSION_FUNCTION("binance.validateAPIKey", UNKNOWN)
 
  protected:
-  ~BinanceWidgetValidateAPIKeyFunction() override {}
+  ~BinanceValidateAPIKeyFunction() override {}
   void OnValidateAPIKey(int status_code, bool unauthorized);
   ResponseAction Run() override;
 };
 
-class BinanceWidgetGetTickerPriceFunction :
+class BinanceGetTickerPriceFunction :
     public ExtensionFunction {
  public:
-  DECLARE_EXTENSION_FUNCTION("binanceWidget.getTickerPrice", UNKNOWN)
+  DECLARE_EXTENSION_FUNCTION("binance.getTickerPrice", UNKNOWN)
 
  protected:
-  ~BinanceWidgetGetTickerPriceFunction() override {}
+  ~BinanceGetTickerPriceFunction() override {}
   void OnGetTickerPrice(const std::string& symbol_pair_price);
 
   ResponseAction Run() override;
@@ -74,4 +74,4 @@ class BinanceWidgetGetTickerPriceFunction :
 }  // namespace api
 }  // namespace extensions
 
-#endif  // BRAVE_BROWSER_EXTENSIONS_API_BINANCE_WIDGET_API_H_
+#endif  // BRAVE_BROWSER_EXTENSIONS_API_BINANCE_API_H_
