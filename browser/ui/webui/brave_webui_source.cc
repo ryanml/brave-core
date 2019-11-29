@@ -250,11 +250,14 @@ void CustomizeWebUIHTMLSource(const std::string &name,
         { "binanceWidgetApiSecretKeyInput" , IDS_BINANCE_WIDGET_API_SECRET_KEY_INPUT },  // NOLINT
         { "binanceWidgetGenNewKey" , IDS_BINANCE_WIDGET_GENERATE_NEW_KEY },
         { "binanceWidgetInvalidEntry", IDS_BINANCE_WIDGET_INVALID_ENTRY },
-        { "binanceWidgetValidatingCreds", IDS_BINANCE_WIDGET_VALIDATING_CREDS },
+        { "binanceWidgetValidatingCreds", IDS_BINANCE_WIDGET_VALIDATING_CREDS },    // NOLINT
         { "binanceWidgetDisconnectTitle", IDS_BINANCE_WIDGET_DISCONNECT_TITLE },    // NOLINT
         { "binanceWidgetDisconnectText" , IDS_BINANCE_WIDGET_DISCONNECT_TEXT },     // NOLINT
         { "binanceWidgetDisconnectButton" , IDS_BINANCE_WIDGET_DISCONNECT_BUTTON }, // NOLINT
-        { "binanceWidgetCancelText" , IDS_BRAVE_UI_CANCEL }
+        { "binanceWidgetCancelText" , IDS_BRAVE_UI_CANCEL },
+        { "binanceWidgetAccountDisconnected" , IDS_BINANCE_WIDGET_ACCOUNT_DISCONNECTED }, // NOLINT
+        { "binanceWidgetInvalidText" , IDS_BINANCE_WIDGET_KEY_INVALID_TEXT },             // NOLINT
+        { "binanceWidgetConfigureButton" , IDS_BINANCE_WIDGET_CONFIGURE_BUTTON }          // NOLINT
       }
     }, {
       std::string("welcome"), {

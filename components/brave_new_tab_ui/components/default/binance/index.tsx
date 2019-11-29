@@ -39,7 +39,10 @@ import {
   DisconnectWrapper,
   DisconnectButton,
   DisconnectTitle,
-  DisconnectCopy
+  DisconnectCopy,
+  InvalidTitle,
+  InvalidCopy,
+  InvalidWrapper
 } from './style'
 import {
   HideIcon,
@@ -71,6 +74,7 @@ interface Props {
   apiCredError: boolean
   btcBalanceValue: string
   validationInProgress: boolean
+  apiCredsInvalid: boolean
   hideWidget: () => void
   connectBinance: () => void
   onBinanceDetails: () => void
@@ -82,6 +86,7 @@ interface Props {
   onBinanceUserTLD: (userTLD: NewTab.BinanceTLD) => void
   onBTCUSDPrice: (value: string) => void
   onSetApiKeys: (apiKey: string, apiSecret: string) => void
+  onApiKeysInvalid: () => void
   onDisconnectBinance: () => void
 }
 
@@ -119,7 +124,14 @@ class Binance extends React.PureComponent<Props, State> {
   }
 
   fetchBalance = () => {
-    chrome.binance.getAccountBalance((balance: string) => {
+    chrome.binance.getAccountBalance((balance: string /*, unauthorized: boolean */) => {
+      /*
+      if (unauthorized) {
+        this.props.onApiKeysInvalid()
+        return
+      }
+      */
+
       this.props.onBinanceBalance(balance)
 
       chrome.binance.getTickerPrice('BTCUSDT', (price: string) => {
@@ -197,10 +209,23 @@ class Binance extends React.PureComponent<Props, State> {
         <DisconnectButton onClick={this.finishDisconnect}>
           {getLocale('binanceWidgetDisconnectButton')}
         </DisconnectButton>
-        <DismissAction onClick={this.cancelDisconnect}>
-          {getLocale('binanceWidgetCancelText')}
-        </DismissAction>
       </DisconnectWrapper>
+    )
+  }
+
+  renderInvalidKeyView = () => {
+    return (
+      <InvalidWrapper>
+        <InvalidTitle>
+          {getLocale('binanceWidgetAccountDisconnected')}
+        </InvalidTitle>
+        <InvalidCopy>
+          {getLocale('binanceWidgetInvalidText')}
+        </InvalidCopy>
+        <GenButton onClick={this.props.connectBinance}>
+          {getLocale('binanceWidgetConfigureButton')}
+        </GenButton>
+      </InvalidWrapper>
     )
   }
 
@@ -339,7 +364,15 @@ class Binance extends React.PureComponent<Props, State> {
   }
 
   render () {
-    const { userAuthed } = this.props
+    const { userAuthed, apiCredsInvalid } = this.props
+
+    if (apiCredsInvalid) {
+      return (
+        <WidgetWrapper>
+          {this.renderInvalidKeyView()}
+        </WidgetWrapper>
+      )
+    }
 
     if (this.state.disconnectInProgress) {
       return (

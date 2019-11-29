@@ -163,3 +163,5 @@ export const onBTCUSDPrice = (price: string) => action(types.ON_BTC_USD_PRICE, {
 })
 
 export const disconnectBinance = () => action(types.DISCONNECT_BINANCE)
+
+export const onApiKeysInvalid = () => action(types.ON_API_KEYS_INVALID)

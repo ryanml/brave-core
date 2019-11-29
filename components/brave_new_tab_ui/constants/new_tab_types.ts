@@ -46,7 +46,8 @@ export const enum types {
   ON_VALID_API_CREDS = '@@newtab/ON_VALID_API_CREDS',
   SET_HIDE_BALANCE = '@@newtab/SET_HIDE_BALANCE',
   CONNECT_TO_BINANCE = '@@newtab/CONNECT_TO_BINANCE',
-  DISCONNECT_BINANCE = '@@newtab/DISCONNECT_BINANCE'
+  DISCONNECT_BINANCE = '@@newtab/DISCONNECT_BINANCE',
+  ON_API_KEYS_INVALID = '@@newtab/ON_API_KEYS_INVALID'
 }
 
 export type DismissBrandedWallpaperNotificationPayload = {

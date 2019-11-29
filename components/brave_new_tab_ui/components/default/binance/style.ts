@@ -255,3 +255,16 @@ export const DisconnectCopy = styled(Copy)`
   line-height: 17px;
   margin: 8px auto 15px auto;
 `
+
+export const InvalidTitle = styled(DisconnectTitle)`
+  max-width: unset;
+  margin-bottom: 20px;
+`
+
+export const InvalidCopy = styled(DisconnectCopy)`
+  max-width: 210px;
+`
+
+export const InvalidWrapper = styled(DisconnectWrapper)`
+  min-width: 240px;
+`

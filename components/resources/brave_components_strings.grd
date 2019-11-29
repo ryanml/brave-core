@@ -726,6 +726,9 @@
       <message name="IDS_BINANCE_WIDGET_DISCONNECT_TITLE" desc="">Are you sure you want to disconnect?</message>
       <message name="IDS_BINANCE_WIDGET_DISCONNECT_TEXT" desc="">Disconnecting will erase your widget settings. You will need to generate a new api key to reconnect.</message>
       <message name="IDS_BINANCE_WIDGET_DISCONNECT_BUTTON" desc="">Disconnect</message>
+      <message name="IDS_BINANCE_WIDGET_ACCOUNT_DISCONNECTED" desc="">Account Disconnected</message>
+      <message name="IDS_BINANCE_WIDGET_KEY_INVALID_TEXT" desc="">Your API key is invalid. A new Binance API key must be configured for this widget to work.</message>
+      <message name="IDS_BINANCE_WIDGET_CONFIGURE_BUTTON" desc="">Configure</message>
 
       <!-- WebUI brave sync resources -->
       <!-- WebUI brave sync resources: Shared Content -->

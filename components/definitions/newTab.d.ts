@@ -120,6 +120,7 @@ declare namespace NewTab {
     hideBalance: boolean
     userTLD: BinanceTLD
     apiCredError: boolean
+    apiCredsInvalid: boolean
     validationInProgress: boolean
   }
 
