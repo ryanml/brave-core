@@ -209,6 +209,9 @@ class Binance extends React.PureComponent<Props, State> {
         <DisconnectButton onClick={this.finishDisconnect}>
           {getLocale('binanceWidgetDisconnectButton')}
         </DisconnectButton>
+        <DismissAction onClick={this.cancelDisconnect}>
+          {getLocale('binanceWidgetCancelText')}
+        </DismissAction>
       </DisconnectWrapper>
     )
   }
