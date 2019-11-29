@@ -154,11 +154,11 @@ class BinanceAPIBrowserTest : public InProcessBrowserTest {
             window.domAutomationController.send('error-2')
             return
           }
-          chrome.binance.getAccountBalance((btc_balance, unauthorized) => {
+          chrome.binance.getAccountBalance((balances, unauthorized) => {
             if (unauthorized) {
               window.domAutomationController.send('error-3')
               return
-            } else if (btc_balance != '0.01382621') {
+            } else if (balances['BTC'] != '0.01382621') {
               window.domAutomationController.send('error-4')
               return
             }
@@ -176,7 +176,7 @@ class BinanceAPIBrowserTest : public InProcessBrowserTest {
     std::string msg_from_renderer;
     std::string script = R"(
       (function() {
-        chrome.binance.getAccountBalance((btc_balance, unauthorized) => {
+        chrome.binance.getAccountBalance((balances, unauthorized) => {
           if (!unauthorized) {
             window.domAutomationController.send('error-3')
             return
@@ -194,7 +194,7 @@ class BinanceAPIBrowserTest : public InProcessBrowserTest {
     std::string msg_from_renderer;
     std::string script = R"(
       (function() {
-        chrome.binance.getAccountBalance((btc_balance, unauthorized) => {
+        chrome.binance.getAccountBalance((balances, unauthorized) => {
           if (unauthorized) {
             window.domAutomationController.send('error-3')
             return

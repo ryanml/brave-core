@@ -124,13 +124,13 @@ class Binance extends React.PureComponent<Props, State> {
   }
 
   fetchBalance = () => {
-    chrome.binance.getAccountBalance((balance: string, unauthorized: boolean) => {
+    chrome.binance.getAccountBalance((balances: Map<string, string>, unauthorized: boolean) => {
       if (unauthorized) {
         this.props.onApiKeysInvalid()
         return
       }
 
-      this.props.onBinanceBalance(balance)
+      this.props.onBinanceBalance(balances['BTC'])
 
       chrome.binance.getTickerPrice('BTCUSDT', (price: string) => {
         this.props.onBTCUSDPrice(price)

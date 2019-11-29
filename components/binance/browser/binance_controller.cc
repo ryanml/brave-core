@@ -216,7 +216,6 @@ void BinanceController::OnURLLoaderComplete(
     }
   }
 
-  LOG(ERROR) << "Net error: " << loader->NetError();
   url_loaders_.erase(iter);
 
   std::move(callback).Run(

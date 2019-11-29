@@ -22,8 +22,9 @@
             "name": "callback",
             "parameters": [
               {
-                "name": "btc_balance",
-                "type": "string"
+                "name": "balances",
+                "type": "object",
+                "additionalProperties": { "type": "string" }
               }, {
                 "name": "unauthorized",
                 "type": "boolean",

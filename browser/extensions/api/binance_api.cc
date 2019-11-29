@@ -55,12 +55,11 @@ BinanceGetAccountBalanceFunction::Run() {
 void BinanceGetAccountBalanceFunction::OnGetAccountBalance(
     const std::map<std::string, std::string>& balances, int status,
     bool unauthorized) {
-  std::string btc_balance = "-";
-  std::map<std::string, std::string>::const_iterator it = balances.find("BTC");
-  if (it != balances.end()) {
-    btc_balance = it->second;
+  auto dict = std::make_unique<base::Value>(base::Value::Type::DICTIONARY);
+  for (const auto& kv : balances) {
+    dict->SetStringKey(kv.first, kv.second);
   }
-  Respond(TwoArguments(std::make_unique<base::Value>(btc_balance),
+  Respond(TwoArguments(std::move(dict),
                        std::make_unique<base::Value>(unauthorized)));
 }
 
@@ -75,8 +74,6 @@ BinanceSetAPIKeyFunction::Run() {
     return RespondNow(Error("Not available in Tor profile"));
   }
 
-  LOG(ERROR) << "API key is: " << params->api_key;
-  LOG(ERROR) << "Secret key is: " << params->secret_key;
   auto* controller = GetBinanceController(browser_context());
   if (!controller->SetAPIKey(params->api_key, params->secret_key)) {
     return RespondNow(Error("Could not set API key"));
