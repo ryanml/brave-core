@@ -172,6 +172,42 @@ class BinanceAPIBrowserTest : public InProcessBrowserTest {
     ASSERT_EQ(msg_from_renderer, "success");
   }
 
+  void WaitForChromeAPIAccountBalanceAssetUnauthorized() {
+    std::string msg_from_renderer;
+    std::string script = R"(
+      (function() {
+        chrome.binance.getAccountBalance((btc_balance, unauthorized) => {
+          if (!unauthorized) {
+            window.domAutomationController.send('error-3')
+            return
+          }
+          window.domAutomationController.send('success')
+        })
+      })()
+      )";
+    ASSERT_TRUE(ExecuteScriptAndExtractString(
+        contents(), script, &msg_from_renderer));
+    ASSERT_EQ(msg_from_renderer, "success");
+  }
+
+  void WaitForChromeAPIAccountBalanceAssetServerError() {
+    std::string msg_from_renderer;
+    std::string script = R"(
+      (function() {
+        chrome.binance.getAccountBalance((btc_balance, unauthorized) => {
+          if (unauthorized) {
+            window.domAutomationController.send('error-3')
+            return
+          }
+          window.domAutomationController.send('success')
+        })
+      })()
+      )";
+    ASSERT_TRUE(ExecuteScriptAndExtractString(
+        contents(), script, &msg_from_renderer));
+    ASSERT_EQ(msg_from_renderer, "success");
+  }
+
   void WaitForChromeAPIUnauthorized() {
     std::string msg_from_renderer;
     std::string script = R"(
@@ -439,6 +475,24 @@ IN_PROC_BROWSER_TEST_F(BinanceAPIBrowserTest,
     ChromeAPIAccountBalance) {
   ASSERT_TRUE(NavigateToNewTabUntilLoadStop());
   WaitForChromeAPIAccountBalance();
+}
+
+IN_PROC_BROWSER_TEST_F(BinanceAPIBrowserTest,
+    ChromeAPIAccountBalanceUnauthorized) {
+  ASSERT_TRUE(NavigateToNewTabUntilLoadStop());
+  // First we setup the API info correctly, then we wait for an error
+  WaitForChromeAPIAccountBalance();
+  ResetHTTPSServer(base::BindRepeating(&HandleRequestUnauthorized));
+  WaitForChromeAPIAccountBalanceAssetUnauthorized();
+}
+
+IN_PROC_BROWSER_TEST_F(BinanceAPIBrowserTest,
+    ChromeAPIAccountBalanceServerError) {
+  ASSERT_TRUE(NavigateToNewTabUntilLoadStop());
+  // First we setup the API info correctly, then we wait for an error
+  WaitForChromeAPIAccountBalance();
+  ResetHTTPSServer(base::BindRepeating(&HandleRequestServerError));
+  WaitForChromeAPIAccountBalanceAssetServerError();
 }
 
 IN_PROC_BROWSER_TEST_F(BinanceAPIBrowserTest,
