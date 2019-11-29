@@ -8,9 +8,9 @@
 #include "base/json/json_reader.h"
 
 // static
-bool BinanceJSONParser::GetBTCValueFromAccountJSON(
-    const std::string& json, std::string* btc_balance) {
-  if (!btc_balance) {
+bool BinanceJSONParser::GetBalanceFromAccountJSON(
+    const std::string& json, std::map<std::string, std::string>* balances) {
+  if (!balances) {
     return false;
   }
   // Response looks like this:
@@ -24,7 +24,6 @@ bool BinanceJSONParser::GetBTCValueFromAccountJSON(
   //     ...
   //   ]
   // }
-  *btc_balance = "0";
   base::JSONReader::ValueWithError value_with_error =
       base::JSONReader::ReadAndReturnValueWithError(
           json, base::JSONParserOptions::JSON_PARSE_RFC);
@@ -44,9 +43,7 @@ bool BinanceJSONParser::GetBTCValueFromAccountJSON(
           free_amount && free_amount->is_string() &&
           locked_amount && locked_amount->is_string()) {
         std::string asset_symbol = asset->GetString();
-        if (asset_symbol == "BTC") {
-          *btc_balance = free_amount->GetString();
-        }
+        balances->insert({asset_symbol, free_amount->GetString()});
       }
     }
   }

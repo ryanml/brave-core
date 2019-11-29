@@ -53,8 +53,15 @@ BinanceGetAccountBalanceFunction::Run() {
 }
 
 void BinanceGetAccountBalanceFunction::OnGetAccountBalance(
-    const std::string& btc_balance) {
-  Respond(OneArgument(std::make_unique<base::Value>(btc_balance)));
+    const std::map<std::string, std::string>& balances, int status,
+    bool unauthorized) {
+  std::string btc_balance = "-";
+  std::map<std::string, std::string>::const_iterator it = balances.find("BTC");
+  if (it != balances.end()) {
+    btc_balance = it->second;
+  }
+  Respond(TwoArguments(std::make_unique<base::Value>(btc_balance),
+                       std::make_unique<base::Value>(unauthorized)));
 }
 
 ExtensionFunction::ResponseAction

@@ -6,6 +6,7 @@
 #ifndef BRAVE_BROWSER_EXTENSIONS_API_BINANCE_API_H_
 #define BRAVE_BROWSER_EXTENSIONS_API_BINANCE_API_H_
 
+#include <map>
 #include <string>
 
 #include "extensions/browser/extension_function.h"
@@ -22,7 +23,8 @@ class BinanceGetAccountBalanceFunction :
 
  protected:
   ~BinanceGetAccountBalanceFunction() override {}
-  void OnGetAccountBalance(const std::string& btc_balance);
+  void OnGetAccountBalance(const std::map<std::string, std::string>& balances,
+                           int status, bool unauthorized);
 
   ResponseAction Run() override;
 };

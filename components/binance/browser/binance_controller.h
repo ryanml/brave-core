@@ -41,7 +41,9 @@ class BinanceController {
   explicit BinanceController(content::BrowserContext* context);
   ~BinanceController();
 
-  using GetAccountBalanceCallback = base::OnceCallback<void(const std::string&)>;
+  using GetAccountBalanceCallback = base::OnceCallback<
+      void(const std::map<std::string, std::string>&, int status,
+           bool unauthorized)>;
   bool GetAccountBalance(GetAccountBalanceCallback callback);
   using ValidateAPIKeyCallback = base::OnceCallback<void(int, bool)>;
   bool ValidateAPIKey(ValidateAPIKeyCallback callback);
@@ -75,10 +77,11 @@ class BinanceController {
                         const std::map<std::string, std::string>& headers);
   void OnGetTickerPrice(GetTickerPriceCallback callback,
                         const int status, const std::string& body,
-                        const std::map<std::string, std::string>& headers);                
+                        const std::map<std::string, std::string>& headers);
   bool URLRequest(const std::string& method, const std::string& path,
                   const std::string& query_params, URLRequestCallback callback);
   bool LoadAPIKeyFromPrefs();
+  bool IsUnauthorized(int status);
   void OnURLLoaderComplete(
       SimpleURLLoaderList::iterator iter,
       URLRequestCallback callback,

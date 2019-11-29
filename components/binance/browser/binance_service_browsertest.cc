@@ -119,11 +119,14 @@ class BinanceAPIBrowserTest : public InProcessBrowserTest {
     wait_for_validate_api_key_->Run();
   }
 
-  void WaitForGetAccountBalance(const std::string& btc_balance) {
+  void WaitForGetAccountBalance(const std::string& btc_balance, int status,
+                                bool unauthorized) {
     if (wait_for_get_account_balance_) {
       return;
     }
     expected_btc_balance_ = btc_balance;
+    expected_status_code_ = status;
+    expected_unauthorized_ = unauthorized;
     wait_for_get_account_balance_.reset(new base::RunLoop);
     wait_for_get_account_balance_->Run();
   }
@@ -151,9 +154,12 @@ class BinanceAPIBrowserTest : public InProcessBrowserTest {
             window.domAutomationController.send('error-2')
             return
           }
-          chrome.binance.getAccountBalance((btc_balance) => {
-            if (btc_balance != '0.01382621') {
+          chrome.binance.getAccountBalance((btc_balance, unauthorized) => {
+            if (unauthorized) {
               window.domAutomationController.send('error-3')
+              return
+            } else if (btc_balance != '0.01382621') {
+              window.domAutomationController.send('error-4')
               return
             }
             window.domAutomationController.send('success')
@@ -214,11 +220,20 @@ class BinanceAPIBrowserTest : public InProcessBrowserTest {
     ASSERT_EQ(expected_unauthorized_, unauthorized);
   }
 
-  void OnGetAccountBalance(const std::string& btc_balance) {
+  void OnGetAccountBalance(const std::map<std::string, std::string>& balances,
+                           int status, bool unauthorized) {
     if (wait_for_get_account_balance_) {
       wait_for_get_account_balance_->Quit();
     }
+    std::string btc_balance = "-";
+    std::map<std::string, std::string>::const_iterator it =
+        balances.find("BTC");
+    if (it != balances.end()) {
+      btc_balance = it->second;
+    }
     ASSERT_EQ(expected_btc_balance_, btc_balance);
+    ASSERT_EQ(expected_status_code_, status);
+    ASSERT_EQ(expected_unauthorized_, unauthorized);
   }
 
   void OnGetTickerPrice(const std::string& ticker_price) {
@@ -321,7 +336,7 @@ IN_PROC_BROWSER_TEST_F(BinanceAPIBrowserTest, GetAccountBalance) {
       base::BindOnce(
           &BinanceAPIBrowserTest::OnGetAccountBalance,
           base::Unretained(this))));
-  WaitForGetAccountBalance("0.01382621");
+  WaitForGetAccountBalance("0.01382621", 200, false);
 }
 
 IN_PROC_BROWSER_TEST_F(BinanceAPIBrowserTest,
@@ -335,7 +350,7 @@ IN_PROC_BROWSER_TEST_F(BinanceAPIBrowserTest,
       base::BindOnce(
           &BinanceAPIBrowserTest::OnGetAccountBalance,
           base::Unretained(this))));
-  WaitForGetAccountBalance("-");
+  WaitForGetAccountBalance("-", 401, true);
 }
 
 IN_PROC_BROWSER_TEST_F(BinanceAPIBrowserTest,
@@ -349,7 +364,7 @@ IN_PROC_BROWSER_TEST_F(BinanceAPIBrowserTest,
       base::BindOnce(
           &BinanceAPIBrowserTest::OnGetAccountBalance,
           base::Unretained(this))));
-  WaitForGetAccountBalance("-");
+  WaitForGetAccountBalance("-", 500, false);
 }
 
 IN_PROC_BROWSER_TEST_F(BinanceAPIBrowserTest, GetBinanceTLD) {

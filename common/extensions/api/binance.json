@@ -24,6 +24,10 @@
               {
                 "name": "btc_balance",
                 "type": "string"
+              }, {
+                "name": "unauthorized",
+                "type": "boolean",
+                "description": "Helpful for a clear indication that the error is explicitly unauthorized"
               }
             ]
           }

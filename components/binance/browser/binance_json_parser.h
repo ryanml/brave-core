@@ -6,13 +6,14 @@
 #ifndef BRAVE_COMPONENTS_BINANCE_BROWSER_BINANCE_JSON_PARSER_H_
 #define BRAVE_COMPONENTS_BINANCE_BROWSER_BINANCE_JSON_PARSER_H_
 
+#include <map>
 #include <string>
 
 class BinanceJSONParser {
  public:
 
-  static bool GetBTCValueFromAccountJSON(const std::string& json,
-                                         std::string* btc_balance);
+  static bool GetBalanceFromAccountJSON(const std::string& json,
+                                        std::map<std::string, std::string>*);
   static bool GetTickerPriceFromJSON(const std::string& json,
                                      std::string* symbol_pair_price);
 };

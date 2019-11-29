@@ -227,20 +227,22 @@ void BinanceController::OnGetAccountBalance(
     GetAccountBalanceCallback callback,
     const int status, const std::string& body,
     const std::map<std::string, std::string>& headers) {
-  std::string btc_balance = "-";
+  std::map<std::string, std::string> balances;
   if (status >= 200 && status <= 299) {
-    if (!BinanceJSONParser::GetBTCValueFromAccountJSON(body, &btc_balance)) {
-      btc_balance = "-";
-    }
+    BinanceJSONParser::GetBalanceFromAccountJSON(body, &balances);
   }
-  std::move(callback).Run(btc_balance);
+  std::move(callback).Run(balances, status, IsUnauthorized(status));
 }
 
 void BinanceController::OnValidateAPIKey(
     ValidateAPIKeyCallback callback,
     const int status, const std::string& body,
     const std::map<std::string, std::string>& headers) {
-  std::move(callback).Run(status, status == 401);
+  std::move(callback).Run(status, IsUnauthorized(status));
+}
+
+bool BinanceController::IsUnauthorized(int status) {
+  return status == 401;
 }
 
 void BinanceController::OnGetTickerPrice(

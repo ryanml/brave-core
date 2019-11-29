@@ -10,11 +10,22 @@
 
 namespace {
 
+std::string GetBalanceFromAsset(std::map<std::string, std::string>& balances,
+    const std::string& asset) {
+  std::string balance;
+  std::map<std::string, std::string>::const_iterator it =
+      balances.find(asset);
+  if (it != balances.end()) {
+    balance = it->second;
+  }
+  return balance;
+}
+
 typedef testing::Test BinanceJSONParserTest;
 
-TEST_F(BinanceJSONParserTest, GetBTCValueFromAccountJSON) {
-  std::string btc_balance;
-  ASSERT_TRUE(BinanceJSONParser::GetBTCValueFromAccountJSON(R"(
+TEST_F(BinanceJSONParserTest, GetBalanceFromAccountJSON) {
+  std::map<std::string, std::string> balances;
+  ASSERT_TRUE(BinanceJSONParser::GetBalanceFromAccountJSON(R"(
       {
         "updateTime":1574721698570,
         "accountType":"SPOT",
@@ -24,28 +35,33 @@ TEST_F(BinanceJSONParserTest, GetBTCValueFromAccountJSON) {
           "locked":"0.00000000"
         }, {
           "asset":"LTC",
-          "free":"0.00000000",
+          "free":"0.15000000",
           "locked":"0.00000000"
         }]
-      })", &btc_balance));
+      })", &balances));
+
+  std::string btc_balance = GetBalanceFromAsset(balances, "BTC");
+  std::string ltc_balance = GetBalanceFromAsset(balances, "LTC");
   ASSERT_EQ(btc_balance, "0.01382621");
+  ASSERT_EQ(ltc_balance, "0.15000000");
 }
 
-TEST_F(BinanceJSONParserTest, GetBTCValueFromAccountJSONNoAssets) {
-  std::string btc_balance;
-  ASSERT_TRUE(BinanceJSONParser::GetBTCValueFromAccountJSON(R"(
+TEST_F(BinanceJSONParserTest, GetBalanceFromAccountJSONNoAssets) {
+  std::map<std::string, std::string> balances;
+  ASSERT_TRUE(BinanceJSONParser::GetBalanceFromAccountJSON(R"(
       {
         "updateTime":1574721698570,
         "accountType":"SPOT",
         "balances":[]
-      })", &btc_balance));
-  ASSERT_EQ(btc_balance, "0");
+      })", &balances));
+  ASSERT_TRUE(balances.empty());
 }
 
-TEST_F(BinanceJSONParserTest, GetBTCValueFromAccountJSONINvalidData) {
-  std::string btc_balance;
-  ASSERT_FALSE(BinanceJSONParser::GetBTCValueFromAccountJSON("unexpected",
-                                                             &btc_balance));
+TEST_F(BinanceJSONParserTest, GetBalanceFromAccountJSONINvalidData) {
+  std::map<std::string, std::string> balances;
+  ASSERT_FALSE(BinanceJSONParser::GetBalanceFromAccountJSON(
+        "unexpected", &balances));
+  ASSERT_TRUE(balances.empty());
 }
 
 TEST_F(BinanceJSONParserTest, GetTickerPriceFromJSON) {
