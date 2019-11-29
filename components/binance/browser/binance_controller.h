@@ -7,6 +7,7 @@
 #define BRAVE_COMPONENTS_BINANCE_BROWSER_BINANCE_CONTROLLER_H_
 
 #include <list>
+#include <map>
 #include <memory>
 #include <string>
 #include <vector>
@@ -18,6 +19,7 @@
 #include "base/memory/weak_ptr.h"
 #include "base/observer_list.h"
 #include "base/values.h"
+#include "url/gurl.h"
 
 namespace base {
 class FilePath;
@@ -55,12 +57,12 @@ class BinanceController {
   std::string GetBinanceTLD();
 
   static bool IsPublicEndpoint(const std::string& endpoint);
-  static void SetAPIEndPointForTest(const std::string& api_endpoint) {
+  static void SetAPIEndPointForTest(const GURL& api_endpoint) {
     api_endpoint_ = api_endpoint;
   }
 
  private:
-  static std::string api_endpoint_;
+  static GURL api_endpoint_;
   using SimpleURLLoaderList =
       std::list<std::unique_ptr<network::SimpleURLLoader>>;
 

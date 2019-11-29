@@ -104,8 +104,7 @@ class BinanceAPIBrowserTest : public InProcessBrowserTest {
     https_server_->SetSSLConfig(net::EmbeddedTestServer::CERT_OK);
     https_server_->RegisterRequestHandler(callback);
     ASSERT_TRUE(https_server_->Start());
-    BinanceController::SetAPIEndPointForTest(
-        https_server_->base_url().spec());
+    BinanceController::SetAPIEndPointForTest(https_server_->base_url());
   }
 
   void WaitForValidateAPIKey(int expected_status_code,

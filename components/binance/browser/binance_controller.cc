@@ -6,7 +6,7 @@
 #include "brave/components/binance/browser/binance_controller.h"
 
 #include <algorithm>
-#include <chrono>
+#include <utility>
 
 #include "base/base64.h"
 #include "base/bind.h"
@@ -16,11 +16,13 @@
 #include "base/strings/utf_string_conversions.h"
 #include "base/task/post_task.h"
 #include "base/task_runner_util.h"
+#include "base/time/time.h"
 #include "base/token.h"
 #include "brave/common/pref_names.h"
 #include "brave/components/binance/browser/binance_crypto.h"
 #include "brave/components/binance/browser/binance_json_parser.h"
 #include "chrome/browser/profiles/profile.h"
+#include "components/country_codes/country_codes.h"
 #include "components/os_crypt/os_crypt.h"
 #include "components/prefs/pref_service.h"
 #include "content/public/browser/browser_context.h"
@@ -28,12 +30,9 @@
 #include "net/base/load_flags.h"
 #include "services/network/public/cpp/shared_url_loader_factory.h"
 #include "services/network/public/cpp/simple_url_loader.h"
-#include "components/country_codes/country_codes.h"
-
-using namespace std::chrono;
 
 // https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md
-std::string BinanceController::api_endpoint_ =  "https://api.binance.com";
+GURL BinanceController::api_endpoint_("https://api.binance.com");
 
 namespace {
 
@@ -116,7 +115,7 @@ bool BinanceController::GetTickerPrice(
 // static
 bool BinanceController::IsPublicEndpoint(
     const std::string& endpoint) {
-  for (const std::string& path: public_endpoints) {
+  for (const std::string& path : public_endpoints) {
     if (path == endpoint) {
       return true;
     }
@@ -141,13 +140,12 @@ bool BinanceController::URLRequest(const std::string& method,
 
   // Public endpoints won't accept extraneous parameters
   if (!IsPublicEndpoint(path)) {
-    milliseconds ms =
-        duration_cast<milliseconds>(system_clock::now().time_since_epoch());
     if (!query_string.empty()) {
       query_string += "&";
     }
     query_string += "recvWindow=5000&timestamp=";
-    query_string += std::to_string(ms.count());
+    query_string += std::to_string(
+        (base::Time::Now() - base::Time::UnixEpoch()).InMilliseconds());
     std::string encoded_signature;
     if (!BinanceCrypto::GetSignatureForTotalParams(query_string,
                                                    secret_key_,
@@ -159,7 +157,7 @@ bool BinanceController::URLRequest(const std::string& method,
   }
 
   auto request = std::make_unique<network::ResourceRequest>();
-  std::string api_url = api_endpoint_;
+  std::string api_url = api_endpoint_.spec();
   std::string api_path = path;
   if (!api_path.empty() && api_path[0] != '/' &&
       !api_url.empty() && api_url.back() != '/') {
@@ -297,7 +295,8 @@ bool BinanceController::LoadAPIKeyFromPrefs() {
   std::string encrypted_api_key;
   std::string encrypted_secret_key;
   if (!base::Base64Decode(encoded_encrypted_api_key, &encrypted_api_key) ||
-      !base::Base64Decode(encoded_encrypted_secret_key, &encrypted_secret_key)) {
+      !base::Base64Decode(encoded_encrypted_secret_key,
+                          &encrypted_secret_key)) {
     LOG(ERROR) << "Could not Base64 decode Binance API key info.";
     return false;
   }

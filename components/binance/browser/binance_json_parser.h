@@ -11,7 +11,6 @@
 
 class BinanceJSONParser {
  public:
-
   static bool GetBalanceFromAccountJSON(const std::string& json,
                                         std::map<std::string, std::string>*);
   static bool GetTickerPriceFromJSON(const std::string& json,

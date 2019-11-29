@@ -7,6 +7,7 @@
 
 #include <memory>
 #include <string>
+#include <utility>
 
 #include "base/environment.h"
 #include "brave/browser/profiles/profile_util.h"
@@ -31,7 +32,7 @@ BinanceController* GetBinanceController(content::BrowserContext* context) {
       ->controller();
 }
 
-}
+}  // namespace
 
 namespace extensions {
 namespace api {

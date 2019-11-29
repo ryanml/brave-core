@@ -10,8 +10,6 @@
 
 #include "crypto/hmac.h"
 
-using namespace std;
-
 namespace {
 
 template<typename T, size_t N>
@@ -24,7 +22,7 @@ std::string uint8ToHex(T (&a)[N]) {
   return res.str();
 }
 
-}
+}  // namespace
 
 // static
 bool BinanceCrypto::GetSignatureForTotalParams(const std::string& query_string,

@@ -10,7 +10,8 @@
 
 namespace {
 
-std::string GetBalanceFromAsset(std::map<std::string, std::string>& balances,
+std::string GetBalanceFromAsset(
+    const std::map<std::string, std::string>& balances,
     const std::string& asset) {
   std::string balance;
   std::map<std::string, std::string>::const_iterator it =
