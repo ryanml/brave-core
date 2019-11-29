@@ -270,9 +270,164 @@ describe('newTabReducer', () => {
       })
     })
   })
+  describe('CONNECT_TO_BINANCE', () => {
+    it('resets any invalid cred message and sets state to in progress', () => {
+      const assertion = newTabReducer(fakeState, {
+        type: types.CONNECT_TO_BINANCE,
+        payload: {}
+      })
+
+      expect(assertion).toEqual({
+        ...fakeState,
+        binanceState: {
+          ...fakeState.binanceState,
+          authInProgress: true,
+          apiCredsInvalid: false
+        }
+      })
+    })
+  })
+  describe('SET_HIDE_BALANCE', () => {
+    it('sets attribute to payload (true)', () => {
+      const assertion = newTabReducer(fakeState, {
+        type: types.SET_HIDE_BALANCE,
+        payload: {
+          hide: true
+        }
+      })
+
+      expect(assertion).toEqual({
+        ...fakeState,
+        binanceState: {
+          ...fakeState.binanceState,
+          hideBalance: true
+        }
+      })
+    })
+
+    it('sets attribute to payload (false)', () => {
+      const assertion = newTabReducer(fakeState, {
+        type: types.SET_HIDE_BALANCE,
+        payload: {
+          hide: false
+        }
+      })
+
+      expect(assertion).toEqual({
+        ...fakeState,
+        binanceState: {
+          ...fakeState.binanceState,
+          hideBalance: false
+        }
+      })
+    })
+  })
+  describe('SET_API_KEYS', () => {
+    let spy: jest.SpyInstance
+
+    beforeEach(() => {
+      spy = jest.spyOn(chrome.binance, 'setAPIKey')
+    })
+
+    afterEach(() => {
+      spy.mockRestore()
+    })
+
+    it('resets any credential error and sets validation in progress, call set api key', () => {
+      const assertion = newTabReducer(fakeState, {
+        type: types.SET_API_KEYS,
+        payload: {
+          apiKey: 'testApiKey',
+          secretKey: 'testApiSecret'
+        }
+      })
+
+      expect(assertion).toEqual({
+        ...fakeState,
+        binanceState: {
+          ...fakeState.binanceState,
+          apiCredError: false,
+          validationInProgress: true
+        }
+      })
+
+      expect(spy).toBeCalledWith('testApiKey', 'testApiSecret')
+    })
+  })
+  describe('ON_BINANCE_BALANCE', () => {
+    it('sets received balance', () => {
+      const assertion = newTabReducer(fakeState, {
+        type: types.ON_BINANCE_BALANCE,
+        payload: {
+          balance: '3.14'
+        }
+      })
+
+      expect(assertion).toEqual({
+        ...fakeState,
+        binanceState: {
+          ...fakeState.binanceState,
+          btcBalance: '3.14'
+        }
+      })
+    })
+  })
+  describe('ON_BINANCE_USER_TLD', () => {
+    it('sets received tld', () => {
+      const assertion = newTabReducer(fakeState, {
+        type: types.ON_BINANCE_USER_TLD,
+        payload: {
+          userTLD: 'us'
+        }
+      })
+
+      expect(assertion).toEqual({
+        ...fakeState,
+        binanceState: {
+          ...fakeState.binanceState,
+          userTLD: 'us'
+        }
+      })
+    })
+  })
+  describe('ON_API_CREDS_ERROR', () => {
+    it('sets indicator for a credential and ends validation process', () => {
+      const assertion = newTabReducer(fakeState, {
+        type: types.ON_API_CREDS_ERROR,
+        payload: {}
+      })
+
+      expect(assertion).toEqual({
+        ...fakeState,
+        binanceState: {
+          ...fakeState.binanceState,
+          apiCredError: true,
+          validationInProgress: false
+        }
+      })
+    })
+  })
+  describe('ON_VALID_API_CREDS', () => {
+    it('sets user authed and ends all validation processes', () => {
+      const assertion = newTabReducer(fakeState, {
+        type: types.ON_VALID_API_CREDS,
+        payload: {}
+      })
+
+      expect(assertion).toEqual({
+        ...fakeState,
+        binanceState: {
+          ...fakeState.binanceState,
+          userAuthed: true,
+          authInProgress: false,
+          validationInProgress: false
+        }
+      })
+    })
+  })
   describe('ON_BTC_USD_PRICE', () => {
     it('handles "-" account case', () => {
-      fakeState.btcBalance = '-'
+      fakeState.binanceState.btcBalance = '-'
       const assertion = newTabReducer(fakeState, {
         type: types.ON_BTC_USD_PRICE,
         payload: {
@@ -320,6 +475,49 @@ describe('newTabReducer', () => {
         binanceState: {
           ...fakeState.binanceState,
           btcBalanceValue: '22466.67'
+        }
+      })
+    })
+  })
+  describe('DISCONNECT_BINANCE', () => {
+    let spy: jest.SpyInstance
+
+    beforeEach(() => {
+      spy = jest.spyOn(chrome.binance, 'setAPIKey')
+    })
+
+    afterEach(() => {
+      spy.mockRestore()
+    })
+
+    it('resets binance state to default storage value, resets api keys', () => {
+      const assertion = newTabReducer(fakeState, {
+        type: types.DISCONNECT_BINANCE,
+        payload: {}
+      })
+
+      expect(assertion).toEqual({
+        ...fakeState,
+        binanceState: {
+          ...fakeState.binanceState,
+          ...storage.defaultState.binanceState
+        }
+      })
+      expect(spy).toBeCalledWith('', '')
+    })
+  })
+  describe('ON_API_KEYS_INVALID', () => {
+    it('sets invalid creds attribute to true', () => {
+      const assertion = newTabReducer(fakeState, {
+        type: types.ON_API_KEYS_INVALID,
+        payload: {}
+      })
+
+      expect(assertion).toEqual({
+        ...fakeState,
+        binanceState: {
+          ...fakeState.binanceState,
+          apiCredsInvalid: true
         }
       })
     })
