@@ -146,8 +146,8 @@ export const setApiKeys = (apiKey: string, secretKey: string) => action(types.SE
   secretKey
 })
 
-export const onBinanceBalance = (balance: string) => action(types.ON_BINANCE_BALANCE, {
-  balance
+export const onBinanceBalances = (balances: Record<string, string>) => action(types.ON_BINANCE_BALANCES, {
+  balances
 })
 
 export const onBinanceUserTLD = (userTLD: NewTab.BinanceTLD) => action(types.ON_BINANCE_USER_TLD, {
@@ -165,3 +165,8 @@ export const onBTCUSDPrice = (price: string) => action(types.ON_BTC_USD_PRICE, {
 export const disconnectBinance = () => action(types.DISCONNECT_BINANCE)
 
 export const onApiKeysInvalid = () => action(types.ON_API_KEYS_INVALID)
+
+export const onAssetBTCPrice = (ticker: string, price: string) => action(types.ON_ASSET_BTC_PRICE, {
+  ticker,
+  price
+})

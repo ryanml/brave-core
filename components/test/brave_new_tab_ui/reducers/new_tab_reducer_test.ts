@@ -354,12 +354,14 @@ describe('newTabReducer', () => {
       expect(spy).toBeCalledWith('testApiKey', 'testApiSecret')
     })
   })
-  describe('ON_BINANCE_BALANCE', () => {
+  describe('ON_BINANCE_BALANCES', () => {
     it('sets received balance', () => {
       const assertion = newTabReducer(fakeState, {
-        type: types.ON_BINANCE_BALANCE,
+        type: types.ON_BINANCE_BALANCES,
         payload: {
-          balance: '3.14'
+          balances: {
+            'BTC': '3.14'
+          }
         }
       })
 
@@ -367,7 +369,9 @@ describe('newTabReducer', () => {
         ...fakeState,
         binanceState: {
           ...fakeState.binanceState,
-          btcBalance: '3.14'
+          accountBalances: {
+            'BTC': '3.14'
+          }
         }
       })
     })
@@ -427,7 +431,9 @@ describe('newTabReducer', () => {
   })
   describe('ON_BTC_USD_PRICE', () => {
     it('handles "-" account case', () => {
-      fakeState.binanceState.btcBalance = '-'
+      fakeState.binanceState.accountBalances = {
+        'BTC': '-'
+      }
       const assertion = newTabReducer(fakeState, {
         type: types.ON_BTC_USD_PRICE,
         payload: {
@@ -462,7 +468,9 @@ describe('newTabReducer', () => {
     })
 
     it('properly calculates BTC USD Price', () => {
-      fakeState.binanceState.btcBalance = '3.14'
+      fakeState.binanceState.accountBalances = {
+        'BTC': '3.14'
+      }
       const assertion = newTabReducer(fakeState, {
         type: types.ON_BTC_USD_PRICE,
         payload: {

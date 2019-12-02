@@ -68,13 +68,13 @@ interface State {
 
 interface Props {
   userAuthed: boolean
-  btcBalance: string
   authInProgress: boolean
   hideBalance: boolean
   apiCredError: boolean
   btcBalanceValue: string
   validationInProgress: boolean
   apiCredsInvalid: boolean
+  accountBalances: Record<string, string>
   hideWidget: () => void
   connectBinance: () => void
   onBinanceDetails: () => void
@@ -82,9 +82,10 @@ interface Props {
   onBinanceTrade: () => void
   onSetHideBalance: (hide: boolean) => void
   onGenerateNewKey: () => void
-  onBinanceBalance: (balance: string) => void
+  onBinanceBalances: (balances: Record<string, string>) => void
   onBinanceUserTLD: (userTLD: NewTab.BinanceTLD) => void
   onBTCUSDPrice: (value: string) => void
+  onAssetBTCPrice: (ticker: string, price: string) => void
   onSetApiKeys: (apiKey: string, apiSecret: string) => void
   onApiKeysInvalid: () => void
   onDisconnectBinance: () => void
@@ -124,17 +125,25 @@ class Binance extends React.PureComponent<Props, State> {
   }
 
   fetchBalance = () => {
-    chrome.binance.getAccountBalance((balances: Map<string, string>, unauthorized: boolean) => {
+    chrome.binance.getAccountBalance((balances: Record<string, string>, unauthorized: boolean) => {
       if (unauthorized) {
         this.props.onApiKeysInvalid()
         return
       }
 
-      this.props.onBinanceBalance(balances['BTC'])
+      this.props.onBinanceBalances(balances)
 
       chrome.binance.getTickerPrice('BTCUSDT', (price: string) => {
         this.props.onBTCUSDPrice(price)
       })
+
+      for (let ticker in balances) {
+        if (ticker !== 'BTC') {
+          chrome.binance.getTickerPrice(`${ticker}BTC`, (price: string) => {
+            this.props.onAssetBTCPrice(ticker, price)
+          })
+        }
+      }
     })
   }
 
@@ -294,7 +303,7 @@ class Binance extends React.PureComponent<Props, State> {
 
   renderAccountView = () => {
     const {
-      btcBalance,
+      accountBalances,
       hideBalance,
       btcBalanceValue,
       onBinanceDetails,
@@ -315,7 +324,7 @@ class Binance extends React.PureComponent<Props, State> {
           </BlurIcon>
         </EquityTitle>
         <Balance hideBalance={hideBalance}>
-          {btcBalance} <TickerLabel>{getLocale('binanceWidgetBTCTickerText')}</TickerLabel>
+          {accountBalances['BTC']} <TickerLabel>{getLocale('binanceWidgetBTCTickerText')}</TickerLabel>
         </Balance>
         <Converted hideBalance={hideBalance}>
           {`= $${btcBalanceValue}`}

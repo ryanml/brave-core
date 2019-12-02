@@ -154,7 +154,7 @@ declare namespace chrome.braveRewards {
 
 declare namespace chrome.binance {
   const setAPIKey: (apiKey: string, apiSecret: string) => {}
-  const getAccountBalance: (callback: (balances: Map<string, string>, unauthorized: boolean) => void) => {}
+  const getAccountBalance: (callback: (balances: Record<string, string>, unauthorized: boolean) => void) => {}
   const getUserTLD: (callback: (userTLD: string) => void) => {}
   const getTickerPrice: (symbolPair: string, callback: (symbolPairValue: string) => void) => {}
   const validateAPIKey: (callback: (status: number, unauthorized: boolean) => void) => {}

@@ -497,9 +497,9 @@ export const newTabReducer: Reducer<NewTab.State | undefined> = (state: NewTab.S
       chrome.binance.setAPIKey(apiKey, secretKey)
       break
 
-    case types.ON_BINANCE_BALANCE:
+    case types.ON_BINANCE_BALANCES:
       state = { ...state }
-      state.binanceState.btcBalance = payload.balance
+      state.binanceState.accountBalances = payload.balances
       break
 
     case types.ON_BINANCE_USER_TLD:
@@ -526,8 +526,18 @@ export const newTabReducer: Reducer<NewTab.State | undefined> = (state: NewTab.S
       }
 
       state = { ...state }
-      const accountBTCBalance = state.binanceState.btcBalance
+      const accountBTCBalance = state.binanceState.accountBalances['BTC'] || ''
       state.binanceState.btcBalanceValue = getUSDPrice(accountBTCBalance, payload.price)
+      break
+
+    case types.ON_ASSET_BTC_PRICE:
+      const { ticker, price } = payload
+      if (!price) {
+        break
+      }
+
+      state = { ...state }
+      state.binanceState.assetBTCValues[ticker] = price
       break
 
     case types.DISCONNECT_BINANCE:

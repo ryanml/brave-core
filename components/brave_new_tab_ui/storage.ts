@@ -56,10 +56,11 @@ export const defaultState: NewTab.State = {
   },
   currentStackWidget: 'rewards',
   binanceState: {
+    accountBalances: {},
+    assetBTCValues: {},
     authInProgress: false,
     authFailed: false,
     userAuthed: false,
-    btcBalance: '0.00',
     btcBalanceValue: '0.00',
     hideBalance: false,
     userTLD: 'com',

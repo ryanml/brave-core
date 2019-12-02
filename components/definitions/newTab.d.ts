@@ -112,10 +112,11 @@ declare namespace NewTab {
   }
 
   export interface BinanceWidgetState {
+    accountBalances: Record<string, string>
     authInProgress: boolean
     authFailed: boolean
+    assetBTCValues: Record<string, string>
     userAuthed: boolean
-    btcBalance: string
     btcBalanceValue: string
     hideBalance: boolean
     userTLD: BinanceTLD
