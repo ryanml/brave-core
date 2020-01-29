@@ -86,15 +86,11 @@ base::DictionaryValue GetPreferencesDictionary(PrefService* prefs) {
       prefs->GetBoolean(kNewTabPageShowRewards));
   pref_data.SetBoolean(
       "isBrandedWallpaperNotificationDismissed",
-<<<<<<< HEAD
       prefs->GetBoolean(
           ntp_sponsored_images::prefs::kBrandedWallpaperNotificationDismissed));
-=======
-      prefs->GetBoolean(kBrandedWallpaperNotificationDismissed));
   pref_data.SetBoolean(
       "showBinance",
       prefs->GetBoolean(kNewTabPageShowBinance));
->>>>>>> Binance Widget Prototyping
   return pref_data;
 }
 
@@ -239,16 +235,11 @@ void BraveNewTabMessageHandler::OnJavascriptAllowed() {
   pref_change_registrar_.Add(kNewTabPageShowRewards,
     base::Bind(&BraveNewTabMessageHandler::OnPreferencesChanged,
     base::Unretained(this)));
-<<<<<<< HEAD
   pref_change_registrar_.Add(
     ntp_sponsored_images::prefs::kBrandedWallpaperNotificationDismissed,
-=======
-<<<<<<< HEAD
-  pref_change_registrar_.Add(kBrandedWallpaperNotificationDismissed,
-=======
+    base::Bind(&BraveNewTabMessageHandler::OnPreferencesChanged,
+    base::Unretained(this)));
   pref_change_registrar_.Add(kNewTabPageShowBinance,
->>>>>>> Binance Widget Prototyping
->>>>>>> Binance Widget Prototyping
     base::Bind(&BraveNewTabMessageHandler::OnPreferencesChanged,
     base::Unretained(this)));
 }
@@ -317,18 +308,11 @@ void BraveNewTabMessageHandler::HandleSaveNewTabPagePref(
     settingsKey = kNewTabPageShowStats;
   } else if (settingsKeyInput == "showRewards") {
     settingsKey = kNewTabPageShowRewards;
-<<<<<<< HEAD
   } else if (settingsKeyInput == "isBrandedWallpaperNotificationDismissed") {
-<<<<<<< HEAD
     settingsKey =
         ntp_sponsored_images::prefs::kBrandedWallpaperNotificationDismissed;
-=======
-    settingsKey = kBrandedWallpaperNotificationDismissed;
-=======
   } else if (settingsKeyInput == "showBinance") {
     settingsKey = kNewTabPageShowBinance;
->>>>>>> Binance Widget Prototyping
->>>>>>> Binance Widget Prototyping
   } else {
     LOG(ERROR) << "Invalid setting key";
     return;
