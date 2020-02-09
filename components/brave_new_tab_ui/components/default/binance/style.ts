@@ -5,7 +5,9 @@
 import styled from 'styled-components'
 
 interface StyleProps {
-  hideBalance: boolean
+  isLast?: boolean
+  hideBalance?: boolean
+  itemsShowing?: boolean
 }
 
 export const WidgetWrapper = styled<{}, 'div'>('div')`
@@ -40,15 +42,14 @@ export const Link = styled<{}, 'a'>('a')`
 `
 
 export const Copy = styled<{}, 'p'>('p')`
-  font-size: 13px;
+  font-size: 15px;
   max-width: 240px;
-  margin-top: 12px;
-  margin-bottom: 25px;
-  color: rgba(255, 255, 255, 0.7);
+  margin-top: 20px;
+  margin-bottom: 11px;
 `
 
 export const ApiCopy = styled(Copy)`
-  max-width: 190px;
+  max-width: 215px;
   line-height: 17px;
   margin-bottom: 10px;
   margin-top: 5px;
@@ -163,8 +164,10 @@ export const InputItem = styled<{}, 'div'>('div')`
 export const InputIconWrapper = styled<{}, 'div'>('div')`
   display: inline-block;
   height: 30px;
-  background: #fff;
+  background: #000;
   width: 20px;
+  border: 1px solid rgb(70, 70, 70);
+  border-right: none;
 `
 
 export const InputIcon = styled<{}, 'div'>('div')`
@@ -177,12 +180,28 @@ export const InputField = styled<{}, 'input'>('input')`
   height: 30px;
   vertical-align: top;
   border: none;
-  border-left: solid #fff;
-  color: #000;
+  color: rgb(70, 70, 70);
+  background: #000;
+  border: 1px solid rgb(70, 70, 70);
+  border-left: none;
+  padding-left: 5px;
 
   &:focus {
     outline: 0;
   }
+`
+
+export const FiatInputField = styled(InputField)`
+  color: #fff;
+  border-top: none;
+  border-left: none;
+  border-right: 1px solid rgb(70, 70, 70);
+  width: 75%;
+  min-width: unset;
+  border-left: none;
+  padding-left: 10px;
+  height: 29px;
+  border-bottom: 1px solid rgb(70, 70, 70);;
 `
 
 export const GenButtonWrapper = styled<{}, 'div'>('div')`
@@ -267,4 +286,70 @@ export const InvalidCopy = styled(DisconnectCopy)`
 
 export const InvalidWrapper = styled(DisconnectWrapper)`
   min-width: 240px;
+`
+
+export const BuyPromptWrapper = styled<{}, 'div'>('div')`
+  margin-bottom: 15px;
+`
+
+export const FiatInputWrapper = styled<{}, 'div'>('div')`
+  height: 30px;
+  border: 1px solid rgb(70, 70, 70);
+  margin-bottom: 15px;
+`
+export const FiatDropdown = styled<{}, 'div'>('div')`
+  float: right;
+  width: 25%;
+  padding: 7px 3px 0px 7px;
+`
+export const FiatDropdownLabel = styled<{}, 'span'>('span')`
+`
+export const CaratDropdown = styled<{}, 'div'>('div')`
+  width: 18px;
+  height: 18px;
+  float: right;
+  margin-top: -2px;
+  color: #fff;
+`
+
+export const AssetDropdown = styled<StyleProps, 'div'>('div')`
+  height: 30px;
+  background: #000;
+  color: #fff;
+  border: 1px solid rgb(70, 70, 70);
+  padding: 7px 3px 0px 8px;
+  cursor: pointer;
+  border-bottom: ${p => p.itemsShowing ? 'none': '1px solid rgb(70, 70, 70)'};
+`
+
+export const AssetDropdownLabel = styled<{}, 'span'>('span')`
+  float: left;
+`
+
+export const AssetItems = styled<{}, 'div'>('div')`
+  background: #000;
+  color: #fff;
+  height: 100px;
+  overflow-y: scroll;
+  position: absolute;
+  width: 240px;
+  padding: 0px 8px;
+  max-height: 75px;
+  border: 1px solid rgb(70, 70, 70);
+  border-top: none;
+`
+
+export const AssetItem = styled<StyleProps, 'div'>('div')`
+  padding: 3px 0px;
+  font-weight: bold;
+  cursor: pointer;
+  border-bottom: ${p => !p.isLast ? '1px solid rgb(70, 70, 70)' : ''};
+`
+
+export const ConnectPrompt = styled<{}, 'div'>('div')`
+  float: right;
+  margin-top: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
 `

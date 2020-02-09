@@ -216,18 +216,21 @@ class NewTabPage extends React.Component<Props, State> {
   }
 
   onApiKeysInvalid = () => {
-    this.props.actions.onApiKeysInvalid()
+    // this.props.actions.onApiKeysInvalid()
   }
 
   setApiKeys = (apiKey: string, apiSecret: string) => {
     this.props.actions.setApiKeys(apiKey, apiSecret)
     setTimeout(() => {
       chrome.binance.validateAPIKey((status: number, unauthorized: boolean) => {
+        this.props.actions.onValidApiCreds()
+        /*
         if (unauthorized || (status < 200 || status > 299)) {
           this.props.actions.onApiCredsError()
         } else {
           this.props.actions.onValidApiCreds()
         }
+        */
       })
     }, 1000)
   }
@@ -253,21 +256,24 @@ class NewTabPage extends React.Component<Props, State> {
     const { userTLD } = this.props.newTabData.binanceState
 
     switch (route) {
+      case 'buy':
+        path = 'buy-sell-crypto'
+        break
       case 'deposit':
-        path = '/usercenter/wallet/deposit/BTC'
+        path = 'usercenter/wallet/deposit/BTC'
         break
       case 'trade':
-        path = '/usercenter/wallet/balances'
+        path = 'usercenter/wallet/balances'
         break
       case 'details':
-        path = '/usercenter/dashboard/overview'
+        path = 'usercenter/dashboard/overview'
         break
       case 'newKey':
-        path = '/usercenter/settings/api-management '
+        path = 'usercenter/settings/api-management '
         break
     }
 
-    window.open(`https://www.binance.${userTLD}/en${path}`, '_blank')
+    window.open(`https://www.binance.${userTLD}/en/${path}`, '_blank')
   }
 
   depositBinance = () => {
@@ -284,6 +290,10 @@ class NewTabPage extends React.Component<Props, State> {
 
   generateNewKey = () => {
     this.openBinanceUrl('newKey')
+  }
+
+  buyCrypto = () => {
+    this.openBinanceUrl('buy')
   }
 
   setHideBalance = (hide: boolean) => {
@@ -346,7 +356,7 @@ class NewTabPage extends React.Component<Props, State> {
         <Binance
           {...newTabData.binanceState}
           menuPosition={'left'}
-          hideWidget={this.toggleShowBinance}
+          onBuyCrypto={this.buyCrypto}
           connectBinance={this.connectBinance}
           onBinanceDetails={this.binanceDetails}
           onBinanceDeposit={this.depositBinance}

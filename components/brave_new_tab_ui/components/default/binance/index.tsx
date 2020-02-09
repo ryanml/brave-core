@@ -7,7 +7,6 @@ import * as React from 'react'
 import {
   Header,
   Content,
-  Title,
   Copy,
   ApiCopy,
   Error,
@@ -42,7 +41,18 @@ import {
   DisconnectCopy,
   InvalidTitle,
   InvalidCopy,
-  InvalidWrapper
+  InvalidWrapper,
+  BuyPromptWrapper,
+  FiatDropdown,
+  FiatDropdownLabel,
+  FiatInputWrapper,
+  CaratDropdown,
+  AssetDropdown,
+  AssetDropdownLabel,
+  ConnectPrompt,
+  AssetItems,
+  AssetItem,
+  FiatInputField
 } from './style'
 import {
   HideIcon,
@@ -58,12 +68,15 @@ import {
 
 import createWidget from '../widget/index'
 import { getLocale } from '../../../../common/locale'
-import { LoaderIcon } from 'brave-ui/components/icons'
+import { CaratDownIcon, LoaderIcon } from 'brave-ui/components/icons'
 
 interface State {
   apiKey: string
   apiSecret: string
   disconnectInProgress: boolean
+  initialAsset: string,
+  initialAmount: string,
+  currenciesShowing: boolean
 }
 
 interface Props {
@@ -75,8 +88,8 @@ interface Props {
   validationInProgress: boolean
   apiCredsInvalid: boolean
   accountBalances: Record<string, string>
-  hideWidget: () => void
   connectBinance: () => void
+  onBuyCrypto: () => void
   onBinanceDetails: () => void
   onBinanceDeposit: () => void
   onBinanceTrade: () => void
@@ -92,13 +105,26 @@ interface Props {
 }
 
 class Binance extends React.PureComponent<Props, State> {
+  private currencies: string[]
+
   constructor (props: Props) {
     super(props)
     this.state = {
       apiKey: '',
       apiSecret: '',
-      disconnectInProgress: false
+      disconnectInProgress: false,
+      initialAsset: 'BTC',
+      initialAmount: '',
+      currenciesShowing: false
     }
+    this.currencies = [
+      'BTC',
+      'ETH',
+      'XRP',
+      'BNB',
+      'BCH',
+      'BUSD'      
+    ]
   }
 
   componentDidMount () {
@@ -126,9 +152,20 @@ class Binance extends React.PureComponent<Props, State> {
 
   fetchBalance = () => {
     chrome.binance.getAccountBalance((balances: Record<string, string>, unauthorized: boolean) => {
+      /*
       if (unauthorized) {
         this.props.onApiKeysInvalid()
         return
+      }
+      */
+
+      balances = {
+        'BTC': '0.3255002',
+        'ETH': '2.5696903',
+        'XRP': '0.0000000',
+        'BNB': '0.0000000',
+        'BCH': '0.0000000',
+        'BUSD': '0.0000000'
       }
 
       this.props.onBinanceBalances(balances)
@@ -202,6 +239,13 @@ class Binance extends React.PureComponent<Props, State> {
     }
 
     this.setState(newState)
+  }
+
+  setInitialAsset (asset: string) {
+    this.setState({
+      initialAsset: asset,
+      currenciesShowing: false
+    })
   }
 
   renderDisconnectView = () => {
@@ -351,30 +395,74 @@ class Binance extends React.PureComponent<Props, State> {
   }
 
   renderWelcomeView = () => {
-    const { connectBinance, hideWidget } = this.props
-
+    const { onBuyCrypto } = this.props
+  
     return (
       <>
-        <Title>
-          {getLocale('binanceWidgetWelcomeTitle')}
-        </Title>
         <Copy>
-          {getLocale('binanceWidgetSubText')}
+          {'Buy Crypto'}
         </Copy>
+        <BuyPromptWrapper>
+          <FiatInputWrapper>
+            <FiatInputField
+              type={'text'}
+              placeholder={'I want to spend...'}
+              value={this.state.initialAmount}
+              onChange={({ target }) => { this.setState({ initialAmount: target.value })}}
+            />
+            <FiatDropdown>
+              <FiatDropdownLabel>
+                {'USD'}
+              </FiatDropdownLabel>
+              <CaratDropdown>
+                <CaratDownIcon />
+              </CaratDropdown>
+            </FiatDropdown>
+          </FiatInputWrapper>
+          <AssetDropdown
+            itemsShowing={this.state.currenciesShowing}
+            onClick={() => { this.setState({ currenciesShowing: !this.state.currenciesShowing })}}
+          >
+            <AssetDropdownLabel>
+              {this.state.initialAsset}
+            </AssetDropdownLabel>
+            <CaratDropdown>
+              <CaratDownIcon />
+            </CaratDropdown>
+          </AssetDropdown>
+          {
+            this.state.currenciesShowing
+            ? <AssetItems>
+                {this.currencies.map((asset: string, i: number) => {
+                  if (asset === this.state.initialAsset) {
+                    return null
+                  }
+
+                  return (
+                    <AssetItem
+                      key={`choice-${asset}`}
+                      isLast={i === (this.currencies.length - 1)}
+                      onClick={this.setInitialAsset.bind(this, asset)}
+                    >
+                      {asset}
+                    </AssetItem>
+                  )
+                })}
+              </AssetItems>
+            : null
+          }
+        </BuyPromptWrapper>
         <ActionsWrapper>
-          <ConnectButton onClick={connectBinance}>
-            {getLocale('binanceWidgetConnectText')}
+          <ConnectButton onClick={onBuyCrypto}>
+            {`Buy ${this.state.initialAsset}`}
           </ConnectButton>
-          <DismissAction onClick={hideWidget}>
-            {getLocale('binanceWidgetDismissText')}
-          </DismissAction>
         </ActionsWrapper>
       </>
     )
   }
-
+  
   render () {
-    const { userAuthed, apiCredsInvalid } = this.props
+    const { userAuthed, authInProgress, apiCredsInvalid, connectBinance } = this.props
 
     if (apiCredsInvalid) {
       return (
@@ -406,7 +494,11 @@ class Binance extends React.PureComponent<Props, State> {
                   <DisconnectIcon />
                 </ActionItem>
               </ActionTray>
-            : null
+            : !userAuthed && !authInProgress
+              ? <ConnectPrompt onClick={connectBinance}>
+                  {'Connect'}
+                </ConnectPrompt>
+              : null
           }
         </Header>
         <Content>
