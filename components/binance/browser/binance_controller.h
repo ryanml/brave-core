@@ -37,6 +37,7 @@ class SimpleURLLoader;
 
 const char api_path_account[] = "/api/v3/account";
 const char api_path_ticker_price[] = "/api/v3/ticker/price";
+const char api_path_ticker_volume[] = "/api/v3/ticker/24hr";
 
 class BinanceController {
  public:
@@ -50,9 +51,12 @@ class BinanceController {
   using ValidateAPIKeyCallback = base::OnceCallback<void(int, bool)>;
   bool ValidateAPIKey(ValidateAPIKeyCallback callback);
   using GetTickerPriceCallback = base::OnceCallback<void(const std::string&)>;
+  using GetTickerVolumeCallback = base::OnceCallback<void(const std::string&)>;
   // Symbol pair is for example: BTCUSDT
   bool GetTickerPrice(const std::string& symbol_pair,
       GetTickerPriceCallback callback);
+  bool GetTickerVolume(const std::string& symbol_pair,
+      GetTickerVolumeCallback callback);
   bool SetAPIKey(const std::string& api_key, const std::string& secret_key);
   std::string GetBinanceTLD();
 
@@ -78,6 +82,9 @@ class BinanceController {
                         const int status, const std::string& body,
                         const std::map<std::string, std::string>& headers);
   void OnGetTickerPrice(GetTickerPriceCallback callback,
+                        const int status, const std::string& body,
+                        const std::map<std::string, std::string>& headers);
+  void OnGetTickerVolume(GetTickerVolumeCallback callback,
                         const int status, const std::string& body,
                         const std::map<std::string, std::string>& headers);
   bool URLRequest(const std::string& method, const std::string& path,

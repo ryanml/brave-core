@@ -528,6 +528,20 @@ export const newTabReducer: Reducer<NewTab.State | undefined> = (state: NewTab.S
       state = { ...state }
       const accountBTCBalance = state.binanceState.accountBalances['BTC'] || ''
       state.binanceState.btcBalanceValue = getUSDPrice(accountBTCBalance, payload.price)
+      state.binanceState.btcPrice = payload.price
+      break
+
+    case types.ON_BTC_USD_VOLUME:
+      if (!payload.volume) {
+        break
+      }
+
+      const btcFloatString = Math.floor(
+        parseFloat(payload.volume)
+      ).toString()
+
+      state = { ...state }
+      state.binanceState.btcVolume = btcFloatString
       break
 
     case types.ON_ASSET_BTC_PRICE:
@@ -538,6 +552,28 @@ export const newTabReducer: Reducer<NewTab.State | undefined> = (state: NewTab.S
 
       state = { ...state }
       state.binanceState.assetBTCValues[ticker] = price
+      break
+
+    case types.ON_ASSET_BTC_VOLUME:
+      if (!payload.volume) {
+        break
+      }
+
+      const floatString = Math.floor(
+        parseFloat(payload.volume)
+      ).toString()
+
+      state = { ...state }
+      state.binanceState.assetBTCVolumes[payload.ticker] = floatString
+      break
+
+    case types.ON_ASSET_USD_PRICE:
+      if (!payload.price) {
+        break
+      }
+
+      state = { ...state }
+      state.binanceState.assetUSDValues[payload.ticker] = payload.price
       break
 
     case types.DISCONNECT_BINANCE:

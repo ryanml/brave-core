@@ -157,6 +157,7 @@ declare namespace chrome.binance {
   const getAccountBalance: (callback: (balances: Record<string, string>, unauthorized: boolean) => void) => {}
   const getUserTLD: (callback: (userTLD: string) => void) => {}
   const getTickerPrice: (symbolPair: string, callback: (symbolPairValue: string) => void) => {}
+  const getTickerVolume: (symbolPair: string, callback: (symbolPairVolume: string) => void) => {}
   const validateAPIKey: (callback: (status: number, unauthorized: boolean) => void) => {}
 }
 

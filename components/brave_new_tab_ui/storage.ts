@@ -58,6 +58,8 @@ export const defaultState: NewTab.State = {
   binanceState: {
     accountBalances: {},
     assetBTCValues: {},
+    assetBTCVolumes: {},
+    assetUSDValues: {},
     authInProgress: false,
     authFailed: false,
     userAuthed: false,
@@ -66,7 +68,9 @@ export const defaultState: NewTab.State = {
     userTLD: 'com',
     apiCredError: false,
     apiCredsInvalid: false,
-    validationInProgress: false
+    validationInProgress: false,
+    btcPrice: '0.00',
+    btcVolume: '0'
   }
 }
 

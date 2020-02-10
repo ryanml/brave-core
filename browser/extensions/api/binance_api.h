@@ -73,6 +73,18 @@ class BinanceGetTickerPriceFunction :
   ResponseAction Run() override;
 };
 
+class BinanceGetTickerVolumeFunction :
+    public ExtensionFunction {
+ public:
+  DECLARE_EXTENSION_FUNCTION("binance.getTickerVolume", UNKNOWN)
+
+ protected:
+  ~BinanceGetTickerVolumeFunction() override {}
+  void OnGetTickerVolume(const std::string& symbol_pair_volume);
+
+  ResponseAction Run() override;
+};
+
 }  // namespace api
 }  // namespace extensions
 

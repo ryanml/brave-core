@@ -243,21 +243,35 @@ class NewTabPage extends React.Component<Props, State> {
     this.props.actions.onBTCUSDPrice(price)
   }
 
+  setBTCUSDVolume = (volume: string) => {
+    this.props.actions.onBTCUSDVolume(volume)
+  }
+
   setAssetBTCPrice = (ticker: string, price: string) => {
     this.props.actions.onAssetBTCPrice(ticker, price)
+  }
+
+  setAssetUSDPrice = (ticker: string, price: string) => {
+    this.props.actions.onAssetUSDPrice(ticker, price)
+  }
+
+  setAssetBTCVolume = (ticker: string, volume: string) => {
+    this.props.actions.onAssetBTCVolume(ticker, volume)
   }
 
   onBinanceUserTLD = (userTLD: NewTab.BinanceTLD) => {
     this.props.actions.onBinanceUserTLD(userTLD)
   }
 
-  openBinanceUrl = (route: string) => {
+  openBinanceUrl = (route: string, coin: string | null = null, amount: string | null = null) => {
     let path = ''
+    let params = ''
     const { userTLD } = this.props.newTabData.binanceState
 
     switch (route) {
       case 'buy':
         path = 'buy-sell-crypto'
+        params = `?coin=${coin}&amount=${amount}`
         break
       case 'deposit':
         path = 'usercenter/wallet/deposit/BTC'
@@ -273,7 +287,7 @@ class NewTabPage extends React.Component<Props, State> {
         break
     }
 
-    window.open(`https://www.binance.${userTLD}/en/${path}`, '_blank')
+    window.open(`https://www.binance.${userTLD}/en/${path}${params}`, '_blank')
   }
 
   depositBinance = () => {
@@ -292,8 +306,8 @@ class NewTabPage extends React.Component<Props, State> {
     this.openBinanceUrl('newKey')
   }
 
-  buyCrypto = () => {
-    this.openBinanceUrl('buy')
+  buyCrypto = (coin: string, amount: string) => {
+    this.openBinanceUrl('buy', coin, amount)
   }
 
   setHideBalance = (hide: boolean) => {
@@ -366,9 +380,12 @@ class NewTabPage extends React.Component<Props, State> {
           onBinanceBalances={this.setBinanceBalances}
           onBinanceUserTLD={this.onBinanceUserTLD}
           onBTCUSDPrice={this.setBTCUSDPrice}
+          onBTCUSDVolume={this.setBTCUSDVolume}
           onSetApiKeys={this.setApiKeys}
           onApiKeysInvalid={this.onApiKeysInvalid}
           onAssetBTCPrice={this.setAssetBTCPrice}
+          onAssetUSDPrice={this.setAssetUSDPrice}
+          onAssetBTCVolume={this.setAssetBTCVolume}
           onDisconnectBinance={this.disconnectBinance}
           textDirection={newTabData.textDirection}
         />

@@ -106,6 +106,26 @@
             ]
           }
         ]
+      },
+      {
+        "name": "getTickerVolume",
+        "type": "function",
+        "description": "Fetches latest symbol pair trading volume",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "symbolPair"
+          }, {
+            "type": "function",
+            "name": "callback",
+            "parameters": [
+              {
+                "name": "symbolPairVolume",
+                "type": "string"
+              }
+            ]
+          }
+        ]
       }
     ],
     "types": [

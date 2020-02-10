@@ -116,6 +116,8 @@ declare namespace NewTab {
     authInProgress: boolean
     authFailed: boolean
     assetBTCValues: Record<string, string>
+    assetUSDValues: Record<string, string>
+    assetBTCVolumes: Record<string, string>
     userAuthed: boolean
     btcBalanceValue: string
     hideBalance: boolean
@@ -123,6 +125,8 @@ declare namespace NewTab {
     apiCredError: boolean
     apiCredsInvalid: boolean
     validationInProgress: boolean
+    btcPrice: string
+    btcVolume: string
   }
 
   export type BinanceTLD = 'us' | 'com'

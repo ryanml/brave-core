@@ -37,7 +37,8 @@ GURL BinanceController::api_endpoint_("https://api.binance.com");
 namespace {
 
 const std::vector<std::string> public_endpoints = {
-  api_path_ticker_price
+  api_path_ticker_price,
+  api_path_ticker_volume
 };
 
 const unsigned int kRetriesCountOnNetworkChange = 1;
@@ -108,6 +109,19 @@ bool BinanceController::GetTickerPrice(
       BinanceCrypto::SanitizeSymbol(symbol_pair);
 
   return URLRequest("GET", api_path_ticker_price,
+                    std::string("symbol=") + sanitized_symbol_pair,
+                    std::move(internal_callback));
+}
+
+bool BinanceController::GetTickerVolume(
+    const std::string& symbol_pair,
+    GetTickerVolumeCallback callback) {
+  auto internal_callback = base::BindOnce(
+      &BinanceController::OnGetTickerVolume,
+      base::Unretained(this), std::move(callback));
+  std::string sanitized_symbol_pair =
+      BinanceCrypto::SanitizeSymbol(symbol_pair);
+  return URLRequest("GET", api_path_ticker_volume,
                     std::string("symbol=") + sanitized_symbol_pair,
                     std::move(internal_callback));
 }
@@ -251,6 +265,17 @@ void BinanceController::OnGetTickerPrice(
     BinanceJSONParser::GetTickerPriceFromJSON(body, &symbol_pair_price);
   }
   std::move(callback).Run(symbol_pair_price);
+}
+
+void BinanceController::OnGetTickerVolume(
+    GetTickerPriceCallback callback,
+    const int status, const std::string& body,
+    const std::map<std::string, std::string>& headers) {
+  std::string symbol_pair_volume = "0";
+  if (status >= 200 && status <= 299) {
+    BinanceJSONParser::GetTickerVolumeFromJSON(body, &symbol_pair_volume);
+  }
+  std::move(callback).Run(symbol_pair_volume);
 }
 
 bool BinanceController::SetAPIKey(const std::string& api_key,

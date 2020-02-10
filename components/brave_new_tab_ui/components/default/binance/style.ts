@@ -6,8 +6,10 @@ import styled from 'styled-components'
 
 interface StyleProps {
   isLast?: boolean
+  isActive?: boolean
   hideBalance?: boolean
   itemsShowing?: boolean
+  position?: 'left' | 'right'
 }
 
 export const WidgetWrapper = styled<{}, 'div'>('div')`
@@ -352,4 +354,155 @@ export const ConnectPrompt = styled<{}, 'div'>('div')`
   font-size: 14px;
   font-weight: bold;
   cursor: pointer;
+`
+
+export const NavigationBar = styled<{}, 'div'>('div')`
+  height: 30px;
+`
+
+export const NavigationItem = styled<StyleProps, 'div'>('div')`
+  float: left;
+  width: 25%;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  color: ${p => p.isActive ? '#F2C101' : '#9D7B01'};
+`
+
+export const SelectedView = styled<{}, 'div'>('div')`
+  border: 1px solid rgb(70, 70, 70);
+  overflow-y: scroll;
+  height: 140px;
+  width: 220px;
+  margin-left: 4px;
+`
+
+export const ListItem = styled<{}, 'div'>('div')`
+  border-bottom: 1px solid rgb(70, 70, 70);
+  padding: 12px 5px;
+  overflow: auto;
+`
+
+export const ListIcon = styled<{}, 'div'>('div')`
+  float: left;
+  margin-top: -2px;
+  margin-right: 10px;
+`
+
+export const ListImg = styled<{}, 'img'>('img')`
+`
+
+export const ListLabel = styled<{}, 'div'>('div')`
+  color: #fff;
+  cursor: pointer;
+`
+
+export const SearchInput = styled<{}, 'input'>('input')`
+  border: none;
+  color: #fff;
+  background: inherit;
+  font-size: 15px;
+  &:focus {
+    outline: 0;
+  }
+`
+
+export const DetailIcons = styled<{}, 'div'>('div')`
+  float: left;
+  margin-top: -3px;
+  margin-right: 10px;
+`
+
+export const AssetTicker = styled<{}, 'span'>('span')`
+  color: #fff;
+  font-weight: bold;
+  margin-right: 3px;
+  font-size: 15px;
+`
+
+export const AssetLabel = styled<{}, 'span'>('span')`
+  color: rgb(70, 70, 70);
+  display: inline-block;
+  font-weight: bold;
+  font-size: 15px;
+`
+
+export const AssetQR = styled<{}, 'div'>('div')`
+  float: right;
+  margin-top: -3px;
+`
+
+export const DetailArea = styled<{}, 'div'>('div')`
+  padding: 5px;
+  font-weight: bold;
+`
+
+export const MemoArea = styled<{}, 'div'>('div')`
+  padding: 5px;
+`
+
+export const MemoInfo = styled<{}, 'div'>('div')`
+  float: left;
+  max-width: 110px;
+`
+
+export const CopyButton = styled(GenButton)`
+  float: right;
+`
+
+export const DetailLabel = styled<{}, 'span'>('span')`
+  color: rgb(70, 70, 70);
+  font-weight: bold;
+  display: block;
+  font-size: 15px;
+  margin-bottom: 5px;
+`
+
+export const DetailInfo = styled<{}, 'span'>('span')`
+  color: #fff;
+  font-weight: bold;
+  display: block;
+  font-size: 15px;
+  margin-bottom: 10px;
+  width: 180px;
+  word-wrap: break-word;
+`
+
+export const BackArrow = styled<{}, 'div'>('div')`
+  width: 20px;
+  float: left;
+  cursor: pointer;
+  margin-right: 5px;
+`
+
+export const ListInfo = styled<StyleProps, 'div'>('div')`
+  float: ${p => `${p.position}`};
+
+  ${p => {
+    if (p.position === 'right') {
+      return `
+        width: 40%;
+        text-align: left;
+      `
+    } else {
+      return null
+    }
+  }}
+`
+
+export const TradeLabel = styled<{}, 'span'>('span')`
+  font-weight: bold;
+  font-size: 14px;
+  display: block;
+  color: rgb(70, 70, 70);
+  margin-bottom: 3px;
+`
+
+export const BTCValueLabel = styled(TradeLabel)`
+  color: #6DD401;
+`
+
+export const OtherValueLabel = styled(TradeLabel)`
+  color: #fff;
 `
