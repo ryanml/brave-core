@@ -66,19 +66,47 @@ import {
   ListInfo,
   TradeLabel,
   BTCValueLabel,
-  OtherValueLabel
+  OtherValueLabel,
+  BTCSummary,
+  BlurIcon,
+  TickerLabel,
+  Balance,
+  Converted,
+  BuySellHeader,
+  AssetInfo,
+  PairPrice,
+  PairName,
+  BuySellToggle,
+  Switch,
+  BuySellContent,
+  AmountInput,
+  AmountButton,
+  AmountTextInput,
+  PercentWrapper,
+  Percent,
+  ActionLabel,
+  BuySellButton
 } from './style'
 import {
   BinanceLogo,
   ApiKeyIcon,
   SecretKeyIcon,
-  DisconnectIcon
+  DisconnectIcon,
+  ShowIcon,
+  HideIcon
 } from './assets/icons'
 
 import createWidget from '../widget/index'
 import { getLocale } from '../../../../common/locale'
 import { CaratLeftIcon, CaratDownIcon, LoaderIcon } from 'brave-ui/components/icons'
 import searchIcon from './assets/search-icon.png'
+import bchIcon from './assets/bch.png'
+import bnbIcon from './assets/bnb.png'
+import btcIcon from './assets/btc.png'
+import busdIcon from './assets/busd.png'
+import ethIcon from './assets/eth.png'
+import xrpIcon from './assets/xrp.png'
+import qrIcon from './assets/qr.png'
 import { getUSDPrice } from '../../../binance-utils'
 
 interface State {
@@ -92,6 +120,9 @@ interface State {
   currentDepositSearch: string
   currentDepositAsset: string
   currentTradeSearch: string
+  currentTradeAsset: string
+  currentTradeAmount: string
+  isBuyView: boolean
 }
 
 interface Props {
@@ -103,6 +134,7 @@ interface Props {
   validationInProgress: boolean
   apiCredsInvalid: boolean
   accountBalances: Record<string, string>
+  assetUSDValues: Record<string, string>
   assetBTCValues: Record<string, string>
   assetBTCVolumes: Record<string, string>
   btcPrice: string
@@ -142,7 +174,10 @@ class Binance extends React.PureComponent<Props, State> {
       selectedView: 'deposit',
       currentDepositSearch: '',
       currentDepositAsset: '',
-      currentTradeSearch: ''
+      currentTradeSearch: '',
+      currentTradeAsset: '',
+      currentTradeAmount: '',
+      isBuyView: true
     }
     this.currencies = [
       'BTC',
@@ -195,13 +230,12 @@ class Binance extends React.PureComponent<Props, State> {
       */
 
       balances = {
-        'BTC': '0.3255002',
-        'ETH': '2.5696903',
-        'BAT': '550.35000',
-        'XRP': '100.000000',
-        'BNB': '5.0000000',
-        'BCH': '200.000000',
-        'BUSD': '15.0000000'
+        'BTC': '5.3255',
+        'ETH': '2.5696',
+        'XRP': '100.0000',
+        'BNB': '5.0000',
+        'BCH': '200.0000',
+        'BUSD': '15.0000'
       }
 
       this.props.onBinanceBalances(balances)
@@ -247,6 +281,7 @@ class Binance extends React.PureComponent<Props, State> {
   }
 
   renderRoutes = () => {
+    const { selectedView } = this.state
     const { userAuthed, authInProgress } = this.props
 
     if (authInProgress) {
@@ -254,10 +289,14 @@ class Binance extends React.PureComponent<Props, State> {
     }
 
     if (userAuthed) {
+      if (selectedView === 'buy') {
+        return this.renderBuyView()
+      }
+
       return this.renderAccountView()
     }
 
-    return this.renderWelcomeView()
+    return this.renderBuyView()
   }
 
   onSetHideBalance = () => {
@@ -323,6 +362,29 @@ class Binance extends React.PureComponent<Props, State> {
     return buff
   }
 
+  getAssetIcon (asset: string) {
+    switch (asset) {
+      case 'BTC':
+        return btcIcon
+      case 'ETH':
+        return ethIcon
+      case 'BCH':
+        return bchIcon
+      case 'BNB':
+        return bnbIcon
+      case 'BUSD':
+        return busdIcon
+      case 'XRP':
+        return xrpIcon
+      default:
+        return null
+    }
+  }
+
+  setIsBuyView (isBuyView: boolean) {
+    this.setState({ isBuyView })
+  }
+
   renderDisconnectView = () => {
     return (
       <DisconnectWrapper>
@@ -366,9 +428,11 @@ class Binance extends React.PureComponent<Props, State> {
         <ListItem>
           <DetailIcons>
             <BackArrow>
-              <CaratLeftIcon onClick={this.setCurrentDepositAsset.bind(this, '')} />
+              <CaratLeftIcon onClick={() => {
+                this.setCurrentDepositAsset.bind(this, '')
+              }}/>
             </BackArrow>
-            <ListImg src={searchIcon} />
+            <ListImg src={this.getAssetIcon(currentDepositAsset)} />
           </DetailIcons>
           <AssetTicker>
             {currentDepositAsset}
@@ -377,7 +441,7 @@ class Binance extends React.PureComponent<Props, State> {
             {`(${this.currencyNames[currentDepositAsset]})`}
           </AssetLabel>
           <AssetQR>
-            <ListImg src={searchIcon} />
+            <ListImg src={qrIcon} />
           </AssetQR>
         </ListItem>
         <DetailArea>
@@ -448,7 +512,7 @@ class Binance extends React.PureComponent<Props, State> {
               onClick={this.setCurrentDepositAsset.bind(this, asset)}
             >
               <ListIcon>
-                <ListImg src={searchIcon} />
+                <ListImg src={this.getAssetIcon(asset)} />
               </ListIcon>
               <ListLabel>
                 {`${asset} (${currencyNames[asset]})`}
@@ -460,8 +524,58 @@ class Binance extends React.PureComponent<Props, State> {
     )
   }
 
-  renderBuySellScreen = () => {
+  renderSummaryView = () => {
+    const { accountBalances, btcBalanceValue, hideBalance } = this.props
 
+    return (
+      <>
+        <BTCSummary>
+          <ListInfo position={'left'}>
+            <TradeLabel>
+              <Balance isBTC={true} hideBalance={hideBalance}>
+                {accountBalances['BTC']} <TickerLabel>{getLocale('binanceWidgetBTCTickerText')}</TickerLabel>
+              </Balance>
+              <Converted hideBalance={hideBalance}>
+                {`= $${btcBalanceValue}`}
+              </Converted>
+            </TradeLabel>
+          </ListInfo>
+          <ListInfo position={'right'}>
+            <TradeLabel>
+              <BlurIcon onClick={this.onSetHideBalance}>
+                {
+                  hideBalance
+                  ? <ShowIcon />
+                  : <HideIcon />
+                }
+              </BlurIcon>
+            </TradeLabel>
+          </ListInfo>          
+        </BTCSummary>
+        {this.currencies.map((asset: string) => {
+          return (
+            <ListItem key={`list-${asset}`}>
+              <ListInfo isAsset={true} position={'left'}>
+                <ListIcon>
+                  <ListImg src={this.getAssetIcon(asset)} />
+                </ListIcon>
+                <ListLabel>
+                  {asset}
+                </ListLabel>
+              </ListInfo>
+              <ListInfo position={'right'}>
+                <Balance isBTC={false} hideBalance={hideBalance}>
+                  {accountBalances[asset]}
+                </Balance>
+                <Converted isBTC={false} hideBalance={hideBalance}>
+                  {`= $${btcBalanceValue}`}
+                </Converted>                
+              </ListInfo>
+            </ListItem>
+          )
+        })}
+      </>
+    )
   }
 
   renderTradeView = () => {
@@ -483,7 +597,11 @@ class Binance extends React.PureComponent<Props, State> {
             })}}
           />
         </ListItem>
-        <ListItem>
+        <ListItem
+          onClick={() => { this.setState({
+            currentTradeAsset: `BTC / USDT`
+          })}}
+        >
           <ListInfo position={'left'}>
             <TradeLabel>
               <span style={{ color: '#fff' }}>{'BTC'}</span>
@@ -513,7 +631,13 @@ class Binance extends React.PureComponent<Props, State> {
           }
 
           return (
-            <ListItem key={`trade-${pair}`}>
+            <ListItem
+              key={`trade-${pair}`}
+              style={{ cursor: 'pointer' }}
+              onClick={() => { this.setState({
+                currentTradeAsset: `${pair} / BTC`
+              })}}
+            >
               <ListInfo position={'left'}>
                 <TradeLabel>
                   <span style={{ color: '#fff' }}>{pair}</span>
@@ -538,12 +662,128 @@ class Binance extends React.PureComponent<Props, State> {
     )
   }
 
-  renderSummaryView = () => {
-    return null
-  }
-
   renderBuySellView = () => {
-    return null
+    const { accountBalances, btcPrice } = this.props
+    const { currentTradeAsset, isBuyView, currentTradeAmount } = this.state
+    const BTCBalance = parseFloat(accountBalances['BTC'])
+    const currentAmount = parseFloat(currentTradeAmount)
+
+    return (
+      <>
+        <BuySellHeader>
+          <AssetInfo>
+            <PairName>
+              {currentTradeAsset}
+            </PairName>
+            <PairPrice>
+              {parseFloat(btcPrice).toFixed(4)}
+            </PairPrice>
+          </AssetInfo>
+          <BuySellToggle>
+            <Switch
+              active={isBuyView}
+              onClick={this.setIsBuyView.bind(this, true)}
+            >
+              {'Buy'}</Switch>
+            <Switch
+              active={!isBuyView}
+              onClick={this.setIsBuyView.bind(this, false)}
+            >
+              {'Sell'}
+            </Switch>
+          </BuySellToggle>
+        </BuySellHeader>
+        <BuySellContent>
+          <ActionLabel>
+            {`${isBuyView ? 'Buy' : 'Sell'} @ Market Price`}
+          </ActionLabel>
+          <AmountInput>
+            <AmountButton
+              onClick={() => {
+                this.setState({
+                  currentTradeAmount: (currentAmount - 1).toString()
+                })
+              }}
+            >
+              {'-'}
+            </AmountButton>
+            <AmountTextInput
+              type={'text'}
+              placeholder={'Amount (BTC)'}
+              value={currentTradeAmount}
+              onChange={({ target }) => {
+                this.setState({ currentTradeAmount: target.value })
+              }}
+            />
+            <AmountButton
+              onClick={() => {
+                this.setState({
+                  currentTradeAmount: (currentAmount + 1).toString()
+                })
+              }}
+            >
+              {'+'}
+            </AmountButton>
+          </AmountInput>
+          <PercentWrapper>
+            <Percent
+              onClick={() => {
+                this.setState({
+                  currentTradeAmount: (BTCBalance * .25).toString()
+                })
+              }}
+            >
+              {'25%'}
+            </Percent>
+            <Percent
+              onClick={() => {
+                this.setState({
+                  currentTradeAmount: (BTCBalance * .50).toString()
+                })
+              }}
+            >
+              {'50%'}
+            </Percent>
+            <Percent
+              onClick={() => {
+                this.setState({
+                  currentTradeAmount: (BTCBalance * .75).toString()
+                })
+              }}
+            >
+              {'75%'}
+            </Percent>
+            <Percent
+              onClick={() => {
+                this.setState({
+                  currentTradeAmount: BTCBalance.toString()
+                })
+              }}
+            >
+              {'100%'}
+            </Percent>
+          </PercentWrapper>
+          <ActionLabel>
+            {
+              isBuyView
+              ? `Available ${accountBalances['BUSD']} BUSD`
+              : `Available ${accountBalances['BTC']} BTC`
+            }
+          </ActionLabel>
+          <BuySellButton isBuy={isBuyView}>
+            {`${isBuyView ? 'Buy' : 'Sell'}`}
+          </BuySellButton>
+          <DismissAction
+            onClick={() => {
+              this.setSelectedView.bind(this, 'trade')
+              this.setState({ currentTradeAsset: '' })
+            }}
+          >
+            {'Cancel'}
+          </DismissAction>
+        </BuySellContent>
+      </>
+    )
   }
   
   renderSelectedView = () => {
@@ -657,9 +897,9 @@ class Binance extends React.PureComponent<Props, State> {
     )
   }
 
-  renderWelcomeView = () => {
+  renderBuyView = () => {
     const { onBuyCrypto } = this.props
-    const { initialAsset, initialAmount } = this.state
+    const { initialAsset, initialAmount, selectedView } = this.state
   
     return (
       <>
@@ -724,15 +964,23 @@ class Binance extends React.PureComponent<Props, State> {
           <ConnectButton onClick={onBuyCrypto.bind(this, initialAsset, initialAmount)}>
             {`Buy ${initialAsset}`}
           </ConnectButton>
+          {
+            selectedView === 'buy'
+            ? <DismissAction onClick={this.setSelectedView.bind(this, 'deposit')}>
+                {'Cancel'}
+              </DismissAction>
+            : null
+          }
         </ActionsWrapper>
       </>
     )
   }
   
   render () {
-    const { userAuthed, authInProgress, apiCredsInvalid, connectBinance } = this.props
+    const { currentTradeAsset, selectedView } = this.state
+    const { userAuthed, authInProgress, apiCredsInvalid, connectBinance } = this.props 
 
-    if (this.state.selectedView === 'buy') {
+    if (currentTradeAsset) {
       return (
         <WidgetWrapper>
           {this.renderBuySellView()}
@@ -761,7 +1009,7 @@ class Binance extends React.PureComponent<Props, State> {
         <Header>
           <BinanceLogo />
           {
-            userAuthed
+            userAuthed && selectedView !== 'buy'
             ? <ActionTray>
                 <ActionItem onClick={this.disconnectBinance}>
                   <DisconnectIcon />
