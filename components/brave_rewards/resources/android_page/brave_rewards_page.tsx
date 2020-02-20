@@ -182,6 +182,14 @@ window.cr.define('brave_rewards', function () {
     getActions().getBalance()
   }
 
+  function claimPromotion (properties: Rewards.Captcha) {
+    getActions().onClaimPromotion(properties)
+  }
+
+  function reconcileStampReset () {
+    getActions().onReconcileStampReset()
+  }
+
   return {
     initialize,
     walletCreated,
@@ -213,7 +221,9 @@ window.cr.define('brave_rewards', function () {
     balance,
     reconcileComplete,
     onlyAnonWallet,
-    unblindedTokensReady
+    unblindedTokensReady,
+    claimPromotion,
+    reconcileStampReset
   }
 })
 

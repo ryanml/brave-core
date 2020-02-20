@@ -37,6 +37,10 @@ export const claimPromotion = (promotionId: string) => action(types.CLAIM_PROMOT
   promotionId
 })
 
+export const onClaimPromotion = (properties: Rewards.Captcha) => action(types.ON_CLAIM_PROMOTION, {
+  properties
+})
+
 export const onPromotionFinish = (properties: Rewards.PromotionFinish) => action(types.ON_PROMOTION_FINISH, {
   properties
 })
@@ -136,6 +140,8 @@ export const onAdsSettingSave = (key: string, value: any) => action(types.ON_ADS
 })
 
 export const getReconcileStamp = () => action(types.GET_RECONCILE_STAMP)
+
+export const onReconcileStampReset = () => action(types.ON_RECONCILE_STAMP_RESET)
 
 export const getPendingContributions = () => action(types.GET_PENDING_CONTRIBUTIONS)
 
