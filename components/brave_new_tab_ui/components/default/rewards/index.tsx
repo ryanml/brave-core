@@ -33,6 +33,7 @@ import {
   TurnOnAdsButton,
   UnsupportedMessage
 } from './style'
+import { StyledTitleTab } from '../widgetCards/style'
 import Notification from './notification'
 import BrandedWallpaperNotification from './brandedWallpaperNotification'
 import { BatColorIcon, CloseStrokeIcon } from 'brave-ui/components/icons'
@@ -54,6 +55,7 @@ export interface RewardsProps {
   isNotification?: boolean
   showBrandedWallpaperNotification: boolean
   brandedWallpaperData?: NewTab.BrandedWallpaper
+  showContent: boolean
   onCreateWallet: () => void
   onEnableAds: () => void
   onEnableRewards: () => void
@@ -312,6 +314,25 @@ class Rewards extends React.PureComponent<RewardsProps, {}> {
     )
   }
 
+  renderTitle = () => {
+    return (
+      <RewardsTitle>
+        <BatIcon>
+          <BatColorIcon />
+        </BatIcon>
+        {getLocale('rewardsWidgetBraveRewards')}
+      </RewardsTitle>
+    )
+  }
+
+  renderTitleTab = () => {
+    return (
+      <StyledTitleTab>
+        {this.renderTitle()}
+      </StyledTitleTab>
+    )
+  }
+
   dismissNotification (notificationType: string) {
     this.props.onDismissNotification(notificationType)
   }
@@ -328,8 +349,13 @@ class Rewards extends React.PureComponent<RewardsProps, {}> {
     const {
       enabledMain,
       walletCreated,
-      isNotification
+      isNotification,
+      showContent
     } = this.props
+
+    if (!showContent) {
+      return this.renderTitleTab()
+    }
 
     // Handle isNotification:
     //   - if rewards isn't on, we ourselves are a notification
@@ -349,12 +375,7 @@ class Rewards extends React.PureComponent<RewardsProps, {}> {
             <CloseStrokeIcon />
           </CloseIcon>
           }
-          <RewardsTitle>
-            <BatIcon>
-              <BatColorIcon />
-            </BatIcon>
-            {getLocale('rewardsWidgetBraveRewards')}
-          </RewardsTitle>
+          {this.renderTitle()}
           {this.renderPreOptIn()}
           {this.renderRewardsInfo()}
           <Footer>

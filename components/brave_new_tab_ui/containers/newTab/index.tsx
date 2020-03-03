@@ -243,6 +243,7 @@ class NewTabPage extends React.Component<Props, State> {
       <Page.GridItemRewards>
         <Rewards
           {...rewardsState}
+          showContent={false}
           preventFocus={!rewardsWidgetOn}
           onCreateWallet={this.createWallet}
           onEnableAds={this.enableAds}
