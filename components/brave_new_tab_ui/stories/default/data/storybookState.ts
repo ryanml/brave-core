@@ -53,6 +53,7 @@ export const getNewTabData = (state: NewTab.State) => ({
   showClock: boolean('Show clock?', true),
   showTopSites: boolean('Show top sites?', true),
   showRewards: boolean('Show rewards?', true),
+  showBinance: boolean('Show Binance?', true),
   textDirection: select('Text direction', { ltr: 'ltr', rtl: 'rtl' } , 'ltr'),
   gridSites: generateTopSites(defaultTopSitesData),
   stats: {
@@ -60,5 +61,6 @@ export const getNewTabData = (state: NewTab.State) => ({
     adsBlockedStat: number('Number of blocked items', 1337),
     httpsUpgradesStat: number('Number of HTTPS upgrades', 1337)
   },
-  initialDataLoaded: true
+  initialDataLoaded: true,
+  currentStackWidget: 'rewards'
 })

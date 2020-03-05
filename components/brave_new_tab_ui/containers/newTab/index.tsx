@@ -14,7 +14,8 @@ import SiteRemovalNotification from './notification'
 import {
   ClockWidget as Clock,
   ListWidget as List,
-  RewardsWidget as Rewards
+  RewardsWidget as Rewards,
+  ExchangeWidget as Exchange
 } from '../../components/default'
 import * as Page from '../../components/default/page'
 import BrandedWallpaperLogo from '../../components/default/brandedWallpaper/logo'
@@ -230,7 +231,45 @@ class NewTabPage extends React.Component<Props, State> {
     this.setState({ showSettingsMenu: !this.state.showSettingsMenu })
   }
 
-  renderRewardsContent () {
+  toggleStackWidget = (widgetId: NewTab.StackWidget) => {
+    this.props.actions.setCurrentStackWidget(widgetId)
+  }
+
+  renderCryptoContent () {
+    const { currentStackWidget } = this.props.newTabData
+
+    return (
+      <Page.GridItemRewards>
+        {
+          currentStackWidget === 'rewards'
+          ? <>
+              {this.renderBinanceWidget(false)}
+              {this.renderRewardsWidget(true)}
+            </>
+          : <>
+              {this.renderRewardsWidget(false)}
+              {this.renderBinanceWidget(true)}
+            </>
+        }
+      </Page.GridItemRewards>
+    )
+  }
+
+  renderBinanceWidget (showContent: boolean) {
+    const { newTabData } = this.props
+
+    return (
+      <Exchange
+        type={'binance'}
+        menuPosition={'left'}
+        textDirection={newTabData.textDirection}
+        showContent={showContent}
+        onShowContent={this.toggleStackWidget.bind('binance')}
+      />
+    )
+  }
+
+  renderRewardsWidget (showContent: boolean) {
     const { newTabData } = this.props
     const {
       rewardsState,
@@ -239,27 +278,31 @@ class NewTabPage extends React.Component<Props, State> {
     const isShowingBrandedWallpaper = GetIsShowingBrandedWallpaper(this.props)
     const shouldShowBrandedWallpaperNotification = GetShouldShowBrandedWallpaperNotification(this.props)
     const shouldShowRewardsWidget = rewardsWidgetOn || shouldShowBrandedWallpaperNotification
-    return shouldShowRewardsWidget && (
-      <Page.GridItemRewards>
-        <Rewards
-          {...rewardsState}
-          preventFocus={!rewardsWidgetOn}
-          onCreateWallet={this.createWallet}
-          onEnableAds={this.enableAds}
-          onEnableRewards={this.enableRewards}
-          isShowingBrandedWallpaper={isShowingBrandedWallpaper}
-          showBrandedWallpaperNotification={shouldShowBrandedWallpaperNotification}
-          onDisableBrandedWallpaper={this.disableBrandedWallpaper}
-          brandedWallpaperData={newTabData.brandedWallpaperData}
-          textDirection={newTabData.textDirection}
-          hideWidget={this.toggleShowRewards}
-          isNotification={!rewardsWidgetOn}
-          onDismissNotification={this.dismissNotification}
-          onDismissBrandedWallpaperNotification={this.dismissBrandedWallpaperNotification}
-          menuPosition={'left'}
-        />
-      </Page.GridItemRewards>
-    )
+
+    if (!shouldShowRewardsWidget) {
+      return null
+    }
+
+    return (
+      <Rewards
+        {...rewardsState}
+        showContent={showContent}
+        preventFocus={!rewardsWidgetOn}
+        onCreateWallet={this.createWallet}
+        onEnableAds={this.enableAds}
+        onEnableRewards={this.enableRewards}
+        isShowingBrandedWallpaper={isShowingBrandedWallpaper}
+        showBrandedWallpaperNotification={shouldShowBrandedWallpaperNotification}
+        onDisableBrandedWallpaper={this.disableBrandedWallpaper}
+        brandedWallpaperData={newTabData.brandedWallpaperData}
+        textDirection={newTabData.textDirection}
+        hideWidget={this.toggleShowRewards}
+        isNotification={!rewardsWidgetOn}
+        onDismissNotification={this.dismissNotification}
+        onDismissBrandedWallpaperNotification={this.dismissBrandedWallpaperNotification}
+        menuPosition={'left'}
+      />
+    )  
   }
 
   render () {

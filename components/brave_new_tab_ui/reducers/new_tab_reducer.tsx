@@ -465,6 +465,14 @@ export const newTabReducer: Reducer<NewTab.State | undefined> = (state: NewTab.S
       }
       break
 
+    case types.SET_CURRENT_STACK_WIDGET:
+      const widgetId: NewTab.StackWidget = { payload }
+      state = {
+        ...state,
+        currentStackWidget: widgetId
+      }
+      break
+
     default:
       break
   }

@@ -59,6 +59,8 @@ declare namespace NewTab {
     url: string
   }
 
+  export type StackWidget = 'rewards' | 'binance'
+
   export interface PersistentState {
     topSites: Site[]
     ignoredTopSites: Site[]
@@ -67,6 +69,7 @@ declare namespace NewTab {
     showEmptyPage: boolean
     bookmarks: Record<string, Bookmark>
     rewardsState: RewardsWidgetState
+    currentStackWidget: StackWidget
   }
 
   export interface EphemeralState {
@@ -85,6 +88,7 @@ declare namespace NewTab {
     showClock: boolean
     showTopSites: boolean
     showRewards: boolean
+    showBinance: boolean
     brandedWallpaperOptIn: boolean
     isBrandedWallpaperNotificationDismissed: boolean
     stats: Stats,

@@ -16,6 +16,7 @@ const defaultState: NewTab.State = {
   showClock: false,
   showTopSites: false,
   showRewards: false,
+  showBinance: false,
   brandedWallpaperOptIn: false,
   isBrandedWallpaperNotificationDismissed: true,
   topSites: [],
@@ -52,7 +53,8 @@ const defaultState: NewTab.State = {
     walletCreated: false,
     walletCreating: false,
     walletCreateFailed: false,
-    walletCorrupted: false
+    walletCorrupted: false,
+    currentStackWidget: 'rewards'
   }
 }
 
