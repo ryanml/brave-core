@@ -479,8 +479,9 @@ export const newTabReducer: Reducer<NewTab.State | undefined> = (state: NewTab.S
 
     case types.CONNECT_TO_BINANCE:
       state = { ...state }
-      state.binanceState.authInProgress = true
-      state.binanceState.apiCredsInvalid = false
+      state.binanceState.userAuthed = true
+      state.binanceState.authInProgress = false
+      state.binanceState.validationInProgress = false
       break
 
     case types.SET_HIDE_BALANCE:

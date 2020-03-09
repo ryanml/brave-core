@@ -9,6 +9,7 @@ interface StyleProps {
   isBTC?: boolean
   isAsset?: boolean
   isBuy?: boolean
+  isSmall?: boolean
   isLast?: boolean
   isActive?: boolean
   hideBalance?: boolean
@@ -33,7 +34,7 @@ export const Header = styled<{}, 'div'>('div')`
 
 export const Content = styled<{}, 'div'>('div')`
   margin: 10px 0;
-  min-width: 240px;
+  min-width: 255px;
 `
 
 export const Title = styled<{}, 'span'>('span')`
@@ -78,11 +79,12 @@ export const ConnectButton = styled<StyleProps, 'button'>('button')`
   font-size: 16px;
   font-weight: bold;
   border-radius: 20px;
-  width: 100%;
+  width: ${p => p.isSmall ? 50 : 100}%;
   background: #D9B227;
   border: 0;
   padding: 10px 0;
   cursor: pointer;
+  color: #000;
   margin-bottom: 10px;
 `
 
@@ -108,6 +110,8 @@ export const Balance = styled<StyleProps, 'span'>('span')`
   font-weight bold;
   margin: 5px 0;
   color: #fff;
+  text-align: ${p => p.isBTC ? 'unset' : 'right'};
+  margin-right: ${p => p.isBTC ? '0' : '7'};
   -webkit-filter: blur(${p => p.hideBalance ? 10 : 0}px);
 `
 
@@ -258,8 +262,8 @@ export const ActionItem = styled<{}, 'div'>('div')`
 `
 
 export const DisconnectWrapper = styled<{}, 'div'>('div')`
-  padding-top: 25px;
-  min-height: 226px;
+  padding-top: 35px;
+  min-height: 250px;
   text-align: center;
   max-width: 240px;
 `
@@ -294,7 +298,7 @@ export const InvalidCopy = styled(DisconnectCopy)`
 `
 
 export const InvalidWrapper = styled(DisconnectWrapper)`
-  min-width: 240px;
+  min-width: 255px;
 `
 
 export const BuyPromptWrapper = styled<{}, 'div'>('div')`
@@ -381,13 +385,13 @@ export const SelectedView = styled<{}, 'div'>('div')`
   border: 1px solid rgb(70, 70, 70);
   overflow-y: scroll;
   height: 170px;
-  width: 220px;
+  width: 235px;
   margin-left: 4px;
 `
 
 export const ListItem = styled<{}, 'div'>('div')`
   border-bottom: 1px solid rgb(70, 70, 70);
-  padding: 12px 5px;
+  padding: 10px 5px;
   overflow: auto;
 `
 
@@ -617,4 +621,40 @@ export const BuySellButton = styled(ConnectButton)`
   padding: 5px;
   margin: 5px 0px;
   background: ${p => p.isBuy ? '#3BB260': '#DD5353'};
+`
+
+export const AvailableLabel = styled<{}, 'span'>('span')`
+  float: right;
+  margin-top: -27px;
+  font-size: 13px;
+`
+
+export const ConvertInfoWrapper = styled<StyleProps, 'div'>('div')`
+  margin: 10px 0;
+  overflow-y: auto;
+`
+
+export const ConvertInfoItem = styled<StyleProps, 'div'>('div')`
+  margin: 5px 0;
+  overflow-y: auto;
+  margin-top: ${p => p.isLast? '15' : '5'}px;
+`
+
+export const ConvertLabel = styled<{}, 'span'>('span')`
+  float: left;
+  width: 45%;
+  text-align: left;
+  font-size: 15px;
+`
+
+export const ConvertValue = styled<{}, 'span'>('span')`
+  font-weight: bold;
+  float: right;
+  width: 55%;
+  text-align: right;
+  font-size: 15px;
+`
+
+export const StyledEmoji = styled<{}, 'div'>('div')`
+  margin: 10px 0px;
 `
