@@ -17,6 +17,7 @@ export const defaultState: NewTab.State = {
   showClock: false,
   showTopSites: false,
   showRewards: false,
+  showBinance: false,
   brandedWallpaperOptIn: false,
   isBrandedWallpaperNotificationDismissed: true,
   showEmptyPage: false,
@@ -49,7 +50,10 @@ export const defaultState: NewTab.State = {
     walletCreateFailed: false,
     walletCorrupted: false
   },
-  currentStackWidget: 'rewards'
+  currentStackWidget: 'rewards',
+  binanceState: {
+    userTLD: 'com'
+  }
 }
 
 if (chrome.extension.inIncognitoContext) {
@@ -98,7 +102,8 @@ export const debouncedSave = debounce<NewTab.State>((data: NewTab.State) => {
     const dataToSave = {
       showEmptyPage: data.showEmptyPage,
       rewardsState: data.rewardsState,
-      currentStackWidget: data.currentStackWidget
+      currentStackWidget: data.currentStackWidget,
+      binanceState: data.binanceState
     }
     window.localStorage.setItem(keyName, JSON.stringify(dataToSave))
   }

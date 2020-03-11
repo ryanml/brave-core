@@ -24,7 +24,9 @@ export const enum types {
   SET_INITIAL_REWARDS_DATA = '@@newtab/SET_INITIAL_REWARDS_DATA',
   SET_PRE_INITIAL_REWARDS_DATA = '@@newtab/SET_PRE_INITIAL_REWARDS_DATA',
   ON_WIDGET_POSITION_CHANGED = '@@newtab/ON_WIDGET_POSITION_CHANGED',
-  SET_CURRENT_STACK_WIDGET = '@@newtab/SET_CURRENT_STACK_WIDGET'
+  SET_CURRENT_STACK_WIDGET = '@@newtab/SET_CURRENT_STACK_WIDGET',
+  // Binance Widget
+  ON_BINANCE_USER_TLD = '@@newtab/ON_BINANCE_USER_TLD'
 }
 
 export type DismissBrandedWallpaperNotificationPayload = {

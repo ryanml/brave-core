@@ -85,3 +85,7 @@ export const onPromotionFinish = (result: NewTab.RewardsResult, promotion: NewTa
 export const setCurrentStackWidget = (widgetId: NewTab.StackWidget) => action(types.SET_CURRENT_STACK_WIDGET, {
   widgetId
 })
+
+export const onBinanceUserTLD = (userTLD: NewTab.BinanceTLD) => action(types.ON_BINANCE_USER_TLD, {
+  userTLD
+})

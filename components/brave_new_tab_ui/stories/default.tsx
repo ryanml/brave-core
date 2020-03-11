@@ -52,6 +52,7 @@ storiesOf('New Tab/Containers', module)
         saveShowTopSites={doNothing}
         saveShowStats={doNothing}
         saveShowRewards={doNothing}
+        saveShowBinance={doNothing}
         saveBrandedWallpaperOptIn={doNothing}
       />
     )
