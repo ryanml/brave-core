@@ -53,9 +53,9 @@ const defaultState: NewTab.State = {
     walletCreated: false,
     walletCreating: false,
     walletCreateFailed: false,
-    walletCorrupted: false,
-    currentStackWidget: 'rewards'
-  }
+    walletCorrupted: false
+  },
+  currentStackWidget: 'rewards'
 }
 
 if (chrome.extension.inIncognitoContext) {
@@ -73,7 +73,8 @@ const getPersistentData = (state: NewTab.State): NewTab.PersistentState => {
     gridSites: state.gridSites,
     showEmptyPage: state.showEmptyPage,
     bookmarks: state.bookmarks,
-    rewardsState: state.rewardsState
+    rewardsState: state.rewardsState,
+    currentStackWidget: state.currentStackWidget
   }
 
   return peristantState

@@ -15,7 +15,8 @@ import {
   ClockWidget as Clock,
   ListWidget as List,
   RewardsWidget as Rewards,
-  ExchangeWidget as Exchange
+  ExchangeWidget as Exchange,
+  WidgetStack
 } from '../../components/default'
 import * as Page from '../../components/default/page'
 import BrandedWallpaperLogo from '../../components/default/brandedWallpaper/logo'
@@ -24,6 +25,8 @@ import VisibilityTimer from '../../helpers/visibilityTimer'
 interface Props {
   newTabData: NewTab.State
   actions: any
+  // This will be removed when the first exchange widget is added
+  useTestingWidget?: boolean
   saveShowBackgroundImage: (value: boolean) => void
   saveShowClock: (value: boolean) => void
   saveShowTopSites: (value: boolean) => void
@@ -235,11 +238,20 @@ class NewTabPage extends React.Component<Props, State> {
     this.props.actions.setCurrentStackWidget(widgetId)
   }
 
-  renderCryptoContent () {
-    const { currentStackWidget } = this.props.newTabData
+  getCryptoContent () {
+    const { newTabData, useTestingWidget } = this.props
+    const { currentStackWidget } = newTabData
+
+    if (!useTestingWidget) {
+      return (
+        <>
+          {this.renderRewardsWidget(true)}
+        </>
+      )
+    }
 
     return (
-      <Page.GridItemRewards>
+      <>
         {
           currentStackWidget === 'rewards'
           ? <>
@@ -251,20 +263,32 @@ class NewTabPage extends React.Component<Props, State> {
               {this.renderBinanceWidget(true)}
             </>
         }
+      </>
+    )
+  }
+
+  renderCryptoContent () {
+    const { newTabData } = this.props
+    const { textDirection } = newTabData
+
+    return (
+      <Page.GridItemRewards>
+        <WidgetStack
+          menuPosition={'left'}
+          textDirection={textDirection}
+        >
+          {this.getCryptoContent()}
+        </WidgetStack>
       </Page.GridItemRewards>
     )
   }
 
   renderBinanceWidget (showContent: boolean) {
-    const { newTabData } = this.props
-
     return (
       <Exchange
         type={'binance'}
-        menuPosition={'left'}
-        textDirection={newTabData.textDirection}
         showContent={showContent}
-        onShowContent={this.toggleStackWidget.bind('binance')}
+        onShowContent={this.toggleStackWidget.bind(this, 'binance')}
       />
     )
   }
@@ -287,7 +311,7 @@ class NewTabPage extends React.Component<Props, State> {
       <Rewards
         {...rewardsState}
         showContent={showContent}
-        preventFocus={!rewardsWidgetOn}
+        onShowContent={this.toggleStackWidget.bind(this, 'rewards')}
         onCreateWallet={this.createWallet}
         onEnableAds={this.enableAds}
         onEnableRewards={this.enableRewards}
@@ -295,12 +319,9 @@ class NewTabPage extends React.Component<Props, State> {
         showBrandedWallpaperNotification={shouldShowBrandedWallpaperNotification}
         onDisableBrandedWallpaper={this.disableBrandedWallpaper}
         brandedWallpaperData={newTabData.brandedWallpaperData}
-        textDirection={newTabData.textDirection}
-        hideWidget={this.toggleShowRewards}
         isNotification={!rewardsWidgetOn}
         onDismissNotification={this.dismissNotification}
         onDismissBrandedWallpaperNotification={this.dismissBrandedWallpaperNotification}
-        menuPosition={'left'}
       />
     )  
   }
@@ -316,7 +337,7 @@ class NewTabPage extends React.Component<Props, State> {
     const hasImage = this.imageSource !== undefined
     const isShowingBrandedWallpaper = newTabData.brandedWallpaperData ? true : false
     const showTopSites = !!this.props.newTabData.gridSites.length && newTabData.showTopSites
-    const rewardsContent = this.renderRewardsContent()
+    const cryptoContent = this.renderCryptoContent()
 
     return (
       <Page.App dataIsReady={newTabData.initialDataLoaded}>
@@ -336,7 +357,7 @@ class NewTabPage extends React.Component<Props, State> {
         <Page.Page
             showClock={newTabData.showClock}
             showStats={newTabData.showStats}
-            showRewards={!!rewardsContent}
+            showRewards={!!cryptoContent}
             showTopSites={showTopSites}
             showBrandedWallpaper={isShowingBrandedWallpaper}
         >
@@ -394,7 +415,7 @@ class NewTabPage extends React.Component<Props, State> {
               </Page.GridItemNotification>
             : null
           }
-            {rewardsContent}
+            {cryptoContent}
           <Page.Footer>
             <Page.FooterContent>
             {isShowingBrandedWallpaper && newTabData.brandedWallpaperData &&

@@ -3,7 +3,6 @@
 * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import * as React from 'react'
-import createWidget from '../widget/index'
 import { convertBalance } from '../../../../brave_rewards/resources/page/utils'
 import { getLocale, splitStringForTag } from '../../../../common/locale'
 
@@ -56,6 +55,7 @@ export interface RewardsProps {
   showBrandedWallpaperNotification: boolean
   brandedWallpaperData?: NewTab.BrandedWallpaper
   showContent: boolean
+  onShowContent: () => void
   onCreateWallet: () => void
   onEnableAds: () => void
   onEnableRewards: () => void
@@ -69,7 +69,7 @@ const enum AmountItemType {
   TIPS = 1
 }
 
-class Rewards extends React.PureComponent<RewardsProps, {}> {
+export default class Rewards extends React.PureComponent<RewardsProps, {}> {
 
   getButtonText = (isAds: boolean = false) => {
     if (isAds) {
@@ -326,8 +326,10 @@ class Rewards extends React.PureComponent<RewardsProps, {}> {
   }
 
   renderTitleTab = () => {
+    const { onShowContent } = this.props
+
     return (
-      <StyledTitleTab>
+      <StyledTitleTab onClick={onShowContent}>
         {this.renderTitle()}
       </StyledTitleTab>
     )
@@ -395,5 +397,3 @@ class Rewards extends React.PureComponent<RewardsProps, {}> {
     )
   }
 }
-
-export const RewardsWidget = createWidget(Rewards)

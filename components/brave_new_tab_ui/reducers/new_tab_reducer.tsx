@@ -39,6 +39,7 @@ export const newTabReducer: Reducer<NewTab.State | undefined> = (state: NewTab.S
 
   const startingState = state
   const payload = action.payload
+
   switch (action.type) {
     case types.NEW_TAB_SET_INITIAL_DATA:
       const initialDataPayload = payload as InitialData
@@ -466,7 +467,8 @@ export const newTabReducer: Reducer<NewTab.State | undefined> = (state: NewTab.S
       break
 
     case types.SET_CURRENT_STACK_WIDGET:
-      const widgetId: NewTab.StackWidget = { payload }
+      const widgetId: NewTab.StackWidget = payload.widgetId
+
       state = {
         ...state,
         currentStackWidget: widgetId

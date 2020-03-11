@@ -62,5 +62,5 @@ export const getNewTabData = (state: NewTab.State) => ({
     httpsUpgradesStat: number('Number of HTTPS upgrades', 1337)
   },
   initialDataLoaded: true,
-  currentStackWidget: 'rewards'
+  currentStackWidget: 'rewards' as NewTab.StackWidget
 })

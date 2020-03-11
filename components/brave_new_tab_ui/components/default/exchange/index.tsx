@@ -3,7 +3,28 @@
 * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import * as React from 'react'
-import createWidget from '../widget/index'
+import {
+  StyledTitleTab,
+  WidgetWrapper,
+  Content,
+  Copy,
+  BuyPromptWrapper,
+  FiatInputWrapper,
+  FiatInputField,
+  FiatDropdown,
+  FiatDropdownLabel,
+  CaratDropdown,
+  AssetDropdown,
+  AssetDropdownLabel,
+  ActionsWrapper,
+  ConnectButton,
+  Header,
+  StyledTitle,
+  BinanceIcon,
+  StyledTitleText
+} from './style'
+import BinanceLogo from './assets/binance-logo'
+import { CaratDownIcon } from 'brave-ui/components/icons'
 
 export type ExchangeType = 'binance'
 
@@ -13,29 +34,88 @@ export interface ExchangeProps {
   onShowContent: () => void
 }
 
-class Exchange extends React.PureComponent<ExchangeProps, {}> {
+export default class Exchange extends React.PureComponent<ExchangeProps, {}> {
 
   renderTitle () {
-    return null
+    const { showContent } = this.props
+
+    return (
+      <Header isInTab={!showContent}>
+        <StyledTitle>
+          <BinanceIcon>
+            <BinanceLogo />
+          </BinanceIcon>
+          <StyledTitleText>
+            {'Binance'}
+          </StyledTitleText>
+        </StyledTitle>
+      </Header>
+    )
   }
 
   renderTitleTab () {
-    return null
+    const { showContent, onShowContent } = this.props
+
+    return (
+      <StyledTitleTab isInTab={!showContent} onClick={onShowContent}>
+        {this.renderTitle()}
+      </StyledTitleTab>
+    )
   }
 
   renderBuyView () {
-    return null
+    return (
+      <>
+        <Content>
+          <Copy>
+            {'Buy Crypto'}
+          </Copy>
+          <BuyPromptWrapper>
+            <FiatInputWrapper>
+              <FiatInputField
+                type={'text'}
+                placeholder={'I want to spend...'}
+              />
+              <FiatDropdown>
+                <FiatDropdownLabel>
+                  {'USD'}
+                </FiatDropdownLabel>
+                <CaratDropdown>
+                  <CaratDownIcon />
+                </CaratDropdown>
+              </FiatDropdown>
+            </FiatInputWrapper>
+            <AssetDropdown itemsShowing={false}>
+              <AssetDropdownLabel>
+                {'BTC'}
+              </AssetDropdownLabel>
+              <CaratDropdown>
+                <CaratDownIcon />
+              </CaratDropdown>
+            </AssetDropdown>
+          </BuyPromptWrapper>
+          <ActionsWrapper>
+            <ConnectButton>
+              {'Buy BTC'}
+            </ConnectButton>
+          </ActionsWrapper>
+        </Content>
+      </>
+    )
   }
 
   render () {
-    const { type, showContent } = this.props
+    const { showContent } = this.props
 
     if (!showContent) {
       return this.renderTitleTab()
     }
 
-    return this.renderBuyView()
+    return (
+      <WidgetWrapper>
+        {this.renderTitle()}
+        {this.renderBuyView()}
+      </WidgetWrapper>
+    )
   }
 }
-
-export const ExchangeWidget = createWidget(Exchange)
