@@ -33,6 +33,7 @@
 
 // https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md
 GURL BinanceController::api_endpoint_("https://api.binance.com");
+GURL BinanceController::oauth_endpoint("https://accounts.binance.com");
 
 namespace {
 
@@ -146,7 +147,7 @@ void BinanceController::ConnectViaOauth () {
 }
 */
 
-std::string GetClientID () {
+std::string BinanceController::GetClientID () {
   return client_id;
 }
 

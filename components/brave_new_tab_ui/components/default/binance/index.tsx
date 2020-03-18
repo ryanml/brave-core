@@ -222,6 +222,8 @@ class Binance extends React.PureComponent<Props, State> {
       this.fetchBalance()
     }
 
+    console.log(window.location.search)
+
     chrome.binance.getUserTLD((userTLD: NewTab.BinanceTLD) => {
       this.props.onBinanceUserTLD(userTLD)
     })
@@ -295,7 +297,8 @@ class Binance extends React.PureComponent<Props, State> {
   }
 
   connectBinance = () => {
-
+    const { binanceClientId } = this.props
+    window.open(`https://accounts.binance.com/en/oauth/authorize?response_type=code&client_id=${binanceClientId}&redirect_uri=chrome://wallet&scope=user:email,user:address`, '_blank')
   }
 
   cancelDisconnect = () => {

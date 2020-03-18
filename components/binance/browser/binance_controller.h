@@ -68,6 +68,7 @@ class BinanceController {
 
  private:
   static GURL api_endpoint_;
+  static GURL oauth_endpoint;
   using SimpleURLLoaderList =
       std::list<std::unique_ptr<network::SimpleURLLoader>>;
 
