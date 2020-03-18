@@ -127,6 +127,7 @@ declare namespace NewTab {
     validationInProgress: boolean
     btcPrice: string
     btcVolume: string
+    binanceClientId: string
   }
 
   export type BinanceTLD = 'us' | 'com'

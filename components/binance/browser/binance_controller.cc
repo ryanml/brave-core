@@ -41,6 +41,8 @@ const std::vector<std::string> public_endpoints = {
   api_path_ticker_volume
 };
 
+const std::string client_id = "Fx5sIiTEI5";
+
 const unsigned int kRetriesCountOnNetworkChange = 1;
 net::NetworkTrafficAnnotationTag GetNetworkTrafficAnnotationTag() {
   return net::DefineNetworkTrafficAnnotation("binance_controller", R"(
@@ -136,6 +138,19 @@ bool BinanceController::IsPublicEndpoint(
   }
   return false;
 }
+
+/*
+void BinanceController::ConnectViaOauth () {
+  // To do, this needs to be an env var
+  const std::string client_secret = "";
+}
+*/
+
+std::string GetClientID () {
+  return client_id;
+}
+
+// bool BinanceController::OAuthRequest() {}
 
 /**
  * Performs a URL Request to a Binance API endpoint

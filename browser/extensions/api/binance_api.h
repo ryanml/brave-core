@@ -85,6 +85,16 @@ class BinanceGetTickerVolumeFunction :
   ResponseAction Run() override;
 };
 
+class BinanceGetClientIdFunction :
+    public ExtensionFunction {
+ public:
+  DECLARE_EXTENSION_FUNCTION("binance.getClientId", UNKNOWN)
+
+ protected:
+  ~BinanceGetClientIdFunction() override {}
+  ResponseAction Run() override;
+};
+
 }  // namespace api
 }  // namespace extensions
 

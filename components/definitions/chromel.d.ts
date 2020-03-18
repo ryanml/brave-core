@@ -159,6 +159,7 @@ declare namespace chrome.binance {
   const getTickerPrice: (symbolPair: string, callback: (symbolPairValue: string) => void) => {}
   const getTickerVolume: (symbolPair: string, callback: (symbolPairVolume: string) => void) => {}
   const validateAPIKey: (callback: (status: number, unauthorized: boolean) => void) => {}
+  const getClientId: (callback: (clientId: string) => void) => {}
 }
 
 declare namespace chrome.rewardsNotifications {

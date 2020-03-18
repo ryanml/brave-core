@@ -126,6 +126,23 @@
             ]
           }
         ]
+      },
+      {
+        "name": "getClientId",
+        "type": "function",
+        "description": "Fetches the Oauth Id for Binance",
+        "parameters": [
+          {
+            "type": "function",
+            "name": "callback",
+            "parameters": [
+              {
+                "name": "clientId",
+                "type": "string"
+              }
+            ]
+          }
+        ]
       }
     ],
     "types": [

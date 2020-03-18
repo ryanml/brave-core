@@ -152,7 +152,7 @@ interface Props {
   assetBTCVolumes: Record<string, string>
   btcPrice: string
   btcVolume: string
-  connectBinance: () => void
+  binanceClientId: string
   onBuyCrypto: (coin: string, amount: string) => void
   onBinanceDetails: () => void
   onBinanceDeposit: () => void
@@ -161,6 +161,7 @@ interface Props {
   onGenerateNewKey: () => void
   onBinanceBalances: (balances: Record<string, string>) => void
   onBinanceUserTLD: (userTLD: NewTab.BinanceTLD) => void
+  onBinanceClientId: (clientId: string) => void
   onBTCUSDPrice: (value: string) => void
   onBTCUSDVolume: (volume: string) => void
   onAssetBTCVolume: (ticker: string, volume: string) => void
@@ -224,6 +225,11 @@ class Binance extends React.PureComponent<Props, State> {
     chrome.binance.getUserTLD((userTLD: NewTab.BinanceTLD) => {
       this.props.onBinanceUserTLD(userTLD)
     })
+
+    chrome.binance.getClientId((clientId: string) => {
+      console.log('receiving client id', clientId)
+      this.props.onBinanceClientId(clientId)
+    })
   }
 
   componentDidUpdate (prevProps: Props) {
@@ -286,6 +292,10 @@ class Binance extends React.PureComponent<Props, State> {
     this.setState({
       disconnectInProgress: true
     })
+  }
+
+  connectBinance = () => {
+
   }
 
   cancelDisconnect = () => {
@@ -504,7 +514,7 @@ class Binance extends React.PureComponent<Props, State> {
         <InvalidCopy>
           {getLocale('binanceWidgetInvalidText')}
         </InvalidCopy>
-        <GenButton onClick={this.props.connectBinance}>
+        <GenButton onClick={this.connectBinance}>
           {getLocale('binanceWidgetConfigureButton')}
         </GenButton>
       </InvalidWrapper>
@@ -1192,7 +1202,7 @@ class Binance extends React.PureComponent<Props, State> {
   
   render () {
     const { currentTradeAsset, selectedView, showConvertPreview, insufficientFunds, convertSuccess } = this.state
-    const { userAuthed, authInProgress, apiCredsInvalid, connectBinance } = this.props 
+    const { userAuthed, authInProgress, apiCredsInvalid } = this.props 
 
     if (currentTradeAsset) {
       return (
@@ -1254,7 +1264,7 @@ class Binance extends React.PureComponent<Props, State> {
                 </ActionItem>
               </ActionTray>
             : !userAuthed && !authInProgress
-              ? <ConnectPrompt onClick={connectBinance}>
+              ? <ConnectPrompt onClick={this.connectBinance}>
                   {'Connect'}
                 </ConnectPrompt>
               : null

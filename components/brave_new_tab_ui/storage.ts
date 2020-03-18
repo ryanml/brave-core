@@ -70,7 +70,8 @@ export const defaultState: NewTab.State = {
     apiCredsInvalid: false,
     validationInProgress: false,
     btcPrice: '0.00',
-    btcVolume: '0'
+    btcVolume: '0',
+    binanceClientId: ''
   }
 }
 
@@ -90,11 +91,8 @@ const getPersistentData = (state: NewTab.State): NewTab.PersistentState => {
     showEmptyPage: state.showEmptyPage,
     bookmarks: state.bookmarks,
     rewardsState: state.rewardsState,
-<<<<<<< HEAD
-    currentStackWidget: state.currentStackWidget
-=======
+    currentStackWidget: state.currentStackWidget,
     binanceState: state.binanceState
->>>>>>> Binance Widget Prototyping
   }
 
   return peristantState

@@ -59,6 +59,7 @@ class BinanceController {
       GetTickerVolumeCallback callback);
   bool SetAPIKey(const std::string& api_key, const std::string& secret_key);
   std::string GetBinanceTLD();
+  std::string GetClientID();
 
   static bool IsPublicEndpoint(const std::string& endpoint);
   static void SetAPIEndPointForTest(const GURL& api_endpoint) {

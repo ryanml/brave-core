@@ -178,5 +178,19 @@ void BinanceGetTickerVolumeFunction::OnGetTickerVolume(
   Respond(OneArgument(std::make_unique<base::Value>(symbol_pair_volume)));
 }
 
+ExtensionFunction::ResponseAction
+BinanceGetClientIdFunction::Run() {
+  Profile* profile = Profile::FromBrowserContext(browser_context());
+  if (brave::IsTorProfile(profile)) {
+    return RespondNow(Error("Not available in Tor profile"));
+  }
+
+  auto* controller = GetBinanceController(browser_context());
+  const std::string client_id = controller->GetClientID();
+
+  return RespondNow(OneArgument(
+      std::make_unique<base::Value>(client_id)));
+}
+
 }  // namespace api
 }  // namespace extensions

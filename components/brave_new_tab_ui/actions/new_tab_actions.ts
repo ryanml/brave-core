@@ -184,3 +184,7 @@ export const onAssetUSDPrice = (ticker: string, price: string) => action(types.O
   ticker,
   price
 })
+
+export const onBinanceClientId = (clientId: string) => action(types.ON_BINANCE_CLIENT_ID, {
+  clientId
+})

@@ -211,10 +211,6 @@ class NewTabPage extends React.Component<Props, State> {
     )
   }
 
-  connectBinance = () => {
-    this.props.actions.connectToBinance()
-  }
-
   onApiKeysInvalid = () => {
     // this.props.actions.onApiKeysInvalid()
   }
@@ -261,6 +257,10 @@ class NewTabPage extends React.Component<Props, State> {
 
   onBinanceUserTLD = (userTLD: NewTab.BinanceTLD) => {
     this.props.actions.onBinanceUserTLD(userTLD)
+  }
+
+  onBinanceClientId = (clientId: string) => {
+    this.props.actions.onBinanceClientId(clientId)
   }
 
   openBinanceUrl = (route: string, coin: string | null = null, amount: string | null = null) => {
@@ -371,7 +371,6 @@ class NewTabPage extends React.Component<Props, State> {
           {...newTabData.binanceState}
           menuPosition={'left'}
           onBuyCrypto={this.buyCrypto}
-          connectBinance={this.connectBinance}
           onBinanceDetails={this.binanceDetails}
           onBinanceDeposit={this.depositBinance}
           onBinanceTrade={this.tradeBinance}
@@ -379,6 +378,7 @@ class NewTabPage extends React.Component<Props, State> {
           onGenerateNewKey={this.generateNewKey}
           onBinanceBalances={this.setBinanceBalances}
           onBinanceUserTLD={this.onBinanceUserTLD}
+          onBinanceClientId={this.onBinanceClientId}
           onBTCUSDPrice={this.setBTCUSDPrice}
           onBTCUSDVolume={this.setBTCUSDVolume}
           onSetApiKeys={this.setApiKeys}

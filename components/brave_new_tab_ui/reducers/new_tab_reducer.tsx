@@ -477,13 +477,6 @@ export const newTabReducer: Reducer<NewTab.State | undefined> = (state: NewTab.S
 
       break
 
-    case types.CONNECT_TO_BINANCE:
-      state = { ...state }
-      state.binanceState.userAuthed = true
-      state.binanceState.authInProgress = false
-      state.binanceState.validationInProgress = false
-      break
-
     case types.SET_HIDE_BALANCE:
       state = { ...state }
       state.binanceState.hideBalance = payload.hide
@@ -588,6 +581,11 @@ export const newTabReducer: Reducer<NewTab.State | undefined> = (state: NewTab.S
     case types.ON_API_KEYS_INVALID:
       state = { ...state }
       state.binanceState.apiCredsInvalid = true
+      break
+
+    case types.ON_BINANCE_CLIENT_ID:
+      state = { ...state }
+      state.binanceState.binanceClientId = payload.clientId
       break
 
     default:
