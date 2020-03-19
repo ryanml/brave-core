@@ -21,7 +21,9 @@ import {
   BinanceIcon,
   StyledTitleText,
   AssetItems,
-  AssetItem
+  AssetItem,
+  TLDSwitchWrapper,
+  TLDSwitch
 } from './style'
 import { StyledTitleTab } from '../widgetTitleTab'
 import currencyData from './data'
@@ -64,15 +66,6 @@ export default class Binance extends React.PureComponent<Props, State> {
     this.comCurrencies = currencyData.comCurrencies
   }
 
-  componentDidMount () {
-    // Storybook
-    if (chrome.hasOwnProperty('binance')) {
-      chrome.binance.getUserTLD((userTLD: NewTab.BinanceTLD) => {
-        this.props.onBinanceUserTLD(userTLD)
-      })
-    }
-  }
-
   setInitialAsset (asset: string) {
     this.setState({
       initialAsset: asset,
@@ -111,6 +104,12 @@ export default class Binance extends React.PureComponent<Props, State> {
     }
 
     this.setState({ initialAmount: e.target.value })
+  }
+
+  toggleTLD = () => {
+    const { userTLD } = this.props
+    const newTLD = userTLD === 'com' ? 'us' : 'com'
+    this.props.onBinanceUserTLD(newTLD)
   }
 
   renderTitle () {
@@ -155,6 +154,20 @@ export default class Binance extends React.PureComponent<Props, State> {
         <Copy>
           {getLocale('binanceWidgetBuyCrypto')}
         </Copy>
+        <TLDSwitchWrapper>
+          <TLDSwitch
+            onClick={this.toggleTLD}
+            isActive={userTLD === 'com'}
+          >
+            {'.com'}
+          </TLDSwitch>
+          <TLDSwitch
+            onClick={this.toggleTLD}
+            isActive={userTLD === 'us'}
+          >
+            {'.us'}
+          </TLDSwitch>
+        </TLDSwitchWrapper>
         <BuyPromptWrapper>
           <FiatInputWrapper>
             <FiatInputField

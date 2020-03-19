@@ -12,6 +12,7 @@ interface StyleProps {
   isLast?: boolean
   disabled?: boolean
   isFiat?: boolean
+  isActive?: boolean
 }
 
 export const WidgetWrapper = styled<{}, 'div'>('div')`
@@ -182,4 +183,18 @@ export const StyledTitle = styled<{}, 'div'>('div')`
 
 export const StyledTitleText = styled<{}, 'div'>('div')`
   margin-top: 4px;
+`
+
+export const TLDSwitchWrapper = styled<StyleProps, 'div'>('div')`
+  float: right;
+  margin-top: -25px;
+`
+
+export const TLDSwitch = styled<StyleProps, 'div'>('div')`
+  font-size: 13px;
+  font-weight: bold;
+  display: inline-block;
+  margin-left: 10px;
+  cursor: pointer;
+  color: ${p => p.isActive ? '#F2C101' : '#9D7B01'};
 `
