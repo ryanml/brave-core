@@ -78,7 +78,7 @@ import { getLocale } from '../../../../common/locale'
 import searchIcon from './assets/search-icon.png'
 import partyIcon from './assets/party.png'
 import qrIcon from './assets/qr.png'
-import geminiLogo from './assets/gemini-logo.png'
+import geminiLogo from './assets/gemini-logo-two.png'
 
 interface State {
   fiatShowing: boolean
@@ -193,7 +193,6 @@ class Gemini extends React.PureComponent<Props, State> {
       'BTC': 'Bitcoin',
       'ETH': 'Ethereum',
       'XRP': 'Ripple',
-      'BNB': 'Binance Coin',
       'BCH': 'Bitcoin Cash',
       'BUSD': 'US Dollar',
       'LINK': 'Chainlink',
@@ -282,6 +281,7 @@ class Gemini extends React.PureComponent<Props, State> {
   connectGemini = () => {
     setTimeout(() => {
       this.setState({ userHasAuthed: true })
+      this.props.onSetSelectedView('deposit')
       this.props.onValidAuthCode()
     }, 1500)
   }
@@ -956,9 +956,9 @@ class Gemini extends React.PureComponent<Props, State> {
         {currencyList.map((asset: string) => {
           // Initial migration display
           const accountBalances = {
-            'BTC': '1.512',
-            'ETH': '10.52',
-            'XRP': '0',
+            'BTC': '1.012',
+            'ETH': '9.52',
+            'XRP': '20',
             'BCH': '0',
             'LTC': '0',
             'BAT': '0',

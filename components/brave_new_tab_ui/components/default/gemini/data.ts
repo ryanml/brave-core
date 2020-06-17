@@ -44,18 +44,18 @@ export default {
     'BTC',
     'ETH',
     'XRP',
-    'BCH',
     'LTC',
     'LINK',
+    'BCH',
     'BAT'
   ],
   comCurrencies: [
     'BTC',
     'ETH',
     'XRP',
-    'BCH',
     'LTC',
     'LINK',
+    'BCH',
     'BAT'
   ],
   cryptoColors: {

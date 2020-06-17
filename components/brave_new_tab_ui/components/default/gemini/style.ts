@@ -205,7 +205,7 @@ export const ActionButton = styled<{}, 'button'>('button')`
   font-weight: bold;
   border-radius: 20px;
   width: 100%;
-  background: #D9B227;
+  background: #7CDDF9;
   border: 0;
   padding: 10px 60px;
   cursor: pointer;

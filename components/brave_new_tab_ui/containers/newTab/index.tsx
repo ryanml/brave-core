@@ -35,7 +35,7 @@ import * as gridSitesActions from '../../actions/grid_sites_actions'
 import * as binanceActions from '../../actions/binance_actions'
 import * as rewardsActions from '../../actions/rewards_actions'
 import { getLocale } from '../../../common/locale'
-import currencyData from '../../components/default/binance/data'
+// import currencyData from '../../components/default/binance/data'
 
 // NTP features
 import Settings from './settings'
@@ -424,6 +424,7 @@ class NewTabPage extends React.Component<Props, State> {
   }
 
   getCurrencyList = () => {
+    /*
     const { accountBalances, userTLD } = this.props.newTabData.binanceState
     const { usCurrencies, comCurrencies } = currencyData
     const baseList = userTLD === 'us' ? usCurrencies : comCurrencies
@@ -436,8 +437,16 @@ class NewTabPage extends React.Component<Props, State> {
     const nonHoldingList = baseList.filter((symbol: string) => {
       return !accounts.includes(symbol)
     })
-
-    return accounts.concat(nonHoldingList)
+    */
+    return [
+      'BTC',
+      'ETH',
+      'XRP',
+      'LTC',
+      'LINK',
+      'BCH',
+      'BAT'
+    ]
   }
 
   getConvertAssets = () => {

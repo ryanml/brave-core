@@ -76,7 +76,7 @@ class MoreCardsSettings extends React.PureComponent<Props, {}> {
       toggleShowBinance,
       showBinance,
       toggleShowTogether,
-      showTogether,
+      // showTogether,
       toggleShowRewards,
       showRewards,
       togetherSupported,
@@ -98,7 +98,7 @@ class MoreCardsSettings extends React.PureComponent<Props, {}> {
                   {getLocale('togetherWidgetWelcomeTitle')}
                 </StyledSettingsCopy>
               </StyledSettingsInfo>
-              {this.renderActionButton(showTogether, toggleShowTogether)}
+              {this.renderActionButton(false, toggleShowTogether)}
             </FeaturedSettingsWidget>
           : null
         }
