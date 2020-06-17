@@ -19,6 +19,7 @@ export const defaultState: NewTab.State = {
   showRewards: false,
   showTogether: false,
   showBinance: false,
+  showGemini: false,
   brandedWallpaperOptIn: false,
   isBrandedWallpaperNotificationDismissed: true,
   showEmptyPage: false,
@@ -58,7 +59,7 @@ export const defaultState: NewTab.State = {
   currentStackWidget: '',
   removedStackWidgets: [],
   // Order is ascending, with last entry being in the foreground
-  widgetStackOrder: ['together', 'binance', 'rewards'],
+  widgetStackOrder: ['together', 'binance', 'gemini', 'rewards'],
   binanceState: {
     userTLD: 'com',
     initialFiat: 'USD',

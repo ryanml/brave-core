@@ -58,6 +58,10 @@ export function saveShowBinance (value: boolean): void {
   sendSavePref('showBinance', value)
 }
 
+export function saveShowGemini (value: boolean): void {
+  sendSavePref('showGemini', value)
+}
+
 export function saveBrandedWallpaperOptIn (value: boolean): void {
   sendSavePref('brandedWallpaperOptIn', value)
 }
