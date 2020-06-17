@@ -16,7 +16,8 @@ import {
   RewardsWidget as Rewards,
   TogetherWidget as Together,
   BinanceWidget as Binance,
-  AddCardWidget as AddCard
+  AddCardWidget as AddCard,
+  GeminiWidget as Gemini
 } from '../../components/default'
 import * as Page from '../../components/default/page'
 import BrandedWallpaperLogo from '../../components/default/brandedWallpaper/logo'
@@ -50,6 +51,7 @@ interface Props {
   saveShowRewards: (value: boolean) => void
   saveShowTogether: (value: boolean) => void
   saveShowBinance: (value: boolean) => void
+  saveShowGemini: (value: boolean) => void
   saveBrandedWallpaperOptIn: (value: boolean) => void
 }
 
@@ -256,6 +258,18 @@ class NewTabPage extends React.Component<Props, State> {
         this.disconnectBinance()
       })
     }
+  }
+
+  toggleShowGemini = () => {
+    const { showGemini } = this.props.newTabData
+
+    if (showGemini) {
+      this.removeStackWidget('gemini')
+    } else {
+      this.setForegroundStackWidget('gemini')
+    }
+
+    this.props.saveShowGemini(!showGemini)
   }
 
   onBinanceClientUrl = (clientUrl: string) => {
@@ -506,7 +520,7 @@ class NewTabPage extends React.Component<Props, State> {
   }
 
   getCryptoContent () {
-    const { widgetStackOrder, binanceState, togetherSupported, showRewards, newWidgetNotifications } = this.props.newTabData
+    const { widgetStackOrder, binanceState, togetherSupported, showRewards, newWidgetNotifications, showGemini } = this.props.newTabData
     const lookup = {
       'rewards': {
         supported: showRewards,
@@ -519,6 +533,10 @@ class NewTabPage extends React.Component<Props, State> {
       'together': {
         supported: togetherSupported && !newWidgetNotifications.includes('together'),
         render: this.renderTogetherWidget.bind(this)
+      },
+      'gemini': {
+        supported: showGemini,
+        render: this.renderGeminiWidget.bind(this)
       }
     }
     const widgetList = widgetStackOrder.filter((widget: NewTab.StackWidget) => lookup[widget].supported)
@@ -675,6 +693,54 @@ class NewTabPage extends React.Component<Props, State> {
         onBuyCrypto={this.buyCrypto}
         onBinanceUserTLD={this.onBinanceUserTLD}
         onShowContent={this.setForegroundStackWidget.bind(this, 'binance')}
+        onSetInitialAmount={this.setInitialAmount}
+        onSetInitialAsset={this.setInitialAsset}
+        onSetInitialFiat={this.setInitialFiat}
+        onSetUserTLDAutoSet={this.setUserTLDAutoSet}
+        onUpdateActions={this.updateActions}
+        onDismissAuthInvalid={this.dismissAuthInvalid}
+        onSetSelectedView={this.setSelectedView}
+        getCurrencyList={this.getCurrencyList}
+      />
+    )
+  }
+
+  renderGeminiWidget (showContent: boolean) {
+    const { newTabData } = this.props
+    const { binanceState, showGemini, textDirection } = newTabData
+    const menuActions = { onLearnMore: this.learnMoreBinance }
+
+    if (!showGemini) {
+      return null
+    }
+
+    if (binanceState.userAuthed) {
+      menuActions['onDisconnect'] = this.setDisconnectInProgress
+      menuActions['onRefreshData'] = this.updateActions
+    }
+
+    return (
+      <Gemini
+        {...menuActions}
+        {...binanceState}
+        isCrypto={true}
+        isCryptoTab={!showContent}
+        menuPosition={'left'}
+        widgetTitle={'Gemini'}
+        textDirection={textDirection}
+        preventFocus={false}
+        hideWidget={this.toggleShowGemini}
+        onDisableWidget={this.toggleShowGemini}
+        showContent={showContent}
+        onSetHideBalance={this.setHideBalance}
+        onBinanceClientUrl={this.onBinanceClientUrl}
+        onConnectBinance={this.connectBinance}
+        onDisconnectBinance={this.disconnectBinance}
+        onCancelDisconnect={this.cancelDisconnect}
+        onValidAuthCode={this.onValidAuthCode}
+        onBuyCrypto={this.buyCrypto}
+        onBinanceUserTLD={this.onBinanceUserTLD}
+        onShowContent={this.setForegroundStackWidget.bind(this, 'gemini')}
         onSetInitialAmount={this.setInitialAmount}
         onSetInitialAsset={this.setInitialAsset}
         onSetInitialFiat={this.setInitialFiat}

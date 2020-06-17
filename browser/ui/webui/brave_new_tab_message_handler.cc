@@ -92,6 +92,9 @@ base::DictionaryValue GetPreferencesDictionary(PrefService* prefs) {
       "showBinance",
       prefs->GetBoolean(kNewTabPageShowBinance));
   pref_data.SetBoolean(
+      "showGemini",
+      prefs->GetBoolean(kNewTabPageShowGemini));
+  pref_data.SetBoolean(
       "showTogether",
       prefs->GetBoolean(kNewTabPageShowTogether));
   return pref_data;
@@ -249,6 +252,9 @@ void BraveNewTabMessageHandler::OnJavascriptAllowed() {
   pref_change_registrar_.Add(kNewTabPageShowBinance,
     base::Bind(&BraveNewTabMessageHandler::OnPreferencesChanged,
     base::Unretained(this)));
+  pref_change_registrar_.Add(kNewTabPageShowGemini,
+    base::Bind(&BraveNewTabMessageHandler::OnPreferencesChanged,
+    base::Unretained(this)));
   pref_change_registrar_.Add(kNewTabPageShowTogether,
     base::Bind(&BraveNewTabMessageHandler::OnPreferencesChanged,
     base::Unretained(this)));
@@ -323,6 +329,8 @@ void BraveNewTabMessageHandler::HandleSaveNewTabPagePref(
     settingsKey = kBrandedWallpaperNotificationDismissed;
   } else if (settingsKeyInput == "showBinance") {
     settingsKey = kNewTabPageShowBinance;
+  } else if (settingsKeyInput == "showGemini") {
+    settingsKey = kNewTabPageShowGemini;
   } else if (settingsKeyInput == "showTogether") {
     settingsKey = kNewTabPageShowTogether;
   } else {

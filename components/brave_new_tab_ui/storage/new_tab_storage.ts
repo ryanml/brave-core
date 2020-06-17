@@ -8,7 +8,7 @@ import { debounce } from '../../common/debounce'
 
 export const keyName = 'new-tab-data'
 const stackWidgetList: NewTab.StackWidget[] = [
-  'together', 'binance', 'rewards'
+  'together', 'binance', 'gemini', 'rewards'
 ]
 
 export const defaultState: NewTab.State = {
@@ -22,6 +22,7 @@ export const defaultState: NewTab.State = {
   showRewards: false,
   showTogether: false,
   showBinance: false,
+  showGemini: false,
   brandedWallpaperOptIn: false,
   isBrandedWallpaperNotificationDismissed: true,
   showEmptyPage: false,
