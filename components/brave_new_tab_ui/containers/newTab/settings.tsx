@@ -47,6 +47,7 @@ export interface Props {
   toggleShowRewards: () => void
   toggleShowTogether: () => void
   toggleShowBinance: () => void
+  toggleShowGemini: () => void
   toggleBrandedWallpaperOptIn: () => void
   showBackgroundImage: boolean
   showStats: boolean
@@ -60,6 +61,7 @@ export interface Props {
   binanceSupported: boolean
   togetherSupported: boolean
   focusMoreCards: boolean
+  showGemini: boolean
   widgetSlotsFull: boolean
 }
 
@@ -169,6 +171,8 @@ export default class Settings extends React.PureComponent<Props, State> {
       showBinance,
       binanceSupported,
       togetherSupported,
+      toggleShowGemini,
+      showGemini,
       widgetSlotsFull
     } = this.props
     const { activeTab } = this.state
@@ -257,6 +261,8 @@ export default class Settings extends React.PureComponent<Props, State> {
                   activeTab === 4
                     ? (
                       <MoreCardsSettings
+                        toggleShowGemini={toggleShowGemini}
+                        showGemini={showGemini}
                         toggleShowBinance={toggleShowBinance}
                         showBinance={showBinance}
                         binanceSupported={binanceSupported}

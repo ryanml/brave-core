@@ -995,12 +995,10 @@ class Gemini extends React.PureComponent<Props, State> {
       currentConvertFrom,
       currentConvertPrice,
       currentConvertFee,
-      currentConvertTransAmount,
       currentConvertExpiryTime
     } = this.state
     const displayConvertAmount = this.formatCryptoBalance(currentConvertAmount)
     const displayConvertFee = this.formatCryptoBalance(currentConvertFee)
-    const displayReceiveAmount = this.formatCryptoBalance(currentConvertTransAmount)
 
     return (
       <InvalidWrapper>

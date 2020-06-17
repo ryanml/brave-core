@@ -881,6 +881,8 @@ class NewTabPage extends React.Component<Props, State> {
           toggleShowTogether={this.toggleShowTogether}
           showTogether={newTabData.showTogether}
           focusMoreCards={focusMoreCards}
+          showGemini={newTabData.showGemini}
+          toggleShowGemini={this.toggleShowGemini}
           widgetSlotsFull={widgetSlotsFull}
         />
       </Page.App>

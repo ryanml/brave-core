@@ -19,6 +19,7 @@ import {
 import togetherBanner from './assets/bravetogether.png'
 import binanceBanner from './assets/binance.png'
 import rewardsBanner from './assets/braverewards.png'
+import geminiBanner from './assets/gemini.png'
 import {
   ShowIcon,
   HideIcon
@@ -35,6 +36,8 @@ interface Props {
   toggleShowRewards: () => void
   showRewards: boolean
   togetherSupported: boolean
+  toggleShowGemini: () => void
+  showGemini: boolean
   widgetSlotsFull: boolean
 }
 
@@ -77,6 +80,8 @@ class MoreCardsSettings extends React.PureComponent<Props, {}> {
       toggleShowRewards,
       showRewards,
       togetherSupported,
+      toggleShowGemini,
+      showGemini,
       widgetSlotsFull
     } = this.props
     return (
@@ -97,6 +102,18 @@ class MoreCardsSettings extends React.PureComponent<Props, {}> {
             </FeaturedSettingsWidget>
           : null
         }
+        <SettingsWidget>
+          <StyledBannerImage src={geminiBanner} />
+          <StyledSettingsInfo>
+            <StyledSettingsTitle>
+              {'Gemini'}
+            </StyledSettingsTitle>
+            <StyledSettingsCopy>
+              {'Trade Crypto on Gemini directly in your browser.'}
+            </StyledSettingsCopy>
+          </StyledSettingsInfo>
+          {this.renderActionButton(showGemini, toggleShowGemini, false)}
+        </SettingsWidget>
         {
           binanceSupported
           ? <SettingsWidget>
@@ -106,7 +123,7 @@ class MoreCardsSettings extends React.PureComponent<Props, {}> {
                   {'Binance'}
                 </StyledSettingsTitle>
                 <StyledSettingsCopy>
-                  {'Trade Crypto directly in your browser.'}
+                  {'Trade Crypto on Binance directly in your browser.'}
                 </StyledSettingsCopy>
               </StyledSettingsInfo>
               {this.renderActionButton(showBinance, toggleShowBinance, false)}
