@@ -91,7 +91,8 @@ export const defaultState: NewTab.State = {
     geminiClientUrl: '',
     userAuthed: false,
     authInProgress: false,
-    tickerPrices: {}
+    tickerPrices: {},
+    selectedView: 'balance'
   }
 }
 

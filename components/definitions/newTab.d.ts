@@ -179,6 +179,7 @@ declare namespace NewTab {
     userAuthed: boolean
     authInProgress: boolean
     tickerPrices: Record<string, string>
+    selectedView: string
   }
 
   export type BinanceTLD = 'us' | 'com'
