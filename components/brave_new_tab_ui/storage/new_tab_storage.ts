@@ -90,7 +90,8 @@ export const defaultState: NewTab.State = {
   geminiState: {
     geminiClientUrl: '',
     userAuthed: false,
-    authInProgress: false
+    authInProgress: false,
+    tickerPrices: {}
   }
 }
 

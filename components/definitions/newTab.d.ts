@@ -178,6 +178,7 @@ declare namespace NewTab {
     geminiClientUrl: string
     userAuthed: boolean
     authInProgress: boolean
+    tickerPrices: Record<string, string>
   }
 
   export type BinanceTLD = 'us' | 'com'

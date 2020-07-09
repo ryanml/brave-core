@@ -35,6 +35,7 @@ import * as geminiActions from '../../actions/gemini_actions'
 import * as rewardsActions from '../../actions/rewards_actions'
 import { getLocale } from '../../../common/locale'
 import currencyData from '../../components/default/binance/data'
+import geminiCurrencies from '../../components/default/gemini/data'
 
 // NTP features
 import Settings from './settings'
@@ -420,9 +421,21 @@ class NewTabPage extends React.Component<Props, State> {
     this.props.actions.setSelectedView(view)
   }
 
-  updateActions = () => {
+  binanceUpdateActions = () => {
     this.fetchBalance()
     this.getConvertAssets()
+  }
+
+  geminiUpdateActions = () => {
+    this.fetchGeminiTickerPrices()
+  }
+
+  fetchGeminiTickerPrices = () => {
+    geminiCurrencies.map((asset: string) => {
+      chrome.gemini.getTickerPrice(`${asset}usd`, (price: string) => {
+        this.props.actions.setGeminiTickerPrice(asset, price)
+      })
+    })
   }
 
   getCurrencyList = () => {
@@ -625,7 +638,7 @@ class NewTabPage extends React.Component<Props, State> {
 
     if (binanceState.userAuthed) {
       menuActions['onDisconnect'] = this.setDisconnectInProgress
-      menuActions['onRefreshData'] = this.updateActions
+      menuActions['onRefreshData'] = this.binanceUpdateActions
     }
 
     return (
@@ -653,7 +666,7 @@ class NewTabPage extends React.Component<Props, State> {
         onSetInitialAsset={this.setInitialAsset}
         onSetInitialFiat={this.setInitialFiat}
         onSetUserTLDAutoSet={this.setUserTLDAutoSet}
-        onUpdateActions={this.updateActions}
+        onUpdateActions={this.binanceUpdateActions}
         onDismissAuthInvalid={this.dismissAuthInvalid}
         onSetSelectedView={this.setSelectedView}
         getCurrencyList={this.getCurrencyList}
@@ -685,6 +698,7 @@ class NewTabPage extends React.Component<Props, State> {
         onValidAuthCode={this.onValidGeminiAuthCode}
         onConnectGemini={this.connectGemini}
         onGeminiClientUrl={this.onGeminiClientUrl}
+        onUpdateActions={this.geminiUpdateActions}
       />
     )
   }
