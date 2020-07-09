@@ -180,6 +180,8 @@ declare namespace NewTab {
     authInProgress: boolean
     tickerPrices: Record<string, string>
     selectedView: string
+    assetAddresses: Record<string, string>
+    assetAddressQRCodes: Record<string, string>
   }
 
   export type BinanceTLD = 'us' | 'com'

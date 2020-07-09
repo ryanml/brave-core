@@ -92,7 +92,9 @@ export const defaultState: NewTab.State = {
     userAuthed: false,
     authInProgress: false,
     tickerPrices: {},
-    selectedView: 'balance'
+    selectedView: 'balance',
+    assetAddresses: {},
+    assetAddressQRCodes: {}
   }
 }
 
