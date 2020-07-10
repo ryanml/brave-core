@@ -94,7 +94,9 @@ export const defaultState: NewTab.State = {
     tickerPrices: {},
     selectedView: 'balance',
     assetAddresses: {},
-    assetAddressQRCodes: {}
+    assetAddressQRCodes: {},
+    hideBalance: true,
+    accountBalances: {}
   }
 }
 

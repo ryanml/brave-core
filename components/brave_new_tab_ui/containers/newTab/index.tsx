@@ -291,8 +291,12 @@ class NewTabPage extends React.Component<Props, State> {
     this.props.actions.onValidGeminiAuthCode()
   }
 
-  setHideBalance = (hide: boolean) => {
-    this.props.actions.setHideBalance(hide)
+  setBinanceHideBalance = (hide: boolean) => {
+    this.props.actions.setBinanceHideBalance(hide)
+  }
+
+  setGeminiHideBalance = (hide: boolean) => {
+    this.props.actions.setGeminiHideBalance(hide)
   }
 
   disconnectBinance = () => {
@@ -657,7 +661,7 @@ class NewTabPage extends React.Component<Props, State> {
         preventFocus={false}
         hideWidget={this.toggleShowBinance}
         showContent={showContent}
-        onSetHideBalance={this.setHideBalance}
+        onSetHideBalance={this.setBinanceHideBalance}
         onBinanceClientUrl={this.onBinanceClientUrl}
         onConnectBinance={this.connectBinance}
         onDisconnectBinance={this.disconnectBinance}
@@ -704,6 +708,7 @@ class NewTabPage extends React.Component<Props, State> {
         onGeminiClientUrl={this.onGeminiClientUrl}
         onUpdateActions={this.geminiUpdateActions}
         onSetSelectedView={this.setGeminiSelectedView}
+        onSetHideBalance={this.setGeminiHideBalance}
       />
     )
   }
