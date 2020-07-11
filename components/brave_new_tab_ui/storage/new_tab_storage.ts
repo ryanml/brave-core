@@ -96,7 +96,8 @@ export const defaultState: NewTab.State = {
     assetAddresses: {},
     assetAddressQRCodes: {},
     hideBalance: true,
-    accountBalances: {}
+    accountBalances: {},
+    disconnectInProgress: false
   }
 }
 
