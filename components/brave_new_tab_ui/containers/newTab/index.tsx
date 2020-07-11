@@ -417,6 +417,9 @@ class NewTabPage extends React.Component<Props, State> {
     this.props.actions.onDepositQRForAsset(asset, src)
   }
 
+  setGeminiAssetDepositQRCodeSrc = (asset: string, src: string) => {
+    this.props.actions.onGeminiDepositQRForAsset(asset, src)
+  }
   setConvertableAssets = (asset: string, assets: string[]) => {
     this.props.actions.onConvertableAssets(asset, assets)
   }
@@ -436,12 +439,33 @@ class NewTabPage extends React.Component<Props, State> {
 
   geminiUpdateActions = () => {
     this.fetchGeminiTickerPrices()
+    this.fetchGeminiBalances()
+    this.fetchGeminiDepositInfo()
   }
 
   fetchGeminiTickerPrices = () => {
     geminiData.currencies.map((asset: string) => {
       chrome.gemini.getTickerPrice(`${asset}usd`, (price: string) => {
         this.props.actions.setGeminiTickerPrice(asset, price)
+      })
+    })
+  }
+
+  fetchGeminiBalances = () => {
+    chrome.gemini.getAccountBalances((balances: Record<string, string>) => {
+      this.props.actions.setGeminiAccountBalances(balances)
+    })
+  }
+
+  fetchGeminiDepositInfo = () => {
+    geminiData.currencies.map((asset: string) => {
+      chrome.gemini.getDepositInfo(`${asset.toLowerCase()}`, (address: string) => {
+        if (!address) {
+          return
+        }
+
+        this.props.actions.setGeminiAssetAddress(asset, address)
+        generateQRData(address, asset, this.setGeminiAssetDepositQRCodeSrc)
       })
     })
   }
