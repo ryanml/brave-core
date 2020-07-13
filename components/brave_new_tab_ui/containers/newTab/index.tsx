@@ -450,6 +450,11 @@ class NewTabPage extends React.Component<Props, State> {
     this.props.actions.setGeminiSelectedView(view)
   }
 
+  setGeminiAuthInvalid = () => {
+    this.props.actions.setGeminiAuthInvalid(true)
+    this.props.actions.disconnectGemini()
+  }
+
   binanceUpdateActions = () => {
     this.fetchBalance()
     this.getConvertAssets()
@@ -470,7 +475,12 @@ class NewTabPage extends React.Component<Props, State> {
   }
 
   fetchGeminiBalances = () => {
-    chrome.gemini.getAccountBalances((balances: Record<string, string>) => {
+    chrome.gemini.getAccountBalances((balances: Record<string, string>, authInvalid: boolean) => {
+      if (authInvalid) {
+        this.setGeminiAuthInvalid()
+        return
+      }
+
       this.props.actions.setGeminiAccountBalances(balances)
     })
   }
@@ -552,6 +562,10 @@ class NewTabPage extends React.Component<Props, State> {
 
   dismissAuthInvalid = () => {
     this.props.actions.setAuthInvalid(false)
+  }
+
+  dismissGeminiAuthInvalid = () => {
+    this.props.actions.setGeminiAuthInvalid(false)
   }
 
   getCryptoContent () {
@@ -760,6 +774,7 @@ class NewTabPage extends React.Component<Props, State> {
         onSetHideBalance={this.setGeminiHideBalance}
         onCancelDisconnect={this.cancelGeminiDisconnect}
         onDisconnectGemini={this.disconnectGemini}
+        onDismissAuthInvalid={this.dismissGeminiAuthInvalid}
       />
     )
   }
