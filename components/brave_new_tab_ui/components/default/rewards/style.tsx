@@ -29,12 +29,13 @@ export const WidgetWrapper = styled(Base)`
       This makes sure that our layered notifications increase the height of the
       whole widget. Absolute positioning would not accomplish that. */
   display: grid;
-  background: ${palette.neutral900};
   border-radius: 6px;
+  background: rgba(59, 62, 79, 0.9);
+  backdrop-filter: blur(27px);
 `
 
 export const WidgetLayer = styled(Base)`
-  padding: 16px 22px 22px 22px;
+  padding: 16px 22px 16px 22px;
   grid-row: 1 / 2;
   grid-column: 1 / 2;
 `
@@ -73,7 +74,9 @@ export const ServiceLink = styled<{}, 'a'>('a')`
 
 export const LearnMoreText = styled<{}, 'div'>('div')`
   font-size: 12px;
-  margin-top: 34px;
+  line-height: 18px;
+  font-weight: 500;
+  font-family: Poppins, sans-serif;
 `
 
 export const Title = styled<{ isGrant?: boolean}, 'span'>('span')`
@@ -166,6 +169,11 @@ const CoinsButton: React.FunctionComponent<CoinsButtonProps> = ({ onClick, class
 export const TurnOnAdsButton = styled(Button as React.ComponentType<ButtonProps>)`
   margin: 15px 0;
   display: inline-block;
+  background: #737ADE;
+  font-size: 12px;
+  font-weight: 600;
+  border: none;
+  padding: 8px 17px;
 `
 
 export const StartRewardsButton = styled<{}, 'button'>('button')`
@@ -197,7 +205,7 @@ export const AmountItem = styled<StyleProps, 'div'>('div')`
 
 export const Amount = styled<{}, 'span'>('span')`
   font-size: 32px;
-  margin-right: 10px;
+  margin-right: 5px;
   font-family: Poppins, sans-serif;
 `
 
@@ -206,8 +214,8 @@ export const ConvertedAmount = styled<{}, 'span'>('span')`
 `
 
 export const AmountDescription = styled<{}, 'div'>('div')`
-  font-size: 14px;
-  color: ${palette.grey300};
+  font-size: 12px;
+  color: #fff;
 `
 
 export const AmountUSD = styled('span')`
@@ -293,8 +301,8 @@ export const UnsupportedMessage = styled<{}, 'div'>('div')`
 `
 
 export const TurnOnText = styled<{}, 'div'>('div')`
-  font-size: 14px;
-  color: ${palette.grey300};
+  font-size: 12px;
+  color: #F0F2FF;
   margin-top: 8px;
 `
 

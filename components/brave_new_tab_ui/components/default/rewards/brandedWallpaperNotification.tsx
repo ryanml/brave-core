@@ -71,7 +71,7 @@ export default class BrandedWallpaperRewardsNotification extends React.PureCompo
           {'Earn tokens for viewing this image and support content creators.'}
         </Title>
         <StartRewardsButton onClick={this.props.onStartRewards}>
-         {getLocale('rewardsWidgetTurnOnAds')}
+         {'Start using Rewards'}
         </StartRewardsButton>
         <NotificationTOS>
           {'By clicking Rewards, you agree to the '}<NotificationAction href='https://brave.com/brave-rewards/'>{'Terms of Service'}</NotificationAction> {' and '} <NotificationAction href='https://brave.com/brave-rewards/'>{'Privacy Policy'}</NotificationAction>
